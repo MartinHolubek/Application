@@ -1,5 +1,6 @@
 package com.example.application
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.esri.arcgisruntime.mapping.ArcGISMap
@@ -14,7 +15,6 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
-
 
 class MapActivity : AppCompatActivity() {
 
@@ -55,7 +55,7 @@ class MapActivity : AppCompatActivity() {
     }
     //metoda na spustenie gps
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        /*when (item.getItemId()) {
             R.id.gps1 ->
                 map?.addDoneLoadingListener(Runnable {
                     //zatvorí menu s miestami
@@ -81,7 +81,7 @@ class MapActivity : AppCompatActivity() {
                     clearPlaceList?.setVisibility(View.VISIBLE)
                     myFlag = true
                 }
-        }
+        }*/
         return true
     }
 
