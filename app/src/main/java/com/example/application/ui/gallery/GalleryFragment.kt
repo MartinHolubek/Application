@@ -8,11 +8,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.esri.arcgisruntime.mapping.ArcGISMap
+import com.esri.arcgisruntime.mapping.view.MapView
 import com.example.application.R
 
 class GalleryFragment : Fragment() {
 
     private lateinit var galleryViewModel: GalleryViewModel
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +29,7 @@ class GalleryFragment : Fragment() {
         val textView: TextView = root.findViewById(R.id.text_gallery)
         galleryViewModel.text.observe(this, Observer {
             textView.text = it
+            //update UI
         })
         return root
     }

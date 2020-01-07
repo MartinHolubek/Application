@@ -2,9 +2,11 @@ package com.example.application
 
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 class StartActivity : AppCompatActivity() {
@@ -24,5 +26,9 @@ class StartActivity : AppCompatActivity() {
         val startIntent = Intent(this, CreateUserActivity::class.java)
         startActivity(startIntent)
         finish()
+    }
+
+    fun getFirebaseUser(): FirebaseUser? {
+        return FirebaseAuth.getInstance().currentUser
     }
 }

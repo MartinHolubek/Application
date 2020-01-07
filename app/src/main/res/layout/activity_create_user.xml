@@ -12,41 +12,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="196dp"
             android:layout_marginEnd="32dp"
             android:ems="10"
+            android:hint="@string/EmailSingUp"
             android:inputType="textEmailAddress"
-            android:text="@string/EmailSingUp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-            android:id="@+id/button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:onClick="SingUpOnClicked"
-            android:text="@string/SignUp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/singUpPass" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
             android:id="@+id/singUpPass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -54,4 +36,40 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sing_up_email" />
+
+    <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="32dp"
+            android:onClick="SingUpOnClicked"
+            android:text="@string/SignUp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/singUpPass" />
+
+    <ImageView
+            android:id="@+id/create_user_image"
+            android:layout_width="173dp"
+            android:layout_height="129dp"
+            app:layout_constraintBottom_toTopOf="@+id/sing_up_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arcgisruntime_mapview_esribanner_bgcolor" />
+
+    <Button
+            android:id="@+id/add_image"
+            android:layout_width="126dp"
+            android:layout_height="48dp"
+            android:onClick="onClickAddImage"
+            android:text="@string/button_add_image"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/singUpPass" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

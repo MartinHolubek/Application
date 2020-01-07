@@ -1,6 +1,10 @@
 package com.example.application
 
+import android.app.Activity
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.findNavController
@@ -13,13 +17,25 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_create_user.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    private var mFirebaseAuth: FirebaseAuth? = null
+    private var mFirebaseUser: FirebaseUser? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -42,6 +58,11 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        mFirebaseAuth = FirebaseAuth.getInstance()
+        mFirebaseUser = mFirebaseAuth?.currentUser
+
+        updateUI()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,5 +74,18 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun updateUI() {
+        var uemail = findViewById<View>(R.id.nav_view) as NavigationView
+        var navHead = uemail.getHeaderView(0)
+        var tvEmail = navHead.findViewById(R.id.nav_header_email) as TextView
+        var tvDisplayName = navHead.findViewById(R.id.nav_header_name) as TextView
+        var tvImage = navHead.findViewById(R.id.nav_header_image) as ImageView
+        tvEmail.text = mFirebaseUser?.email
+        tvDisplayName.text = mFirebaseUser?.displayName
+        tvImage.setImageURI(null)
+        tvImage.setImageURI(mFirebaseUser?.photoUrl)
+
     }
 }

@@ -22,4 +22,5 @@
     <string name="StartMap">Zapnúť mapu</string>
     <string name="SingOut">Odhlásiť sa</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="button_add_image">Vložiť fotku</string>
 </resources>
