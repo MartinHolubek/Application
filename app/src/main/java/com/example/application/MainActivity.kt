@@ -20,6 +20,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.esri.arcgisruntime.mapping.view.LocationDisplay
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        var uemail = findViewById<View>(R.id.nav_view) as NavigationView
+        var uemail = findViewById(R.id.nav_view) as NavigationView
         var navHead = uemail.getHeaderView(0)
         var tvEmail = navHead.findViewById(R.id.nav_header_email) as TextView
         var tvDisplayName = navHead.findViewById(R.id.nav_header_name) as TextView

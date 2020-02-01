@@ -92,7 +92,9 @@ class CreateUserActivity : AppCompatActivity() {
             }
         }.start()
     }
-
+    /**
+     *
+     */
     fun createAccount(){
         mFirebaseAuth?.createUserWithEmailAndPassword(sing_up_email.text.toString(), singUpPass.text.toString())
             ?.addOnCompleteListener(this,

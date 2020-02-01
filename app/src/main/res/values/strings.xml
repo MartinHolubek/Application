@@ -23,4 +23,11 @@
     <string name="SingOut">Odhlásiť sa</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="button_add_image">Vložiť fotku</string>
+    <string name="button_gps">Spustit GPS</string>
+    <string name="button_clean">Vycistene</string>
+    <string name="photo_before">Fotka pred</string>
+    <string name="photo_after">Fotka po</string>
+    <string name="location_permission_denied">User denied permission for device location.</string>
+    <string name="undefined_location">Location is undefined</string>
+    <string name="without_pictures">Kde su obrazky ?</string>
 </resources>
