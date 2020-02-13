@@ -1,31 +1,29 @@
 package com.example.application
 
-import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import android.view.Menu
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import com.esri.arcgisruntime.mapping.view.LocationDisplay
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_create_user.*
-import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.point_list_item.view.*
+import java.util.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -85,8 +83,22 @@ class MainActivity : AppCompatActivity() {
         var tvImage = navHead.findViewById(R.id.nav_header_image) as ImageView
         tvEmail.text = mFirebaseUser?.email
         tvDisplayName.text = mFirebaseUser?.displayName
+
+
+        /*val myUrlStr = "xyz"
+        val url: URL
+        var uri: Uri = Uri.EMPTY
+        try {
+            url = URL(mFirebaseUser?.photoUrl.toString())
+            uri = Uri.parse(url.toURI().toString())
+        } catch (e1: MalformedURLException) {
+            e1.printStackTrace()
+        } catch (e: URISyntaxException) {
+            e.printStackTrace()
+        }
+
         tvImage.setImageURI(null)
-        tvImage.setImageURI(mFirebaseUser?.photoUrl)
+        tvImage.setImageURI(uri)*/
 
     }
 }

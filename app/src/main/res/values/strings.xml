@@ -30,4 +30,11 @@
     <string name="location_permission_denied">User denied permission for device location.</string>
     <string name="undefined_location">Location is undefined</string>
     <string name="without_pictures">Kde su obrazky ?</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="place_name">place name</string>
+    <string name="clear_text">clear text</string>
+    <string name="photo">foto</string>
+    <string name="date_ticket">Datum</string>
+    <string name="user_name">user name</string>
 </resources>
