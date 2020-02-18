@@ -12,13 +12,18 @@ import kotlin.collections.ArrayList
 class RetrieveData{
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
+    private lateinit var mName: String
+    private lateinit var mImageUrl: String
 
 
-    fun Retrieve(Array : ArrayList<Place>){
-
+    fun Retrieve(){
         val storage = FirebaseStorage.getInstance()
         val db = FirebaseFirestore.getInstance()
-        mFirebaseAuth = FirebaseAuth.getInstance()
+
+
+
+
+        /*mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
         var path : String? = null
         db.collection("users")
@@ -32,6 +37,10 @@ class RetrieveData{
             }
             .addOnFailureListener { exception ->
                 Log.d(ContentValues.TAG, "Error getting documents: ", exception)
-            }
+            }*/
+    }
+
+    fun Upload(imageUrl: String){
+
     }
 }

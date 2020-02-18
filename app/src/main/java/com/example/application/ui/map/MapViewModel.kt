@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
 
 class MapViewModel : ViewModel() {
@@ -82,13 +83,13 @@ class MapViewModel : ViewModel() {
 
         uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
+
         }.addOnSuccessListener {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
+
         }
+        //point.put("pict",pictureRef.path)
         point.put("pict",pictureRef.path)
-
-
 
         db.collection("users")
             .document(mFirebaseUser!!.uid)

@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -39,8 +40,10 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 
 
 class MapFragment : Fragment() {
@@ -63,6 +66,16 @@ class MapFragment : Fragment() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+
+
+    // This is an arbitrary number we are using to keep track of the permission
+    // request. Where an app has multiple context for requesting permission,
+// this can help differentiate the different contexts.
+    private val REQUEST_CODE_PERMISSIONS = 10
+
+    // This is an array of all the permission specified in the manifest.
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,6 +101,10 @@ class MapFragment : Fragment() {
             //imageView_after.setImageURI(Uri.parse(it))
         })
 
+
+        /**
+         *
+         */
         val buttonClean : Button = root.findViewById(R.id.button_clean)
         buttonClean.setOnClickListener(View.OnClickListener {
             mLocationDisplay = mapView.locationDisplay
@@ -108,12 +125,12 @@ class MapFragment : Fragment() {
                 "y" to y,
                 "date" to currentTime
             )
-
-            if (byteArray_photo_after != null && byteArray_photo_before != null){
+            Toast.makeText(root.context,mapViewModel.addPoint(point,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
+            /*if (byteArray_photo_after != null && byteArray_photo_before != null){
                 Toast.makeText(root.context,mapViewModel.addPoint(point,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
             }else{
                 Toast.makeText(root.context,R.string.without_pictures, Toast.LENGTH_LONG).show()
-            }
+            }*/
 
 
         })
@@ -137,6 +154,19 @@ class MapFragment : Fragment() {
         })
 
         return root
+    }
+
+    // Add this after onCreate
+
+    private val executor = Executors.newSingleThreadExecutor()
+    private lateinit var viewFinder: TextureView
+
+    private fun startCamera() {
+        // TODO: Implement CameraX operations
+    }
+
+    private fun updateTransform() {
+        // TODO: Implement camera viewfinder transformations
     }
 
 
@@ -209,6 +239,23 @@ class MapFragment : Fragment() {
         {
             Toast.makeText(this.context, resources.getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show()
         }
+
+        /*if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                viewFinder.post { startCamera() }
+            } else {
+                Toast.makeText(this.context,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }*/
+    }
+    /**
+     * Check if all permission specified in the manifest have been granted
+     */
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            this.context!!, it) == PackageManager.PERMISSION_GRANTED
     }
 
     /**
@@ -259,6 +306,7 @@ class MapFragment : Fragment() {
         }
     }
 
+
     private fun dispatchTakePictureIntentBefore(v: View) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(v.context.packageManager)?.also {
@@ -275,6 +323,12 @@ class MapFragment : Fragment() {
         }
     }
 
+    /**
+     * Metoda, ktorá sa volá po ukončení aktivity
+     * @param requestCode - kod vložený ako parameter pri starte aktivity
+     * @param resultCode - kod vysledku
+     * @param data - vrati bitmap v atribute extra
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap

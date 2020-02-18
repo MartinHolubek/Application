@@ -7,16 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.application.Place
 import com.example.application.RetrieveData
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
-import java.net.URL
-import java.sql.Timestamp
+import java.io.File
 import java.util.*
-import java.util.logging.Handler
 import kotlin.collections.ArrayList
+
 
 class HomeViewModel : ViewModel() {
 
@@ -32,13 +33,6 @@ class HomeViewModel : ViewModel() {
         value = ArrayList<Place>()
         addPoints()
 
-
-        //value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-        /*value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-        value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-        value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-        value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-        value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))*/
     }
     val list: LiveData<ArrayList<Place>> = _list
 
@@ -48,6 +42,8 @@ class HomeViewModel : ViewModel() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
         var path : String? = null
+        val storageRef = storage.reference
+
 
         db.collection("users")
             .document(mFirebaseUser!!.uid)
@@ -57,22 +53,13 @@ class HomeViewModel : ViewModel() {
                 for (document in result) {
                     android.os.Handler().postDelayed({
                         var list = ArrayList<Place>()
+                        /*list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
                         list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                        list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                        list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                        list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
+                        list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))*/
+                        list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", document.data["pict"] as String))
                         _list.value = list
 
                     },3000)
-                    /*var list = ArrayList<Place>()
-                    list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                    list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                    list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                    list!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-                    _list.value = list
-                    _list.apply { value!!.add(Place(2, "Pato", Calendar.getInstance().time, "Slovakia", "vycistene", "%"))
-
-                    }*/
                 }
             }
             .addOnFailureListener { exception ->

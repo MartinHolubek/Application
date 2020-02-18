@@ -2,18 +2,18 @@ package com.example.application.ui.home
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.example.application.R
 import com.example.application.Place
 import com.google.firebase.auth.FirebaseAuth
@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
 
     fun updateList(view : View){
 
-        listPoints = view.findViewById(R.id.lvPoints) as ListView
+        listPoints = view.findViewById<ListView>(R.id.lvPoints)
         var myfoodAdapter= foodAdapter(view.context,listFood)
         listPoints.adapter=myfoodAdapter
     }
@@ -76,10 +76,36 @@ class HomeFragment : Fragment() {
             var placeView=layoutInflater.inflate(R.layout.ticket,null)
             var currentPlace=listFoodAdapter[position]
             placeView.textViewName.text=currentPlace.userName
+            //placeView.valueFoto.setImageURI()
             placeView.valueFoto.text=currentPlace.photo.toString()
             placeView.valueClearText.text=currentPlace.ClearText.toString()
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
             placeView.valueDate.text=currentPlace.date.toString()
+
+            // Reference to an image file in Cloud Storage
+            val storageReference = FirebaseStorage.getInstance().reference
+
+            // ImageView in your Activity
+            val imageView = placeView.findViewById<ImageView>(R.id.imageTicket)
+
+            /*// Download directly from StorageReference using Glide
+            // (See MyAppGlideModule for Loader registration)
+            Glide.with(context!!)
+                .load(storageReference)
+                .into(imageView)*/
+            var islandRef = storageReference.child(currentPlace.photo.toString())
+
+            val ONE_MEGABYTE: Long = 1024 * 1024
+            islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+                // Konvertujeme byteArray na bitmap
+                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
+                imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.width,imageView.height,false))
+
+
+            }.addOnFailureListener {
+                // Handle any errors
+            }
+
             return placeView
         }
 
