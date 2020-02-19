@@ -7,8 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -17,10 +19,11 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_create_user.*
-import kotlinx.android.synthetic.main.nav_header_main.*
-import java.security.Permission
-import java.util.jar.Manifest
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CreateUserActivity : AppCompatActivity() {
@@ -105,8 +108,8 @@ class CreateUserActivity : AppCompatActivity() {
                         //nastavenie fotky
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(imageUri)
+                            .setDisplayName(sign_up_name.text.toString())
                             .build()
-
                         mFirebaseAuth?.currentUser?.updateProfile(profileUpdates)
                             ?.addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
@@ -120,9 +123,15 @@ class CreateUserActivity : AppCompatActivity() {
                             this, "Authentication success.",
                             Toast.LENGTH_SHORT
                         ).show()
+
+
+                        android.os.Handler().postDelayed({
+                            addInfoAccount()
+                        },2000)
+
+
                         val startIntent = Intent(this, MainActivity::class.java)
                         startActivity(startIntent)
-                        updateUI()
                     } else { // If sign in fails, display a message to the user.
                         Log.w(
                             FragmentActivity.ACCOUNT_SERVICE,
@@ -133,12 +142,20 @@ class CreateUserActivity : AppCompatActivity() {
                             this, "Authentication failed.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        updateUI()
                     }
                 })
+
     }
 
-    fun updateUI(){
+    fun addInfoAccount(){
+        val db = FirebaseFirestore.getInstance()
+        var name = findViewById<TextView>(R.id.sign_up_name)
+        val user = hashMapOf(
+            "displayName" to name.text.toString()
+        )
 
+        db.collection("users")
+            .document(mFirebaseAuth?.currentUser!!.uid)
+            .set(user)
     }
 }

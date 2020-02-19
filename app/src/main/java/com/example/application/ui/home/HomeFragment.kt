@@ -27,12 +27,8 @@ import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
-
-    private var mFirebaseAuth: FirebaseAuth? = null
-    private var mFirebaseUser: FirebaseUser? = null
     private lateinit var homeViewModel: HomeViewModel
 
-    private var myDataset : ArrayList<String> = ArrayList()
     var listFood =  ArrayList<Place>()
     lateinit var  listPoints : ListView
 
@@ -45,10 +41,12 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
+
         val textView: TextView = root.findViewById(R.id.text_home)
         homeViewModel.text.observe(this, Observer {
             textView.text = it
         })
+
         homeViewModel.list.observe(this, Observer {
             listFood = it
             updateList(root)
@@ -63,6 +61,7 @@ class HomeFragment : Fragment() {
         listPoints.adapter=myfoodAdapter
     }
 
+
     inner class foodAdapter:BaseAdapter{
         var listFoodAdapter= java.util.ArrayList<Place>()
         var context:Context?=null
@@ -71,7 +70,9 @@ class HomeFragment : Fragment() {
             this.context=context
         }
 
-
+        /**
+         * Vytvorí
+         */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var placeView=layoutInflater.inflate(R.layout.ticket,null)
             var currentPlace=listFoodAdapter[position]
@@ -82,30 +83,21 @@ class HomeFragment : Fragment() {
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
             placeView.valueDate.text=currentPlace.date.toString()
 
-            // Reference to an image file in Cloud Storage
-            val storageReference = FirebaseStorage.getInstance().reference
-
-            // ImageView in your Activity
             val imageView = placeView.findViewById<ImageView>(R.id.imageTicket)
 
-            /*// Download directly from StorageReference using Glide
-            // (See MyAppGlideModule for Loader registration)
-            Glide.with(context!!)
-                .load(storageReference)
-                .into(imageView)*/
-            var islandRef = storageReference.child(currentPlace.photo.toString())
+            //Referencia na obrázok v úložisku Firebase
+            var islandRef = FirebaseStorage.getInstance()
+                                                            .reference
+                                                            .child(currentPlace.photo.toString())
 
             val ONE_MEGABYTE: Long = 1024 * 1024
             islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
                 // Konvertujeme byteArray na bitmap
                 var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
                 imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.width,imageView.height,false))
-
-
             }.addOnFailureListener {
                 // Handle any errors
             }
-
             return placeView
         }
 

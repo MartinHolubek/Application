@@ -1,8 +1,10 @@
 package com.example.application
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -21,6 +23,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.point_list_item.view.*
 import java.util.ArrayList
 
@@ -70,6 +73,17 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_logout -> {
+                val startIntent = Intent(this, StartActivity::class.java)
+                startActivity(startIntent)
+            }
+            else -> onSupportNavigateUp()
+        }
+        return true
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -83,6 +97,8 @@ class MainActivity : AppCompatActivity() {
         var tvImage = navHead.findViewById(R.id.nav_header_image) as ImageView
         tvEmail.text = mFirebaseUser?.email
         tvDisplayName.text = mFirebaseUser?.displayName
+
+
 
 
         /*val myUrlStr = "xyz"

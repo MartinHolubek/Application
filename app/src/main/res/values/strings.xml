@@ -37,4 +37,5 @@
     <string name="photo">foto</string>
     <string name="date_ticket">Datum</string>
     <string name="user_name">user name</string>
+    <string name="add_friend">pridať priatela</string>
 </resources>
