@@ -1,13 +1,9 @@
 package com.example.application
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,9 +19,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.point_list_item.view.*
-import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_tools, R.id.nav_show_friend, R.id.nav_add_friend
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -60,6 +60,10 @@ class FireStoreRepository{
         return documentReference.delete()
     }
 
+
+    /**
+     * vráti query ktoré obsahuje zoznam ludí začinájucich na @param name
+     */
     fun getCollectionCanBeFriends(name :String): Query {
         var friends : MutableList<String> = mutableListOf()
 
@@ -73,8 +77,12 @@ class FireStoreRepository{
                 }
             }
 
+        /*var collectionReference = firestoreDB.collection("users")
+            .whereEqualTo("displayName", name.toString())*/
         var collectionReference = firestoreDB.collection("users")
-            .whereEqualTo("displayName", name.toString())
+            .orderBy("displayName")
+            .startAt(name)
+            .endAt("${name}\uf8ff")
 
         return collectionReference
 
