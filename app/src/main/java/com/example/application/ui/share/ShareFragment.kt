@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.application.Friend
 import com.example.application.R
+import kotlinx.android.synthetic.main.ticket_friend.*
 import kotlinx.android.synthetic.main.ticket_friend.view.*
 
 class ShareFragment : Fragment() {
@@ -20,7 +21,7 @@ class ShareFragment : Fragment() {
     private lateinit var shareViewModel: ShareViewModel
 
     lateinit var  listViewFriends : ListView
-    var listFriends =  ArrayList<Friend>()
+    lateinit var listFriends : ArrayList<Friend>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +36,12 @@ class ShareFragment : Fragment() {
             textView.text = it
         })
 
-        shareViewModel.list.observe(this, Observer {
-            listFriends = it
+        listFriends = arrayListOf()
+        shareViewModel.getFriends().observe(this, Observer {
+            listFriends = ArrayList(it)
+
             updateList(root)
+
         })
 
         return root
@@ -51,9 +55,9 @@ class ShareFragment : Fragment() {
     }
 
     inner class foodAdapter: BaseAdapter {
-        var listFriendAdapter= java.util.ArrayList<Friend>()
+        var listFriendAdapter : ArrayList<Friend>
         var context: Context?=null
-        constructor(context:Context, listPlaceAdapter: java.util.ArrayList<Friend>):super(){
+        constructor(context:Context, listPlaceAdapter: ArrayList<Friend>):super(){
             this.listFriendAdapter=listPlaceAdapter
             this.context=context
         }
@@ -65,6 +69,12 @@ class ShareFragment : Fragment() {
             var friendView=layoutInflater.inflate(R.layout.ticket_friend,null)
             var currentfriend=listFriendAdapter[position]
             friendView.textViewName.text = currentfriend.displayName.toString()
+            friendView.addFriend.text = currentfriend.uid.toString()
+            friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
+            friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
+                //shareViewModel.saveFriendsToFirebase(listFriendAdapter[position])
+                shareViewModel.deleteFriendItem(listFriendAdapter[position])
+            })
 
             return friendView
         }

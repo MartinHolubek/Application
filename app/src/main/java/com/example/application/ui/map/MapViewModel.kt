@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.Basemap
+import com.example.application.FireStoreRepository
+import com.example.application.Place
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +18,9 @@ import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
 
 class MapViewModel : ViewModel() {
+
+    val TAG = "MAP_VIEW_MODEL"
+    var fireStoreRepository = FireStoreRepository()
 
 
     private var mFirebaseAuth: FirebaseAuth? = null
@@ -91,7 +96,8 @@ class MapViewModel : ViewModel() {
         //point.put("pict",pictureRef.path)
         point.put("pict",pictureRef.path)
 
-        db.collection("users")
+        //Prvy sposob ukladania
+        /*db.collection("users")
             .document(mFirebaseUser!!.uid)
             .collection("places")
             .add(point).addOnSuccessListener { documentReference ->
@@ -99,9 +105,43 @@ class MapViewModel : ViewModel() {
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
-            }
-        return   pictureRef.path
+            }*/
 
+        return   pictureRef.path
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun addPoint2(point : Place, ba1: ByteArray?, ba2: ByteArray?) : String {
+        val storage = FirebaseStorage.getInstance()
+        val db = FirebaseFirestore.getInstance()
+        mFirebaseAuth = FirebaseAuth.getInstance()
+        mFirebaseUser = mFirebaseAuth?.currentUser
+
+
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        val reference = storage.getReference("Pictures/" + mFirebaseUser!!.uid)
+        val pictureRef = reference.child("pictures_$timeStamp")
+        var uploadTask = pictureRef.putBytes(ba1!!)
+
+
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+
+        }.addOnSuccessListener {
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+
+        }
+        //point.put("pict",pictureRef.path)
+        point.photo = pictureRef.path
+        point.pointID = mFirebaseUser!!.uid + timeStamp
+        point.userName = mFirebaseUser!!.displayName
+
+        //Druhy sposob ukladania
+        fireStoreRepository.savePlaceItem(point).addOnFailureListener{
+            Log.e(TAG,"Chyba pri ukladani miesta")
+        }
+
+        return   pictureRef.path
     }
 
     /**

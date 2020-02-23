@@ -1,11 +1,9 @@
 package com.example.application.ui.home
 
-import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,23 +11,16 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
 import com.example.application.R
 import com.example.application.Place
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.ticket.view.*
-import java.util.*
-import kotlin.collections.ArrayList
-
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    var listFood =  ArrayList<Place>()
+    lateinit var listPlaces2 : List<Place>
     lateinit var  listPoints : ListView
 
     override fun onCreateView(
@@ -47,25 +38,23 @@ class HomeFragment : Fragment() {
             textView.text = it
         })
 
-        homeViewModel.list.observe(this, Observer {
-            listFood = it
-            updateList(root)
+        homeViewModel.getSavedPlaces().observe(this, Observer { it ->
+            listPlaces2 = it
+            updateList2(root)
         })
         return root
     }
-
-    fun updateList(view : View){
+    fun updateList2(view : View){
 
         listPoints = view.findViewById<ListView>(R.id.lvPoints)
-        var myfoodAdapter= foodAdapter(view.context,listFood)
-        listPoints.adapter=myfoodAdapter
+        var myPlaceAdapter= placeAdapter2(view.context,listPlaces2)
+        listPoints.adapter=myPlaceAdapter
     }
 
-
-    inner class foodAdapter:BaseAdapter{
-        var listFoodAdapter= java.util.ArrayList<Place>()
+    inner class placeAdapter2:BaseAdapter{
+        var listFoodAdapter : List<Place>
         var context:Context?=null
-        constructor(context:Context, listPlaceAdapter: java.util.ArrayList<Place>):super(){
+        constructor(context:Context, listPlaceAdapter: List<Place>):super(){
             this.listFoodAdapter=listPlaceAdapter
             this.context=context
         }
@@ -87,8 +76,8 @@ class HomeFragment : Fragment() {
 
             //Referencia na obrázok v úložisku Firebase
             var islandRef = FirebaseStorage.getInstance()
-                                                            .reference
-                                                            .child(currentPlace.photo.toString())
+                .reference
+                .child(currentPlace.photo.toString())
 
             val ONE_MEGABYTE: Long = 1024 * 1024
             islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {

@@ -38,4 +38,7 @@
     <string name="date_ticket">Datum</string>
     <string name="user_name">user name</string>
     <string name="add_friend">pridať priatela</string>
+    <string name="Search">Vyhladat</string>
+    <string name="RemoveFriend">Odobrať</string>
+    <string name="AddFriend">Pridať</string>
 </resources>

@@ -35,6 +35,7 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay.DataSourceStatusChang
 import com.esri.arcgisruntime.mapping.view.LocationDisplay.DataSourceStatusChangedListener
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
+import com.example.application.Place
 import com.example.application.R
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.ByteArrayOutputStream
@@ -125,7 +126,16 @@ class MapFragment : Fragment() {
                 "y" to y,
                 "date" to currentTime
             )
-            Toast.makeText(root.context,mapViewModel.addPoint(point,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
+            val point2 = Place()
+            point2.ClearText = "text miesta"
+            point2.date = Calendar.getInstance().time
+            point2.placeName = "Dumbier"
+
+            //Prvy sposob
+            //Toast.makeText(root.context,mapViewModel.addPoint(point,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
+
+            //Druhy sposob
+            Toast.makeText(root.context,mapViewModel.addPoint2(point2,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
             /*if (byteArray_photo_after != null && byteArray_photo_before != null){
                 Toast.makeText(root.context,mapViewModel.addPoint(point,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
             }else{
