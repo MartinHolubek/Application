@@ -7,12 +7,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Domov</string>
-    <string name="menu_map">Mapa</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_show_friend">Priatelia</string>
-    <string name="menu_add_friend">Nájsť priateľa</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
     <string name="Login">Prihlásiť sa</string>
     <string name="SignUp">Vytvoriť nový účet</string>
     <string name="textLogin">Nemám účet</string>

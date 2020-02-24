@@ -1,4 +1,4 @@
-package com.example.application.ui.add_friend
+package com.example.application.ui.send
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import com.example.application.Friend
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
 
-class AddFriendViewModel : ViewModel() {
+class SendViewModel : ViewModel() {
 
     val TAG = "FIRESTORE_VIEW_MODEL"
     var firebaseRepository = FireStoreRepository()

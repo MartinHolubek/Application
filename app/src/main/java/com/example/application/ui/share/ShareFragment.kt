@@ -1,4 +1,4 @@
-package com.example.application.ui.show_friend
+package com.example.application.ui.share
 
 import android.content.Context
 import android.os.Bundle
@@ -13,11 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.application.Friend
 import com.example.application.R
+import kotlinx.android.synthetic.main.ticket_friend.*
 import kotlinx.android.synthetic.main.ticket_friend.view.*
 
-class ShowFriendFragment : Fragment() {
+class ShareFragment : Fragment() {
 
-    private lateinit var showFriendViewModel: ShowFriendViewModel
+    private lateinit var shareViewModel: ShareViewModel
 
     lateinit var  listViewFriends : ListView
     lateinit var listFriends : ArrayList<Friend>
@@ -27,16 +28,16 @@ class ShowFriendFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        showFriendViewModel =
-            ViewModelProviders.of(this).get(ShowFriendViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_show_friend, container, false)
+        shareViewModel =
+            ViewModelProviders.of(this).get(ShareViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_share, container, false)
         val textView: TextView = root.findViewById(R.id.text_share)
-        showFriendViewModel.text.observe(this, Observer {
+        shareViewModel.text.observe(this, Observer {
             textView.text = it
         })
 
         listFriends = arrayListOf()
-        showFriendViewModel.getFriends().observe(this, Observer {
+        shareViewModel.getFriends().observe(this, Observer {
             listFriends = ArrayList(it)
 
             updateList(root)
@@ -72,7 +73,7 @@ class ShowFriendFragment : Fragment() {
             friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
             friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
                 //shareViewModel.saveFriendsToFirebase(listFriendAdapter[position])
-                showFriendViewModel.deleteFriendItem(listFriendAdapter[position])
+                shareViewModel.deleteFriendItem(listFriendAdapter[position])
             })
 
             return friendView

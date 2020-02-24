@@ -14,7 +14,7 @@
     <fragment
             android:id="@+id/nav_gallery"
             android:name="com.example.application.ui.map.MapFragment"
-            android:label="@string/menu_map"
+            android:label="@string/menu_gallery"
             tools:layout="@layout/fragment_map" />
 
     <fragment
@@ -30,14 +30,14 @@
             tools:layout="@layout/fragment_tools" />
 
     <fragment
-            android:id="@+id/nav_show_friend"
-            android:name="com.example.application.ui.show_friend.ShowFriendFragment"
-            android:label="@string/menu_show_friend"
-            tools:layout="@layout/fragment_show_friend" />
+            android:id="@+id/nav_share"
+            android:name="com.example.application.ui.share.ShareFragment"
+            android:label="@string/menu_share"
+            tools:layout="@layout/fragment_share" />
 
     <fragment
-            android:id="@+id/nav_add_friend"
-            android:name="com.example.application.ui.add_friend.AddFriendFragment"
-            android:label="@string/menu_add_friend"
+            android:id="@+id/nav_send"
+            android:name="com.example.application.ui.send.SendFragment"
+            android:label="@string/menu_send"
             tools:layout="@layout/fragment_send" />
 </navigation>

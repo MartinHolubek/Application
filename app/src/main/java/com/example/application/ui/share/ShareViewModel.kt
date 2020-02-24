@@ -1,4 +1,4 @@
-package com.example.application.ui.show_friend
+package com.example.application.ui.share
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,10 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.application.FireStoreRepository
 import com.example.application.Friend
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
-class ShowFriendViewModel : ViewModel() {
+class ShareViewModel : ViewModel() {
 
     val TAG = "FIRESTORE_VIEW_MODEL"
     var firebaseRepository = FireStoreRepository()

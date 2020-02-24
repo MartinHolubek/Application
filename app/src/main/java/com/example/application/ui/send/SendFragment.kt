@@ -1,4 +1,4 @@
-package com.example.application.ui.add_friend
+package com.example.application.ui.send
 
 import android.content.Context
 import android.os.Bundle
@@ -14,11 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.application.Friend
 import com.example.application.R
+import kotlinx.android.synthetic.main.ticket_friend.*
 import kotlinx.android.synthetic.main.ticket_friend.view.*
 
-class AddFriendFragment : Fragment() {
+class SendFragment : Fragment() {
 
-    private lateinit var addFriendViewModel: AddFriendViewModel
+    private lateinit var sendViewModel: SendViewModel
 
     lateinit var  listViewFriends : ListView
     lateinit var listPotentionalFriends : ArrayList<Friend>
@@ -29,25 +30,25 @@ class AddFriendFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        addFriendViewModel =
-            ViewModelProviders.of(this).get(AddFriendViewModel::class.java)
+        sendViewModel =
+            ViewModelProviders.of(this).get(SendViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_send, container, false)
         val textView: TextView = root.findViewById(R.id.text_send)
         listFriends = arrayListOf()
         listPotentionalFriends = arrayListOf()
 
-        addFriendViewModel.getPotentionalFriends(textView.text.toString()).observe(this, Observer {
+        sendViewModel.getPotentionalFriends(textView.text.toString()).observe(this, Observer {
             listPotentionalFriends = ArrayList(it)
             updateList(root)
         })
 
-        addFriendViewModel.getFriends().observe(this, Observer {
+        sendViewModel.getFriends().observe(this, Observer {
             listFriends = ArrayList(it)
         })
 
         var buttonSearch = root.findViewById<Button>(R.id.buttonSearchFriend)
         buttonSearch.setOnClickListener(View.OnClickListener {
-            addFriendViewModel.getPotentionalFriends(textView.text.toString())
+            sendViewModel.getPotentionalFriends(textView.text.toString())
         })
         return root
     }
@@ -96,10 +97,10 @@ class AddFriendFragment : Fragment() {
             friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
 
                 if (!isFriend(listFriendAdapter[position])){
-                    addFriendViewModel.saveFriendsToFirebase(listFriendAdapter[position])
+                    sendViewModel.saveFriendsToFirebase(listFriendAdapter[position])
                     friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
                 }else{
-                    addFriendViewModel.deleteFriendItem(listFriendAdapter[position])
+                    sendViewModel.deleteFriendItem(listFriendAdapter[position])
                     friendView.buttonAddFriend.text = getText(R.string.AddFriend)
                 }
 
