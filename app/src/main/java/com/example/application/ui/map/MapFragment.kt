@@ -145,12 +145,12 @@ class MapFragment : Fragment() {
 
         })
 
-        val buttonGPS : Button = root.findViewById(R.id.button_gps)
+        /*val buttonGPS : Button = root.findViewById(R.id.button_gps)
         buttonGPS.setOnClickListener(View.OnClickListener {
             mapViewModel.changeText("GPS spustena")
             setupLocationDisplay(root, mapView)
 
-        })
+        })*/
 
         val buttonBeforePhoto : Button = root.findViewById(R.id.button_photo_before)
         buttonBeforePhoto.setOnClickListener(View.OnClickListener {
