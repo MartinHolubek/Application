@@ -1,7 +1,6 @@
 package com.example.application.ui.map
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
 
 class MapViewModel : ViewModel() {
@@ -132,7 +130,7 @@ class MapViewModel : ViewModel() {
 
         }
         //point.put("pict",pictureRef.path)
-        point.photo = pictureRef.path
+        point.photoBefore = pictureRef.path
         point.pointID = mFirebaseUser!!.uid + timeStamp
         point.userName = mFirebaseUser!!.displayName
 

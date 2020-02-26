@@ -36,9 +36,11 @@
     <string name="clear_text">clear text</string>
     <string name="photo">foto</string>
     <string name="date_ticket">Datum</string>
-    <string name="user_name">user name</string>
+    <string name="user_name">Uživateľ</string>
     <string name="add_friend">pridať priatela</string>
     <string name="Search">Vyhladat</string>
     <string name="RemoveFriend">Odobrať</string>
     <string name="AddFriend">Pridať</string>
+    <string name="Address">Adresa</string>
+    <string name="Description">Popis</string>
 </resources>

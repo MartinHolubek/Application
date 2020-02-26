@@ -65,10 +65,9 @@ class HomeFragment : Fragment() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var placeView=layoutInflater.inflate(R.layout.ticket,null)
             var currentPlace=listFoodAdapter[position]
-            placeView.textViewName.text=currentPlace.userName
+            placeView.valueUser.text=currentPlace.userName
             //placeView.valueFoto.setImageURI()
-            placeView.valueFoto.text=currentPlace.photo.toString()
-            placeView.valueClearText.text=currentPlace.ClearText.toString()
+            placeView.textViewDescription.text=currentPlace.ClearText.toString()
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
             placeView.valueDate.text=currentPlace.date.toString()
 
@@ -77,7 +76,7 @@ class HomeFragment : Fragment() {
             //Referencia na obrázok v úložisku Firebase
             var islandRef = FirebaseStorage.getInstance()
                 .reference
-                .child(currentPlace.photo.toString())
+                .child(currentPlace.photoBefore.toString())
 
             val ONE_MEGABYTE: Long = 1024 * 1024
             islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {

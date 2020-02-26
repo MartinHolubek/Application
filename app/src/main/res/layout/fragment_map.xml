@@ -5,13 +5,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
+    <EditText
             android:id="@+id/text_gallery"
             android:layout_width="408dp"
             android:layout_height="84dp"
             android:textAlignment="center"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView_after"
+            app:layout_constraintBottom_toTopOf="@+id/imageView_before"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
@@ -56,18 +56,19 @@
 
     <ImageView
             android:id="@+id/imageView_after"
-            android:layout_width="136dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO"
             app:layout_constraintBottom_toTopOf="@+id/button_photo_after"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.907"
             app:layout_constraintStart_toEndOf="@+id/button_clean"
+            app:layout_constraintTop_toBottomOf="@+id/text_gallery"
             tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
             android:id="@+id/imageView_before"
-            android:layout_width="126dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO"
             app:layout_constraintBottom_toTopOf="@+id/button_photo_before"

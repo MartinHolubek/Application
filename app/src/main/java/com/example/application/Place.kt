@@ -1,6 +1,6 @@
 package com.example.application
 
-import java.net.URL
+import com.google.firebase.firestore.GeoPoint
 import java.util.*
 
 class Place(){
@@ -10,13 +10,18 @@ class Place(){
     var date:Date?=null
     var placeName:String?=null
     var ClearText:String?=null
-    var photo:String?=null
-    constructor(pointID:String, userName:String, date:Date, placeName:String, clearText:String, photo:String) : this() {
+    var photoBefore:String?=null
+    var photoAfter:String?=null
+    var coordinates:GeoPoint?=null
+    constructor(pointID:String, userName:String, date:Date, placeName:String, clearText:String,
+                photoBefore:String,photoAfter:String, coords:GeoPoint) : this() {
         this.pointID=pointID
         this.userName=userName
         this.date=date
         this.placeName=placeName
         this.ClearText=clearText
-        this.photo=photo
+        this.photoBefore=photoBefore
+        this.photoAfter=photoAfter
+        this.coordinates=coords
     }
 }
