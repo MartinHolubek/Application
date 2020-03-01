@@ -11,7 +11,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_friends">Friends</string>
     <string name="menu_send">Send</string>
     <string name="Login">Prihlásiť sa</string>
     <string name="SignUp">Vytvoriť nový účet</string>
@@ -43,4 +43,15 @@
     <string name="AddFriend">Pridať</string>
     <string name="Address">Adresa</string>
     <string name="Description">Popis</string>
+    <string name="pictureEvent">Obrázok podujatia</string>
+    <string name="InsertPicture">Vybrať fotku</string>
+    <string name="NameEvent">Názov podujatia</string>
+    <string name="InsertNameEvent">Vložte názov</string>
+    <string name="InsertDetails">Vložte popis</string>
+    <string name="DetailsEvent">Popis</string>
+    <string name="DateTime">Dátum a čas</string>
+    <string name="LocationEvent">Miesto podujatia</string>
+    <string name="InputLocationEvent">Vyberte miesto</string>
+    <string name="CreateEvent">Vytvoriť udalosť</string>
+    <string name="Back">Späť</string>
 </resources>

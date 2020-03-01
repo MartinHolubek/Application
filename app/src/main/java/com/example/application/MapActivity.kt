@@ -1,8 +1,14 @@
 package com.example.application
 
+import android.app.PendingIntent.getActivity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.Basemap
 import com.esri.arcgisruntime.mapping.view.MapView
@@ -11,41 +17,87 @@ import android.view.Menu
 
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.*
 import com.esri.arcgisruntime.mapping.view.LocationDisplay
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
+import com.esri.arcgisruntime.loadable.LoadStatus
+import com.esri.arcgisruntime.mapping.Viewpoint
+import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
+import com.esri.arcgisruntime.tasks.geocode.LocatorTask
+import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
+import com.example.application.ui.addEvent.AddEventFragment
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_map.*
+import kotlinx.android.synthetic.main.ticket.view.*
 
 class MapActivity : AppCompatActivity() {
 
-    var myFlag: Boolean = false
-    //deklaracia premennej map view, ktora zobrazuje mapu
-    private var mapView: MapView? = null
+    private lateinit var mLocatorTask : LocatorTask
+    private lateinit var graphicOverlay : GraphicsOverlay
+    private lateinit var mapView: MapView
+    private lateinit var textLocation: AutoCompleteTextView
 
-    private var map: ArcGISMap? = null
-
-    private var clearPlaceList: ListView? = null
-    private var myAdapter: ArrayAdapter<*>? = null
-    var cities = arrayOf("New York", "Chicago", "Denver", "Detroit", "Las Vegas", "Paris")
+    //pole adries
+    var addresses : ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        addresses = ArrayList()
+        //mapView = findViewById(R.id.mapEvent)
+        mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
+        mLocatorTask.loadAsync()
 
-        mapView = findViewById<MapView>(R.id.map1)
+        textLocation = findViewById<AutoCompleteTextView>(R.id.inputEventLocation)
+        textLocation.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                if (mLocatorTask.loadStatus == LoadStatus.LOADED && p0.toString() !=""){
+                    if (mLocatorTask.locatorInfo.isSupportsSuggestions){
+                        //ziskaj aktualne rozsirenie mapy
+                        //var currentExtent = mapView!!.getCurrentViewpoint(Viewpoint.Type.BOUNDING_GEOMETRY).targetGeometry
 
-        map = ArcGISMap(Basemap.Type.STREETS_VECTOR, 49.201476197, 18.870735168, 11)
+                        //Obmedzte vyhľadávanie na tento rozsah máp a nie viac ako 10 návrhov
+                        var suggestParams = SuggestParameters()
+                        //suggestParams.searchArea = currentExtent
+                        suggestParams.maxResults = 10
 
-        mapView!!.map = map
+                        //Ziskanie navrhov zo vstupu uzivatela
+                        var suggestionsFuture = mLocatorTask.suggestAsync(p0.toString(),suggestParams)
+                        suggestionsFuture.addDoneListener(Runnable { kotlin.run {
+                            try {
+                                var suggestResults = suggestionsFuture.get()
+                                addresses!!.clear()
+                                for (result in suggestResults){
+                                    addresses!!.add(result.label)
+                                }
+                                showSuggestions()
 
-        clearPlaceList = findViewById<ListView>(R.id.listview)
-        clearPlaceList?.setVisibility(View.GONE)
+                            }catch (e: InterruptedException){
 
-        //pridanie listu do myAdaptera
-        myAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, cities)
-        clearPlaceList?.adapter = myAdapter
+                            }
+                        } })
+                    }
+                }
+            }
 
-        clearPlaceList?.setOnItemClickListener { _, _, i, _ -> Toast.makeText(applicationContext, cities[i], Toast.LENGTH_SHORT).show() }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+        })
+
+        var buttonBack = findViewById<Button>(R.id.buttonBackEvent)
+        buttonBack.setOnClickListener (View.OnClickListener{
+                var intent = Intent()
+                intent.putExtra(AddEventFragment.EXTRA_KEY,inputEventLocation.text.toString())
+
+                setResult(AddEventFragment.RESULT_CODE,intent)
+                finish()
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,5 +136,15 @@ class MapActivity : AppCompatActivity() {
         }*/
         return true
     }
+
+    /**
+     * Naplní adapter pre zobrazenie vyhladaných miest podla textu
+     */
+    fun showSuggestions(){
+        var adapter : ArrayAdapter<String> = ArrayAdapter(this,android.R.layout.simple_list_item_1,
+            addresses!!.toList())
+        textLocation.setAdapter(adapter)
+    }
+
 
 }

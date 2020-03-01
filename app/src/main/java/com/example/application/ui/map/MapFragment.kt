@@ -115,7 +115,7 @@ class MapFragment : Fragment() {
         // create a LocatorTask from an online service
         mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
 
-        val mapView = root.findViewById<MapView>(R.id.map1)
+        mapView = root.findViewById<MapView>(R.id.map1)
         mapViewModel.text.observe(this, Observer {
             editText.text = it
             //update UI

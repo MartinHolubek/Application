@@ -1,13 +1,10 @@
 package com.example.application
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,9 +20,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.point_list_item.view.*
-import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,8 +48,8 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_addevent,
+                R.id.nav_tools, R.id.nav_friends, R.id.nav_addfriend
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -87,6 +81,16 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode==2){
+            var address = data?.getStringExtra("MESSAGE")
+            var textLocation = findViewById<EditText>(R.id.inputLocation)
+            textLocation.setText(address)
+        }
     }
 
     private fun updateUI() {

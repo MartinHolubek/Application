@@ -116,9 +116,9 @@ class MapViewModel : ViewModel() {
         mFirebaseUser = mFirebaseAuth?.currentUser
 
 
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val reference = storage.getReference("Pictures/" + mFirebaseUser!!.uid)
-        val pictureRef = reference.child("pictures_$timeStamp")
+        var pictureRef = reference.child("pictureBefore_$timeStamp")
         var uploadTask = pictureRef.putBytes(ba1!!)
 
 
@@ -131,6 +131,19 @@ class MapViewModel : ViewModel() {
         }
         //point.put("pict",pictureRef.path)
         point.photoBefore = pictureRef.path
+
+        timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        pictureRef = reference.child("pictureAfter_$timeStamp")
+        uploadTask =pictureRef.putBytes(ba2!!)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+
+        }.addOnSuccessListener {
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+
+        }
+        point.photoAfter = pictureRef.path
+
         point.pointID = mFirebaseUser!!.uid + timeStamp
         point.userName = mFirebaseUser!!.displayName
 

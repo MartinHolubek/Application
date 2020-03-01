@@ -71,21 +71,38 @@ class HomeFragment : Fragment() {
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
             placeView.valueDate.text=currentPlace.date.toString()
 
-            val imageView = placeView.findViewById<ImageView>(R.id.imageTicket)
+            val imageBeforeView = placeView.findViewById<ImageView>(R.id.imageTicketBefore)
 
             //Referencia na obrázok v úložisku Firebase
-            var islandRef = FirebaseStorage.getInstance()
+            var photoBeforeRef = FirebaseStorage.getInstance()
                 .reference
                 .child(currentPlace.photoBefore.toString())
 
             val ONE_MEGABYTE: Long = 1024 * 1024
-            islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+            photoBeforeRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
                 // Konvertujeme byteArray na bitmap
                 var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.width,imageView.height,false))
+                imageBeforeView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageBeforeView.width,imageBeforeView.height,false))
             }.addOnFailureListener {
                 // Handle any errors
             }
+
+
+
+
+
+            val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
+            var photoAfterRef = FirebaseStorage.getInstance()
+                .reference
+                .child(currentPlace.photoAfter.toString())
+            photoAfterRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+                // Konvertujeme byteArray na bitmap
+                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
+                imageAfterView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageAfterView.width,imageAfterView.height,false))
+            }.addOnFailureListener {
+                // Handle any errors
+            }
+
             return placeView
         }
 

@@ -7,16 +7,34 @@
         android:layout_height="match_parent"
         tools:context=".MapActivity">
 
-
-    <ListView
-            android:id="@+id/listview"
-            android:layout_width="150dp"
+    <Button
+            android:id="@+id/buttonBackEvent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:background="@android:color/background_light"
-            android:divider="@android:drawable/divider_horizontal_textfield"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="@string/Back"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+    <AutoCompleteTextView
+            android:id="@+id/inputEventLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:ems="10"
+            android:hint="@string/InputLocationEvent"
+            android:inputType="textPersonName"
+            android:completionThreshold="1"
+            android:dropDownAnchor="@id/text_view_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonBackEvent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/text_view_address"
+            android:layout_width="390dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputEventLocation" />
 </androidx.constraintlayout.widget.ConstraintLayout>
