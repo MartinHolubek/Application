@@ -5,6 +5,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class Event(){
+    var title :String?=null
     var organizer :String?=null
     var startDate :Date?=null
     var endDate :Date?=null

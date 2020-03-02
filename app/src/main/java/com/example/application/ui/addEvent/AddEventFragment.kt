@@ -1,15 +1,20 @@
 package com.example.application.ui.addEvent
 
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,9 +32,14 @@ import com.esri.arcgisruntime.tasks.geocode.GeocodeResult
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
 import com.esri.arcgisruntime.util.ListenableList
+import com.example.application.Event
 import com.example.application.MainActivity
 import com.example.application.MapActivity
 import com.example.application.R
+import kotlinx.android.synthetic.main.activity_create_user.*
+import kotlinx.android.synthetic.main.fragment_addevent.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AddEventFragment : Fragment() {
 
@@ -38,6 +48,9 @@ class AddEventFragment : Fragment() {
     private lateinit var textLocation: EditText
     private lateinit var map: ArcGISMap
     private var mLocationDisplay: LocationDisplay? = null
+
+    private lateinit var startDate: EditText
+    private lateinit var startTime: EditText
 
     val REQUEST_CODE = 11
 
@@ -73,6 +86,9 @@ class AddEventFragment : Fragment() {
             mapView!!.map = it
         })
 
+        startDate = root.findViewById(R.id.inputStartDateEvent)
+        startTime = root.findViewById(R.id.inputStartTimeEvent)
+
 
         addresses = ArrayList()
         // create a LocatorTask from an online service
@@ -84,7 +100,29 @@ class AddEventFragment : Fragment() {
             startActivityForResult(intent,REQUEST_CODE)
         })
 
+        var buttonAdd = root.findViewById<Button>(R.id.buttonAddEvent)
+        buttonAdd.setOnClickListener(View.OnClickListener {
+            addEvent(root)
+        })
+        startDate.setOnClickListener(View.OnClickListener {
+            showDatePickerDialog(startDate)
+        })
+        startTime.setOnClickListener(View.OnClickListener {
+            showTimePickerDialog(root)
+        })
+
         return root
+    }
+
+
+    private fun addEvent(view:View):Boolean {
+        var event = Event()
+        event.title = view.findViewById<EditText>(R.id.inputTitleEvent).toString()
+        event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).toString()
+
+
+        addEventViewModel.saveEventToFirebase(event)
+        return true
     }
 
     //Metoda ktora ziskava spravy z inej aktivity
@@ -120,6 +158,57 @@ class AddEventFragment : Fragment() {
                     Toast.makeText(this.context,e.toString(),Toast.LENGTH_SHORT).show()
                 }
             } })
+        }
+    }
+
+    fun showDatePickerDialog(v: View) {
+        val newFragment = DatePickerFragment()
+        newFragment.show(activity!!.supportFragmentManager, "datePicker")
+    }
+
+    class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            // Use the current date as the default date in the picker
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            // Create a new instance of DatePickerDialog and return it
+            return DatePickerDialog(this.context!!, this, year, month, day)
+        }
+
+        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
+            // Do something with the date chosen by the user
+            var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
+            text?.setText("${day.toString()}.${month.toString()}.${year.toString()}")
+        }
+    }
+
+    fun showTimePickerDialog(v: View) {
+        TimePickerFragment().show(activity!!.supportFragmentManager, "timePicker")
+    }
+
+    class TimePickerFragment() : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            // Use the current time as the default values for the picker
+            val c = Calendar.getInstance()
+            val hour = c.get(Calendar.HOUR_OF_DAY)
+            val minute = c.get(Calendar.MINUTE)
+
+            // Create a new instance of TimePickerDialog and return it
+            return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
+        }
+
+        override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
+            // Do something with the time chosen by the user
+            var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)
+            text?.setText("${hourOfDay.toString()}:${minute.toString()}")
+
+
         }
     }
 }

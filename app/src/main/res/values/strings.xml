@@ -54,4 +54,6 @@
     <string name="InputLocationEvent">Vyberte miesto</string>
     <string name="CreateEvent">Vytvoriť udalosť</string>
     <string name="Back">Späť</string>
+    <string name="Time">Čas</string>
+    <string name="Date">Dátum</string>
 </resources>

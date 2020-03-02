@@ -80,6 +80,13 @@ class FireStoreRepository{
 
     }
 
+    fun saveEventItem(event: Event): Task<Void> {
+        var documentReference = firestoreDB.collection("users")
+            .document(user!!.uid)
+            .collection("events")
+            .document()
+        return documentReference.set(event)
+    }
 
 
 }
