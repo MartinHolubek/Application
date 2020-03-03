@@ -47,7 +47,9 @@ class AddFriendFragment : Fragment() {
 
         var buttonSearch = root.findViewById<Button>(R.id.buttonSearchFriend)
         buttonSearch.setOnClickListener(View.OnClickListener {
-            addFriendViewModel.getPotentionalFriends(textView.text.toString())
+            if (!textView.text.toString().equals("")){
+                addFriendViewModel.getPotentionalFriends(textView.text.toString())
+            }
         })
         return root
     }

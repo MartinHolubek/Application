@@ -73,8 +73,11 @@ class FireStoreRepository{
                 }
             }
 
+        /*var collectionReference = firestoreDB.collection("users")
+            .whereEqualTo("displayName", name.toString())*/
+
         var collectionReference = firestoreDB.collection("users")
-            .whereEqualTo("displayName", name.toString())
+            .orderBy("displayName").startAt(name).endAt(name+"\uf8ff")
 
         return collectionReference
 

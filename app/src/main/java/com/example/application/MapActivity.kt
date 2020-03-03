@@ -1,34 +1,23 @@
 package com.example.application
 
-import android.app.PendingIntent.getActivity
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import com.esri.arcgisruntime.mapping.ArcGISMap
-import com.esri.arcgisruntime.mapping.Basemap
 import com.esri.arcgisruntime.mapping.view.MapView
 
 import android.view.Menu
 
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import com.esri.arcgisruntime.mapping.view.LocationDisplay
 import com.esri.arcgisruntime.loadable.LoadStatus
-import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
 import com.example.application.ui.addEvent.AddEventFragment
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_map.*
-import kotlinx.android.synthetic.main.ticket.view.*
 
 class MapActivity : AppCompatActivity() {
 
@@ -94,7 +83,7 @@ class MapActivity : AppCompatActivity() {
                 var intent = Intent()
                 intent.putExtra(AddEventFragment.EXTRA_KEY,inputEventLocation.text.toString())
 
-                setResult(AddEventFragment.RESULT_CODE,intent)
+                setResult(AddEventFragment.RESULT_CODE_LOCATION,intent)
                 finish()
 
         })

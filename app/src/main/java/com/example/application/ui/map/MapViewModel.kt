@@ -122,6 +122,7 @@ class MapViewModel : ViewModel() {
         var uploadTask = pictureRef.putBytes(ba1!!)
 
 
+
         uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
 

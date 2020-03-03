@@ -1,14 +1,16 @@
 package com.example.application.ui.addEvent
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
@@ -18,26 +20,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
-import com.esri.arcgisruntime.loadable.LoadStatus
 import com.esri.arcgisruntime.mapping.ArcGISMap
-import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.Graphic
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.mapping.view.LocationDisplay
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
-import com.esri.arcgisruntime.tasks.geocode.GeocodeResult
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
-import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
-import com.esri.arcgisruntime.util.ListenableList
 import com.example.application.Event
-import com.example.application.MainActivity
 import com.example.application.MapActivity
 import com.example.application.R
-import kotlinx.android.synthetic.main.activity_create_user.*
-import kotlinx.android.synthetic.main.fragment_addevent.*
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -49,14 +44,24 @@ class AddEventFragment : Fragment() {
     private lateinit var map: ArcGISMap
     private var mLocationDisplay: LocationDisplay? = null
 
+    val SELECT_IMAGE = 1001
+    private var imageUri: Uri? = null
+
     private lateinit var startDate: EditText
     private lateinit var startTime: EditText
+    private lateinit var imageViewPhotoEvent: ImageView
 
-    val REQUEST_CODE = 11
+    private lateinit var point: GeoPoint
+
+    val REQUEST_CODE_LOCATION = 11
+    val REQUEST_CODE_PHOTO = 10
 
     companion object{
         val EXTRA_KEY = "address"
-        val RESULT_CODE = 12
+        val RESULT_CODE_LOCATION = 12
+        val RESULT_CODE_PHOTO = 13
+        lateinit var localDate : ArrayList<Int>
+
     }
 
 
@@ -66,6 +71,7 @@ class AddEventFragment : Fragment() {
 
     //pole adries
     var addresses : ArrayList<String>? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,7 +94,8 @@ class AddEventFragment : Fragment() {
 
         startDate = root.findViewById(R.id.inputStartDateEvent)
         startTime = root.findViewById(R.id.inputStartTimeEvent)
-
+        imageViewPhotoEvent = root.findViewById(R.id.imageViewPhotoEvent)
+        localDate = ArrayList()
 
         addresses = ArrayList()
         // create a LocatorTask from an online service
@@ -97,15 +104,20 @@ class AddEventFragment : Fragment() {
         textLocation = root.findViewById<EditText>(R.id.inputLocation)
         textLocation.setOnClickListener(View.OnClickListener{
             var intent = Intent(activity, MapActivity::class.java)
-            startActivityForResult(intent,REQUEST_CODE)
+            startActivityForResult(intent,REQUEST_CODE_LOCATION)
         })
 
         var buttonAdd = root.findViewById<Button>(R.id.buttonAddEvent)
         buttonAdd.setOnClickListener(View.OnClickListener {
             addEvent(root)
         })
+        var buttonAddPhoto = root.findViewById<Button>(R.id.buttonAddPictureEvent)
+        buttonAddPhoto.setOnClickListener(View.OnClickListener {
+            onClickAddImage(root)
+        })
+
         startDate.setOnClickListener(View.OnClickListener {
-            showDatePickerDialog(startDate)
+            showDatePickerDialog(root)
         })
         startTime.setOnClickListener(View.OnClickListener {
             showTimePickerDialog(root)
@@ -114,12 +126,18 @@ class AddEventFragment : Fragment() {
         return root
     }
 
+    /**
+     * Metoda. ktora uloží udalosť do databazy firebase
+     */
 
     private fun addEvent(view:View):Boolean {
         var event = Event()
-        event.title = view.findViewById<EditText>(R.id.inputTitleEvent).toString()
-        event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).toString()
-
+        event.title = view.findViewById<EditText>(R.id.inputTitleEvent).text.toString()
+        event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).text.toString()
+        var date = GregorianCalendar(localDate[0],localDate[1],localDate[2],localDate[3],localDate[4]).time
+        event.startDate = Timestamp(date)
+        event.coordinates = point
+        event.picture = imageUri.toString()
 
         addEventViewModel.saveEventToFirebase(event)
         return true
@@ -129,7 +147,7 @@ class AddEventFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode==REQUEST_CODE && resultCode == RESULT_CODE){
+        if (requestCode==REQUEST_CODE_LOCATION && resultCode == RESULT_CODE_LOCATION){
             var address = data?.getStringExtra(EXTRA_KEY)
             textLocation.setText(address)
 
@@ -140,8 +158,11 @@ class AddEventFragment : Fragment() {
                     if (geocodeResults.size>0){
                         var topResult = geocodeResults.get(0)
                         var loc = topResult.displayLocation
+                        //inicializacia point
+                        point = GeoPoint(loc.x,loc.y)
+
                         var att = topResult.attributes
-                        var symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE,
+                        var symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE,
                             Color.rgb(255,0,0),20.0f)
                         var geocodeLocation = Graphic(loc,att,symbol)
                         var graphicsOverlay = GraphicsOverlay()
@@ -158,15 +179,24 @@ class AddEventFragment : Fragment() {
                     Toast.makeText(this.context,e.toString(),Toast.LENGTH_SHORT).show()
                 }
             } })
+        }else if(resultCode== Activity.RESULT_OK && requestCode== SELECT_IMAGE){
+            imageUri = data?.data
+            if (imageUri != null){
+                imageViewPhotoEvent.setImageURI(imageUri)
+            }
         }
     }
 
+    /**
+     * Zobrazi okno s vyberom datumu
+     */
     fun showDatePickerDialog(v: View) {
         val newFragment = DatePickerFragment()
         newFragment.show(activity!!.supportFragmentManager, "datePicker")
     }
 
     class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             // Use the current date as the default date in the picker
@@ -182,7 +212,11 @@ class AddEventFragment : Fragment() {
         override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
             // Do something with the date chosen by the user
             var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
-            text?.setText("${day.toString()}.${month.toString()}.${year.toString()}")
+            text?.setText("${month+1} ${day}, ${year}")
+
+            localDate.add(0,year)
+            localDate.add(1,month)
+            localDate.add(2,day)
         }
     }
 
@@ -191,8 +225,6 @@ class AddEventFragment : Fragment() {
     }
 
     class TimePickerFragment() : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-
-
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             // Use the current time as the default values for the picker
             val c = Calendar.getInstance()
@@ -200,15 +232,49 @@ class AddEventFragment : Fragment() {
             val minute = c.get(Calendar.MINUTE)
 
             // Create a new instance of TimePickerDialog and return it
-            return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
+            return TimePickerDialog(activity, this, hour, minute,
+                DateFormat.is24HourFormat(activity))
         }
 
         override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
             // Do something with the time chosen by the user
             var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)
-            text?.setText("${hourOfDay.toString()}:${minute.toString()}")
-
+            text?.setText("${hourOfDay}:${minute}")
+            localDate.add(3,hourOfDay)
+            localDate.add(4,minute)
 
         }
     }
+
+    fun onClickAddImage(view : View){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(activity?.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+                //permission not granted
+                val permissions = Array(1){android.Manifest.permission.READ_EXTERNAL_STORAGE}
+                //show popup for runtime perrmision
+                requestPermissions(permissions, Context.CONTEXT_INCLUDE_CODE)
+
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE)
+
+            }else{
+                //permision allready granted
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE)
+            }
+        }else{
+            //system os is less as marshmallow
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE)
+        }
+    }
+
+
 }
