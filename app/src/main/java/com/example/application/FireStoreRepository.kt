@@ -91,5 +91,13 @@ class FireStoreRepository{
         return documentReference.set(event)
     }
 
+    fun getEventItems(): CollectionReference {
+        var collectionReference = firestoreDB.collection("users")
+            .document(user!!.uid)
+            .collection("events")
+
+        return collectionReference
+    }
+
 
 }

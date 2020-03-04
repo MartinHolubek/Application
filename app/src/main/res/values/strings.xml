@@ -56,4 +56,9 @@
     <string name="Back">Späť</string>
     <string name="Time">Čas</string>
     <string name="Date">Dátum</string>
+    <string name="ShowEvents">Udalosti</string>
+    <string name="Settings">Nastavenia</string>
+    <string name="organizer">Organizátor</string>
+    <string name="interest">Majú záujem</string>
+    <string name="event">Udalosť</string>
 </resources>
