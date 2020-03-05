@@ -107,6 +107,7 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        container?.removeAllViews()
         mapViewModel =
             ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_map, container, false)
@@ -187,6 +188,8 @@ class MapFragment : Fragment() {
             point2.date = Calendar.getInstance().time
             point2.placeName = "Dumbier"
             point2.coordinates = GeoPoint(x!!,y!!)
+            point2.rating = 0F
+            point2.countOfRating = 0
 
             var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(x,y))
             addressInfo.addDoneListener(Runnable {

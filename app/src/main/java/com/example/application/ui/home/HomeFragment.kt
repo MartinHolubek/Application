@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.application.R
 import com.example.application.Place
+import com.example.application.ui.place.PlaceFragment
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.ticket.view.*
 
@@ -72,6 +73,30 @@ class HomeFragment : Fragment() {
             placeView.valueDate.text=currentPlace.date.toString()
 
             val imageBeforeView = placeView.findViewById<ImageView>(R.id.imageTicketBefore)
+            var ratingValue:Float
+            val ratingbar =placeView.findViewById<RatingBar>(R.id.rating_bar)
+
+
+            ratingbar.rating = 2F
+            placeView.textViewRating.text = currentPlace.countOfRating.toString() + " Hodnotení"
+
+            placeView.setOnClickListener(View.OnClickListener {
+                var placeFragment =
+                    PlaceFragment()
+
+                val bundle = Bundle()
+
+                bundle.putString("POINT_ID",currentPlace.pointID.toString())
+                placeFragment.arguments = bundle
+
+                var uidUser = currentPlace.pointID?.dropLast(15)
+                var fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                fragmentTransaction?.replace(R.id.nav_host_fragment, placeFragment)
+                fragmentTransaction?.addToBackStack(null)
+                fragmentTransaction?.commit()
+            })
+
+
 
             //Referencia na obrázok v úložisku Firebase
             var photoBeforeRef = FirebaseStorage.getInstance()
@@ -86,10 +111,6 @@ class HomeFragment : Fragment() {
             }.addOnFailureListener {
                 // Handle any errors
             }
-
-
-
-
 
             val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
             var photoAfterRef = FirebaseStorage.getInstance()

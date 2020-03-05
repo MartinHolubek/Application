@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         package="com.example.application">
-
     <!-- Pridanie povolení na pristup na internet,zápis do súboru a a získanie pozície zariadenia -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,15 +20,21 @@
             android:required="true" />
 
     <application
-            android:largeHeap="true"
-            android:hardwareAccelerated="false"
             android:allowBackup="true"
+            android:hardwareAccelerated="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.MainActivity"></activity>
+        <activity
+                android:name=".PlaceActivity"
+                android:label="@string/title_activity_place"
+                android:theme="@style/AppTheme.NoActionBar" />
+
         <receiver android:name=".text_view">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -44,7 +49,7 @@
                 android:name=".MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
+                android:windowSoftInputMode="stateVisible|adjustResize|adjustPan" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

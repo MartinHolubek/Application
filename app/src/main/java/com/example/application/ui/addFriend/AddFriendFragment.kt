@@ -29,6 +29,7 @@ class AddFriendFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        container?.removeAllViews()
         addFriendViewModel =
             ViewModelProviders.of(this).get(AddFriendViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addfriend, container, false)

@@ -78,6 +78,7 @@ class AddEventFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        container?.removeAllViews()
         addEventViewModel =
             ViewModelProviders.of(this).get(AddEventViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addevent, container, false)

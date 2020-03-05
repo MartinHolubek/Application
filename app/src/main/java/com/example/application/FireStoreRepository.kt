@@ -1,9 +1,9 @@
 package com.example.application
 
-import android.os.Handler
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -26,6 +26,16 @@ class FireStoreRepository{
         var collectionReference = firestoreDB.collection("users/${user!!.uid}/places")
 
         return collectionReference
+    }
+
+    fun getPlaceItem(placeID:String): DocumentReference {
+        var user = placeID.dropLast(15)
+        var documentReference = firestoreDB.collection("users")
+            .document(user)
+            .collection("places")
+            .document(placeID)
+
+        return documentReference
     }
 
 

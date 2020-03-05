@@ -33,6 +33,7 @@ class ToolsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        container?.removeAllViews()
         toolsViewModel =
             ViewModelProviders.of(this).get(ToolsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_tools, container, false)

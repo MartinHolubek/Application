@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),Communicator {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -124,6 +124,14 @@ class MainActivity : AppCompatActivity() {
 
         tvImage.setImageURI(null)
         tvImage.setImageURI(uri)*/
+
+    }
+
+    override fun passDataCom(pointID: String) {
+        val bundle = Bundle()
+
+        bundle.putString("POINT_ID",pointID)
+        val transaction = supportFragmentManager.beginTransaction()
 
     }
 }
