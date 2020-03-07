@@ -152,4 +152,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="pictureBefore">Fotka pred</string>
+    <string name="RatePlace">Odohnodte miesto</string>
+    <string name="Comment">Komentár</string>
+    <string name="Comments">Komentáre</string>
 </resources>

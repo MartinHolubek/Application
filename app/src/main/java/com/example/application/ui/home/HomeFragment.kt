@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        container?.removeAllViews()
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
@@ -45,8 +45,8 @@ class HomeFragment : Fragment() {
         })
         return root
     }
-    fun updateList2(view : View){
 
+    fun updateList2(view : View){
         listPoints = view.findViewById<ListView>(R.id.lvPoints)
         var myPlaceAdapter= placeAdapter2(view.context,listPlaces2)
         listPoints.adapter=myPlaceAdapter
@@ -94,6 +94,7 @@ class HomeFragment : Fragment() {
                 fragmentTransaction?.replace(R.id.nav_host_fragment, placeFragment)
                 fragmentTransaction?.addToBackStack(null)
                 fragmentTransaction?.commit()
+
             })
 
 
