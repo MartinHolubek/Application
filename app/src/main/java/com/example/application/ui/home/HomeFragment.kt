@@ -11,6 +11,9 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
+import com.example.application.Friend
 import com.example.application.R
 import com.example.application.Place
 import com.example.application.ui.place.PlaceFragment
@@ -22,6 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     lateinit var listPlaces2 : List<Place>
+    lateinit var listFriends : List<String>
     lateinit var  listPoints : ListView
 
     override fun onCreateView(
@@ -39,7 +43,16 @@ class HomeFragment : Fragment() {
             textView.text = it
         })
 
-        homeViewModel.getSavedPlaces().observe(this, Observer { it ->
+        /*homeViewModel.getFriends().observe(this, Observer {
+            listFriends = it
+        })*/
+
+        /*homeViewModel.getSavedPlaces().observe(this, Observer { it ->
+            listPlaces2 = it
+            updateList2(root)
+        })*/
+        var list = listOf<String>("Qs3QLZEy78SM3DPRFHEYf54TSZx2","UI98XTlfQwhcoGysy0TAC3RTvcI2")
+        homeViewModel.getPlaces(list).observe(this, Observer { it ->
             listPlaces2 = it
             updateList2(root)
         })
@@ -81,7 +94,11 @@ class HomeFragment : Fragment() {
             placeView.textViewRating.text = currentPlace.countOfRating.toString() + " Hodnotení"
 
             placeView.setOnClickListener(View.OnClickListener {
-                var placeFragment =
+                val bundle = Bundle()
+
+                bundle.putString("POINT_ID",currentPlace.pointID.toString())
+                findNavController().navigate(R.id.action_nav_home_to_place,bundle)
+                /*var placeFragment =
                     PlaceFragment()
 
                 val bundle = Bundle()
@@ -93,7 +110,7 @@ class HomeFragment : Fragment() {
                 var fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                 fragmentTransaction?.replace(R.id.nav_host_fragment, placeFragment)
                 fragmentTransaction?.addToBackStack(null)
-                fragmentTransaction?.commit()
+                fragmentTransaction?.commit()*/
 
             })
 

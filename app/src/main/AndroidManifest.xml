@@ -29,7 +29,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.MainActivity"></activity>
         <activity
                 android:name=".PlaceActivity"
                 android:label="@string/title_activity_place"
@@ -49,7 +48,7 @@
                 android:name=".MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="stateVisible|adjustResize|adjustPan" />
+                android:windowSoftInputMode="adjustResize" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

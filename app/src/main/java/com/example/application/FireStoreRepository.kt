@@ -1,13 +1,11 @@
 package com.example.application
 
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import java.time.LocalDate
 import java.util.*
 
 class FireStoreRepository{
@@ -146,8 +144,22 @@ class FireStoreRepository{
         return collectionReference
     }
 
-    fun getUser(){
+    fun getUserPlaces(): CollectionReference{
+        var collectionReference = firestoreDB.collection("users")
 
+
+
+        return collectionReference
+    }
+
+    fun getPlaces(): Query{
+
+        return firestoreDB.collectionGroup("places")
+    }
+
+    fun getPlaces(listUsers:List<String>): Query {
+        //return firestoreDB.collection("users").whereIn("uid",listUsers)
+        return firestoreDB.collectionGroup("places").whereIn("creatorID",listUsers)
     }
 
 

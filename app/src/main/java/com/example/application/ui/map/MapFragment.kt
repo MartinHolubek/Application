@@ -16,10 +16,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -40,6 +38,7 @@ import com.esri.arcgisruntime.symbology.TextSymbol
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.example.application.Place
 import com.example.application.R
+import com.example.application.UsersPlaces
 import com.google.android.gms.tasks.CancellationToken
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_map.*
@@ -50,6 +49,7 @@ import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
 
 class MapFragment : Fragment() {
@@ -62,6 +62,8 @@ class MapFragment : Fragment() {
     private var byteArray_photo_before: ByteArray? = null
     private var byteArray_photo_after: ByteArray? = null
 
+    lateinit var listUsersPlaces : List<Place>
+
     var currentPhotoPath: String? = null
     val REQUEST_TAKE_PHOTO = 1
     val REQUEST_IMAGE_CAPTURE_BEFORE = 1
@@ -69,34 +71,6 @@ class MapFragment : Fragment() {
 
     //objekt na zistenie adresy
     private lateinit var mLocatorTask : LocatorTask
-
-    private val requestCode = 2
-    var reqPermissions = arrayOf<String>(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )
-
-    private class MyTouchListener(view: View,mapView: MapView) : DefaultMapViewOnTouchListener(view.context,mapView){
-
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            val pt = Point(e?.x as Double,e?.y as Double, SpatialReference.create(4326))
-            val mySymbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 18.0F)
-            val textSymbol = TextSymbol(30.0F,"Ahoj",Color.BLUE,TextSymbol.HorizontalAlignment.CENTER,TextSymbol.VerticalAlignment.BOTTOM)
-            val myGraphic = Graphic(pt, textSymbol)
-            val myGraphicsOverlay = GraphicsOverlay()
-            myGraphicsOverlay.graphics.add(myGraphic)
-            mMapView.graphicsOverlays.add(myGraphicsOverlay)
-            return true
-        }
-
-    }
-
-
-
-    // This is an arbitrary number we are using to keep track of the permission
-    // request. Where an app has multiple context for requesting permission,
-// this can help differentiate the different contexts.
-    private val REQUEST_CODE_PERMISSIONS = 10
 
     // This is an array of all the permission specified in the manifest.
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -111,51 +85,50 @@ class MapFragment : Fragment() {
         mapViewModel =
             ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_map, container, false)
-        val editText: TextView = root.findViewById(R.id.text_gallery)
+        val editText: EditText = root.findViewById(R.id.text_gallery)
+
+        var inputMethodManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(editText,InputMethodManager.SHOW_IMPLICIT)
 
         // create a LocatorTask from an online service
+
         mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
 
         mapView = root.findViewById<MapView>(R.id.map1)
         mapViewModel.text.observe(this, Observer {
-            editText.text = it
+            editText.setText(it)
             //update UI
         })
         mapViewModel.map.observe(this, Observer {
             mapView!!.map = it
         })
 
-        mapView.onTouchListener = object:DefaultMapViewOnTouchListener(root.context, mapView) {
+        mapViewModel.savedPlaces.observe(this, Observer {
+            thread {
+                listUsersPlaces = it
+                if (mapView!!.map != null){
+                    val myGraphicsOverlay = GraphicsOverlay()
+                    for (item in listUsersPlaces){
+                        val pt = Point(item.coordinates?.latitude!!,item.coordinates?.longitude!!, SpatialReference.create(4326))
+                        val mySymbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 18.0F)
+                        val textSymbol = TextSymbol(30.0F,"Ahoj",Color.BLUE,TextSymbol.HorizontalAlignment.CENTER,TextSymbol.VerticalAlignment.BOTTOM)
+                        val myGraphic = Graphic(pt, mySymbol)
+                        myGraphic.attributes.set("username",item.userName)
+                        myGraphic.attributes.set("placename",item.placeName)
+                        myGraphic.attributes.set("date",item.date.toString())
+                        myGraphic.attributes.set("clearText",item.ClearText)
+                        myGraphic.attributes.set("rating",item.rating.toString())
+                        myGraphicsOverlay.graphics.add(myGraphic)
 
-            override fun onSingleTapConfirmed(e:MotionEvent):Boolean {
-                val screenPoint : android.graphics.Point = android.graphics.Point(e.x.toInt(),e.y.toInt())
-
-                val  identifyGraphics : ListenableFuture<MutableList<IdentifyGraphicsOverlayResult>>? =
-                    mapView.identifyGraphicsOverlaysAsync(screenPoint,10.0,false)
-
-
-                identifyGraphics?.addDoneListener(Runnable {
-                    kotlin.run {
-                        Toast.makeText(root.context, identifyGraphics.get().size.toString() + ",,,", Toast.LENGTH_SHORT).show()
-
-                        //ak list obsahuje nejaky bod
-                        if (identifyGraphics.get().size > 0 &&
-                            identifyGraphics.get().get(0).graphics.size > 0){
-                            identifyGraphics.get().get(0).graphics.get(0).isSelected = true
-
-
-                            // zobraz9 dialogove okno
-                            showDialog( root,identifyGraphics.get().get(0).graphics.get(0).attributes.get("address").toString() +
-                                    identifyGraphics.get().get(0).graphics.get(0).attributes.get("user"))
-                        }else{
-                            //Toast.makeText(root.context, "Ziadny vybrany bod", Toast.LENGTH_SHORT).show()
-                        }
                     }
-                })
-
-                return true
+                    mapView.graphicsOverlays.add(myGraphicsOverlay)
+                }
             }
-        }
+        })
+
+        setOnTouchListener(root)
+
+
         mapViewModel.before_photo_path.observe(this, Observer {
             //imageView_before.setImageURI(Uri.parse(it))
         })
@@ -191,6 +164,7 @@ class MapFragment : Fragment() {
             point2.rating = 0F
             point2.countOfRating = 0
 
+
             var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(x,y))
             addressInfo.addDoneListener(Runnable {
                 kotlin.run {
@@ -223,26 +197,39 @@ class MapFragment : Fragment() {
             setupLocationDisplay(root, mapView)
 
         })*/
-
-        val buttonBeforePhoto : Button = root.findViewById(R.id.button_photo_before)
-        buttonBeforePhoto.setOnClickListener(View.OnClickListener {
+        val imageBeforePhoto = root.findViewById<ImageView>(R.id.imageView_before)
+        val textViewHintBefore = root.findViewById<TextView>(R.id.textViewHintBeforePhoto)
+        imageBeforePhoto.setOnClickListener(View.OnClickListener {
             if (byteArray_photo_before != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",true)
             }else{
                 dispatchTakePictureIntentBefore(root)
+                textViewHintBefore.visibility = View.GONE
             }
 
         })
+        val imageAfterPhoto = root.findViewById<ImageView>(R.id.imageView_after)
+        val textViewHintAfter = root.findViewById<TextView>(R.id.textViewHintAfterPhoto)
 
-        val buttonAfterPhoto : Button = root.findViewById(R.id.button_photo_after)
-        buttonAfterPhoto.setOnClickListener(View.OnClickListener {
+        imageAfterPhoto.setOnClickListener(View.OnClickListener {
             if (byteArray_photo_after != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",false)
             }else{
                 dispatchTakePictureIntentAfter(root)
+                textViewHintAfter.visibility = View.GONE
             }
 
             //mapViewModel.getURL()
+        })
+        val frameLayout = root.findViewById<FrameLayout>(R.id.framelayoutAfterPhoto)
+        frameLayout.visibility = View.GONE
+        val switch = root.findViewById<Switch>(R.id.switchAddAfterPhoto)
+        switch.setOnClickListener(View.OnClickListener {
+            if (switch.isChecked){
+                frameLayout.visibility = View.VISIBLE
+            }else{
+                frameLayout.visibility = View.GONE
+            }
         })
 
         // spustit GPS
@@ -250,6 +237,46 @@ class MapFragment : Fragment() {
         setupLocationDisplay(root, mapView)
 
         return root
+    }
+
+    private fun setOnTouchListener(root:View) {
+        mapView.onTouchListener = object:DefaultMapViewOnTouchListener(root.context, mapView) {
+
+            override fun onSingleTapConfirmed(e:MotionEvent):Boolean {
+                val screenPoint : android.graphics.Point = android.graphics.Point(e.x.toInt(),e.y.toInt())
+
+                val  identifyGraphics : ListenableFuture<MutableList<IdentifyGraphicsOverlayResult>>? =
+                    mapView.identifyGraphicsOverlaysAsync(screenPoint,10.0,false)
+
+
+                identifyGraphics?.addDoneListener(Runnable {
+                    kotlin.run {
+                        Toast.makeText(root.context, identifyGraphics.get().size.toString() + ",,,", Toast.LENGTH_SHORT).show()
+
+                        //ak list obsahuje nejaky bod
+                        if (identifyGraphics.get().size > 0 &&
+                            identifyGraphics.get().get(0).graphics.size > 0){
+                            identifyGraphics.get().get(0).graphics.get(0).isSelected = true
+
+                            var place = identifyGraphics.get().get(0).graphics.get(0)
+                            var username =   place.attributes.get("username").toString()
+                            var placename =   place.attributes.get("placename").toString()
+                            var date =   place.attributes.get("date").toString()
+                            var text =   place.attributes.get("clearText").toString()
+                            var rating =   place.attributes.get("rating").toString()
+
+
+                            // zobraz9 dialogove okno
+                            showDialog( root,username,placename,date,text,rating)
+                        }else{
+                            //Toast.makeText(root.context, "Ziadny vybrany bod", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+
+                return true
+            }
+        }
     }
 
     private fun showDialog(view: View, text:String, before:Boolean){
@@ -287,7 +314,7 @@ class MapFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showDialog(view: View, text: String){
+    private fun showDialog(view: View, username: String, placename: String, date: String, text: String, rating: String){
         //objekt dialog okno
         lateinit var dialog: AlertDialog
 
@@ -301,10 +328,10 @@ class MapFragment : Fragment() {
             }
         }
 
-
         builder.setTitle("Dialog")
 
-        builder.setMessage(text)
+        builder.setMessage("Uživatel:${username}\nNázov miesta:${placename}\nDátum označenia:${date}\nPopis:${text}\nHodnotenie:${rating}")
+
 
         builder.setNeutralButton("CANCEL",dialogClickListener)
 
@@ -348,7 +375,6 @@ class MapFragment : Fragment() {
 
         myGraphicsOverlay.graphics.add(myGraphic)
         mv.graphicsOverlays.add(myGraphicsOverlay)
-
         //Text symbol
 
 

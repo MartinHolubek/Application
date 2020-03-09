@@ -9,7 +9,12 @@
             android:id="@+id/nav_home"
             android:name="com.example.application.ui.home.HomeFragment"
             android:label="@string/menu_home"
-            tools:layout="@layout/fragment_home" />
+            tools:layout="@layout/fragment_home" >
+        <action
+                android:id="@+id/action_nav_home_to_place"
+                app:destination="@id/nav_place" />
+        <argument android:name="placeID" />
+    </fragment>
 
     <fragment
             android:id="@+id/nav_map"
@@ -39,4 +44,8 @@
             android:id="@+id/nav_addfriend"
             android:name="com.example.application.ui.addFriend.AddFriendFragment"
             android:label="@string/menu_addfriend" />
+    <fragment
+            android:id="@+id/nav_place"
+            android:name="com.example.application.ui.place.PlaceFragment"
+            android:label="PlaceFragment" />
 </navigation>

@@ -4,7 +4,7 @@ import com.google.firebase.firestore.GeoPoint
 import java.util.*
 
 class Place(){
-
+    var creatorID:String?=null
     var pointID:String?=null
     var userName:String?=null
     var date:Date?=null

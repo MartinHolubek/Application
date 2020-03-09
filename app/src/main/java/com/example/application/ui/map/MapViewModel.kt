@@ -1,25 +1,56 @@
 package com.example.application.ui.map
 
 import android.annotation.SuppressLint
+import android.os.AsyncTask.execute
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.Basemap
-import com.example.application.FireStoreRepository
-import com.example.application.Place
+import com.example.application.*
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.FirebaseStorage
+import org.w3c.dom.Document
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.thread
 
 class MapViewModel : ViewModel() {
 
     val TAG = "MAP_VIEW_MODEL"
     var fireStoreRepository = FireStoreRepository()
+    //var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData()
+    var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData<List<Place>>().apply {
 
+        thread {
+            fireStoreRepository.getPlaces()
+                .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Chyba pri načitaní priatelov")
+
+                        return@EventListener
+                    }
+
+                    var savedPlacesList: MutableList<Place> = mutableListOf()
+                    for (doc in value!!) {
+                        var place = doc.toObject(Place::class.java)
+                        savedPlacesList.add(place)
+                    }
+                    this.postValue(savedPlacesList)
+
+                })
+        }
+
+    }
+    var savedPlaces : LiveData<List<Place>> = savedUsersPlaces
 
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
@@ -43,6 +74,7 @@ class MapViewModel : ViewModel() {
 
     private var _map = MutableLiveData<ArcGISMap>().apply {
         value = ArcGISMap(Basemap.Type.STREETS_VECTOR, 49.201476197, 18.870735168, 11)
+
     }
     val map: LiveData<ArcGISMap> = _map
 
@@ -71,57 +103,16 @@ class MapViewModel : ViewModel() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun addPoint(point : HashMap<String,Any?>, ba1: ByteArray?, ba2: ByteArray?) : String {
-        val storage = FirebaseStorage.getInstance()
-        val db = FirebaseFirestore.getInstance()
-        mFirebaseAuth = FirebaseAuth.getInstance()
-        mFirebaseUser = mFirebaseAuth?.currentUser
-
-
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-        val reference = storage.getReference("Pictures/" + mFirebaseUser!!.uid)
-        val pictureRef = reference.child("pictures_$timeStamp")
-        var uploadTask = pictureRef.putBytes(ba1!!)
-
-
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-
-        }
-        //point.put("pict",pictureRef.path)
-        point.put("pict",pictureRef.path)
-
-        //Prvy sposob ukladania
-        /*db.collection("users")
-            .document(mFirebaseUser!!.uid)
-            .collection("places")
-            .add(point).addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-            }*/
-
-        return   pictureRef.path
-    }
-
-    @SuppressLint("SimpleDateFormat")
     fun addPoint2(point : Place, ba1: ByteArray?, ba2: ByteArray?) : String {
         val storage = FirebaseStorage.getInstance()
         val db = FirebaseFirestore.getInstance()
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
 
-
         var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val reference = storage.getReference("Pictures/" + mFirebaseUser!!.uid)
         var pictureRef = reference.child("pictureBefore_$timeStamp")
         var uploadTask = pictureRef.putBytes(ba1!!)
-
-
 
         uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
@@ -145,6 +136,7 @@ class MapViewModel : ViewModel() {
         }
         point.photoAfter = pictureRef.path
 
+        point.creatorID = mFirebaseUser!!.uid
         point.pointID = mFirebaseUser!!.uid + timeStamp
         point.userName = mFirebaseUser!!.displayName
 
@@ -154,34 +146,6 @@ class MapViewModel : ViewModel() {
         }
 
         return   pictureRef.path
-    }
-
-    /**
-     * vráti hodnotu prveho zaznamu v kolekcii
-     */
-    fun getURL(){
-        val storage = FirebaseStorage.getInstance()
-        val db = FirebaseFirestore.getInstance()
-        mFirebaseAuth = FirebaseAuth.getInstance()
-        mFirebaseUser = mFirebaseAuth?.currentUser
-        var path : String? = null
-
-        db.collection("users")
-            .document(mFirebaseUser!!.uid)
-            .collection("places")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                    var storageRef = storage.reference
-                    _after_photo_path.value = document.data.get("pict") as String
-
-                    break
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting documents: ", exception)
-            }
     }
 }
 

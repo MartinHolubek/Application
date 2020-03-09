@@ -125,9 +125,9 @@ class CreateUserActivity : AppCompatActivity() {
                         ).show()
 
 
-                        android.os.Handler().postDelayed({
-                            addInfoAccount()
-                        },2000)
+
+                        addInfoAccount()
+
 
 
                         val startIntent = Intent(this, MainActivity::class.java)
@@ -151,7 +151,8 @@ class CreateUserActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         var name = findViewById<TextView>(R.id.sign_up_name)
         val user = hashMapOf(
-            "displayName" to name.text.toString()
+            "displayName" to name.text.toString(),
+            "uid" to mFirebaseAuth?.currentUser!!.uid
         )
 
         db.collection("users")
