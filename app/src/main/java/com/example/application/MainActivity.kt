@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(),Communicator {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_map, R.id.nav_addevent,
-                R.id.nav_tools, R.id.nav_friends, R.id.nav_addfriend
+                R.id.nav_events, R.id.nav_friends, R.id.nav_addfriend
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

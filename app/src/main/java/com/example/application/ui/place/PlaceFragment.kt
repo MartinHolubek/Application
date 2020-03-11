@@ -2,6 +2,7 @@ package com.example.application.ui.place
 
 import android.animation.ArgbEvaluator
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
@@ -16,10 +17,13 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
+import com.esri.arcgisruntime.mapping.ArcGISMap
+import com.esri.arcgisruntime.mapping.Basemap
 import com.esri.arcgisruntime.mapping.view.Graphic
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.mapping.view.MapView
@@ -48,27 +52,33 @@ class PlaceFragment : Fragment() {
     private lateinit var argbEvaluator: ArgbEvaluator
     private lateinit var models : ArrayList<Picture>
     private lateinit var place: Place
+    private var placeID:String?=null
     private lateinit var comments: List<Comment>
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var mapView:MapView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         placeViewModel =
             ViewModelProviders.of(this).get(PlaceViewModel::class.java)
         val root = inflater.inflate(R.layout.place_fragment, container, false)
+        if (placeID == null){
+            placeID = arguments?.getString("POINT_ID")
+        }
         viewPager = root.findViewById<ViewPager>(R.id.viewPager)
         viewPagerComments = root.findViewById(R.id.viewPagerComments)
-
-        var placeID = arguments?.getString("POINT_ID")
-
         mapView = root.findViewById<MapView>(R.id.placeMap)
-        placeViewModel.map.observe(this, Observer {
-            mapView!!.map = it
-        })
+        mapView!!.map = ArcGISMap(Basemap.Type.STREETS_VECTOR, 49.201476197, 18.870735168, 11)
+
         //Vyhladanie miesta podla ID
         placeViewModel.getPlace(placeID.toString()).observe(this, Observer { it ->
             place = it
@@ -90,6 +100,8 @@ class PlaceFragment : Fragment() {
                 place.countOfRating!!,place.rating!!,ratingbarPlace.rating,comment.text.toString())
 
         })
+
+
         return root
     }
 
@@ -167,7 +179,6 @@ class PlaceFragment : Fragment() {
             var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
             models.add(Picture(bmp,"Fotka po"))
 
-
             var adapter = AdapterPictures(models,view.context)
 
             viewPager.adapter = adapter
@@ -216,7 +227,6 @@ class PlaceFragment : Fragment() {
             title = view.findViewById<TextView>(R.id.pictureTitle)
             imageView.setImageBitmap(currentPicture.image)
             title.setText(currentPicture.title)
-
 
             container.addView(view,0)
             return view

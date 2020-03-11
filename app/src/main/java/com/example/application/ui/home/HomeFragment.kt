@@ -37,32 +37,39 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-
+        listFriends = listOf()
         val textView: TextView = root.findViewById(R.id.text_home)
         homeViewModel.text.observe(this, Observer {
             textView.text = it
         })
 
-        /*homeViewModel.getFriends().observe(this, Observer {
-            listFriends = it
-        })*/
+        homeViewModel.getFriends().observe(this, Observer {
+
+            listPlaces2 = it
+
+            updateList2(root)
+        })
 
         /*homeViewModel.getSavedPlaces().observe(this, Observer { it ->
             listPlaces2 = it
             updateList2(root)
         })*/
-        var list = listOf<String>("Qs3QLZEy78SM3DPRFHEYf54TSZx2","UI98XTlfQwhcoGysy0TAC3RTvcI2")
+
+        /*var list = listOf<String>("Qs3QLZEy78SM3DPRFHEYf54TSZx2","UI98XTlfQwhcoGysy0TAC3RTvcI2")
         homeViewModel.getPlaces(list).observe(this, Observer { it ->
             listPlaces2 = it
             updateList2(root)
-        })
+        })*/
         return root
     }
 
     fun updateList2(view : View){
-        listPoints = view.findViewById<ListView>(R.id.lvPoints)
-        var myPlaceAdapter= placeAdapter2(view.context,listPlaces2)
-        listPoints.adapter=myPlaceAdapter
+        kotlin.run {
+            listPoints = view.findViewById<ListView>(R.id.lvPoints)
+            var myPlaceAdapter= placeAdapter2(view.context,listPlaces2)
+            listPoints.adapter=myPlaceAdapter
+        }
+
     }
 
     inner class placeAdapter2:BaseAdapter{
@@ -121,16 +128,18 @@ class HomeFragment : Fragment() {
                 .reference
                 .child(currentPlace.photoBefore.toString())
 
+
             val ONE_MEGABYTE: Long = 1024 * 1024
             photoBeforeRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
                 // Konvertujeme byteArray na bitmap
                 var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                imageBeforeView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageBeforeView.width,imageBeforeView.height,false))
+                //imageBeforeView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageBeforeView.width,imageBeforeView.height,false))
+                imageBeforeView.setImageBitmap(bmp)
             }.addOnFailureListener {
                 // Handle any errors
             }
 
-            val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
+            /*val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
             var photoAfterRef = FirebaseStorage.getInstance()
                 .reference
                 .child(currentPlace.photoAfter.toString())
@@ -140,7 +149,7 @@ class HomeFragment : Fragment() {
                 imageAfterView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageAfterView.width,imageAfterView.height,false))
             }.addOnFailureListener {
                 // Handle any errors
-            }
+            }*/
 
             return placeView
         }

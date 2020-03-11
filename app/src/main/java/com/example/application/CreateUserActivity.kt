@@ -124,11 +124,7 @@ class CreateUserActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-
-
                         addInfoAccount()
-
-
 
                         val startIntent = Intent(this, MainActivity::class.java)
                         startActivity(startIntent)
@@ -144,7 +140,6 @@ class CreateUserActivity : AppCompatActivity() {
                         ).show()
                     }
                 })
-
     }
 
     fun addInfoAccount(){

@@ -71,7 +71,7 @@ class HomeViewModel : ViewModel() {
         })
         return savedPlaces
     }
-    fun getFriends() : LiveData<List<String>>{
+    fun getFriends() : LiveData<List<Place>>{
         firebaseRepository.getFriendsItem().addSnapshotListener(EventListener<QuerySnapshot>{value, e ->
             if (e != null) {
                 Log.w(TAG, "Chyba pri načitaní priatelov")
@@ -85,10 +85,28 @@ class HomeViewModel : ViewModel() {
                 var friend = doc.toObject(Friend::class.java)
                 savedFriendList.add(friend.uid.toString())
             }
+            if (savedFriendList.isEmpty()){
+                savedPlaces.value = listOf<Place>()
+            }else{
+                firebaseRepository.getPlaces(savedFriendList).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Chyba pri načitaní priatelov")
+                        savedFriends.value = null
 
+                        return@EventListener
+                    }
+                    var savedPlacesList : MutableList<Place> = mutableListOf()
+                    for (doc in value!!){
+                        var placeItem = doc.toObject(Place::class.java)
+                        savedPlacesList.add(placeItem)
+                    }
+
+                    savedPlaces.value = savedPlacesList
+                })
+            }
             savedFriends.value = savedFriendList
         })
-        return savedFriends
+        return savedPlaces
 
     }
 

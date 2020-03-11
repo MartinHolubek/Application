@@ -10,7 +10,7 @@
     <string name="menu_home">Domov</string>
     <string name="menu_map">Mapa</string>
     <string name="menu_addevent">Pridať udalosť</string>
-    <string name="menu_tools">Tools</string>
+    <string name="menu_events">Udalosti</string>
     <string name="menu_friends">Priatelia</string>
     <string name="menu_addfriend">Vyhľadať priateľa</string>
     <string name="Login">Prihlásiť sa</string>
@@ -160,4 +160,9 @@
     <string name="AddAfterPhoto">Odfotiť vyčistene miesto</string>
     <string name="photo_before_hint">Kliknutím pridáte futku</string>
     <string name="photo_hint">Kliknutím pridáte fotku</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_to_all_event">Všetky udalosti</string>
+    <string name="button_to_my_event">Moje udalosti</string>
 </resources>

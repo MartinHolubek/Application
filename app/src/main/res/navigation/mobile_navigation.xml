@@ -29,10 +29,14 @@
             tools:layout="@layout/fragment_addevent" />
 
     <fragment
-            android:id="@+id/nav_tools"
-            android:name="com.example.application.ui.tools.ToolsFragment"
-            android:label="@string/menu_tools"
-            tools:layout="@layout/fragment_tools" />
+            android:id="@+id/nav_events"
+            android:name="com.example.application.ui.events.EventsFragment"
+            android:label="@string/menu_events"
+            tools:layout="@layout/fragment_events" >
+        <action
+                android:id="@+id/action_nav_events_to_myEventsFragment"
+                app:destination="@id/myEventsFragment" />
+    </fragment>
 
     <fragment
             android:id="@+id/nav_friends"
@@ -48,4 +52,13 @@
             android:id="@+id/nav_place"
             android:name="com.example.application.ui.place.PlaceFragment"
             android:label="PlaceFragment" />
+    <fragment
+            android:id="@+id/myEventsFragment"
+            android:name="com.example.application.ui.MyEventsFragment"
+            android:label="my_events_fragment"
+            tools:layout="@layout/my_events_fragment" >
+        <action
+                android:id="@+id/action_myEventsFragment_to_nav_events"
+                app:destination="@id/nav_events" />
+    </fragment>
 </navigation>

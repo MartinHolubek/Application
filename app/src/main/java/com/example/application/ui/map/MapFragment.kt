@@ -9,7 +9,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +24,7 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.esri.arcgisruntime.concurrent.ListenableFuture
@@ -42,6 +45,7 @@ import com.example.application.UsersPlaces
 import com.google.android.gms.tasks.CancellationToken
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_map.*
+import kotlinx.android.synthetic.main.fragment_map.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -57,23 +61,28 @@ class MapFragment : Fragment() {
     private lateinit var mapViewModel: MapViewModel
     private lateinit var mapView: MapView
     private lateinit var map: ArcGISMap
+    private lateinit var imageBeforePhoto: ImageView
     private var mLocationDisplay: LocationDisplay? = null
 
     private var byteArray_photo_before: ByteArray? = null
     private var byteArray_photo_after: ByteArray? = null
 
-    lateinit var listUsersPlaces : List<Place>
+    private var uriPictureBefore:Uri?=null
+    private var uriPictureAfter:Uri?=null
 
+    lateinit var listUsersPlaces : List<Place>
+    var currentPhotoBeforePath:String?=null
     var currentPhotoPath: String? = null
-    val REQUEST_TAKE_PHOTO = 1
+    val REQUEST_TAKE_PHOTO = 3
     val REQUEST_IMAGE_CAPTURE_BEFORE = 1
     val REQUEST_IMAGE_CAPTURE_AFTER = 2
 
     //objekt na zistenie adresy
     private lateinit var mLocatorTask : LocatorTask
-
+    private  val REQUEST_CODE_PERMISSIONS = 10
     // This is an array of all the permission specified in the manifest.
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -128,14 +137,6 @@ class MapFragment : Fragment() {
 
         setOnTouchListener(root)
 
-
-        mapViewModel.before_photo_path.observe(this, Observer {
-            //imageView_before.setImageURI(Uri.parse(it))
-        })
-        mapViewModel.after_photo_path.observe(this, Observer {
-            //imageView_after.setImageURI(Uri.parse(it))
-        })
-
         val buttonClean : Button = root.findViewById(R.id.button_clean)
         buttonClean.setOnClickListener(View.OnClickListener {
             mLocationDisplay = mapView.locationDisplay
@@ -164,6 +165,15 @@ class MapFragment : Fragment() {
             point2.rating = 0F
             point2.countOfRating = 0
 
+            var bitmap = (imageView_before.drawable as BitmapDrawable).bitmap
+            val baos =ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+            val data = baos.toByteArray()
+
+            var bitmap2 = (imageView_after.drawable as BitmapDrawable).bitmap
+            val baos2 =ByteArrayOutputStream()
+            bitmap2.compress(Bitmap.CompressFormat.JPEG, 50, baos2)
+            val data2 = baos2.toByteArray()
 
             var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(x,y))
             addressInfo.addDoneListener(Runnable {
@@ -172,7 +182,9 @@ class MapFragment : Fragment() {
                         var address =addressInfo.get().get(0).attributes.getValue("Address").toString() + "," +
                                 addressInfo.get().get(0).attributes.getValue("City")
                         point2.placeName = address
-                        Toast.makeText(root.context,mapViewModel.addPoint2(point2,byteArray_photo_before, byteArray_photo_after), Toast.LENGTH_LONG).show()
+
+                        Toast.makeText(root.context,mapViewModel.addPoint2(point2,data, data2), Toast.LENGTH_LONG).show()
+
                     }
                 }
             })
@@ -197,27 +209,31 @@ class MapFragment : Fragment() {
             setupLocationDisplay(root, mapView)
 
         })*/
-        val imageBeforePhoto = root.findViewById<ImageView>(R.id.imageView_before)
+        imageBeforePhoto = root.findViewById(R.id.imageView_before)
         val textViewHintBefore = root.findViewById<TextView>(R.id.textViewHintBeforePhoto)
         imageBeforePhoto.setOnClickListener(View.OnClickListener {
-            if (byteArray_photo_before != null){
+
+            dispatchTakePictureIntent(root,REQUEST_IMAGE_CAPTURE_BEFORE)
+            /*if (byteArray_photo_before != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",true)
             }else{
                 dispatchTakePictureIntentBefore(root)
                 textViewHintBefore.visibility = View.GONE
-            }
+            }*/
 
         })
         val imageAfterPhoto = root.findViewById<ImageView>(R.id.imageView_after)
         val textViewHintAfter = root.findViewById<TextView>(R.id.textViewHintAfterPhoto)
 
         imageAfterPhoto.setOnClickListener(View.OnClickListener {
-            if (byteArray_photo_after != null){
+
+            dispatchTakePictureIntent(root, REQUEST_IMAGE_CAPTURE_AFTER)
+            /*if (byteArray_photo_after != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",false)
             }else{
                 dispatchTakePictureIntentAfter(root)
                 textViewHintAfter.visibility = View.GONE
-            }
+            }*/
 
             //mapViewModel.getURL()
         })
@@ -238,7 +254,6 @@ class MapFragment : Fragment() {
 
         return root
     }
-
     private fun setOnTouchListener(root:View) {
         mapView.onTouchListener = object:DefaultMapViewOnTouchListener(root.context, mapView) {
 
@@ -343,20 +358,6 @@ class MapFragment : Fragment() {
     }
 
 
-    // Add this after onCreate
-
-    private val executor = Executors.newSingleThreadExecutor()
-    private lateinit var viewFinder: TextureView
-
-    private fun startCamera() {
-        // TODO: Implement CameraX operations
-    }
-
-    private fun updateTransform() {
-        // TODO: Implement camera viewfinder transformations
-    }
-
-
     /**
      * Zobrazí sa bod na mapovej vrstve
      * @param [mv] mapova vrstva
@@ -375,9 +376,6 @@ class MapFragment : Fragment() {
 
         myGraphicsOverlay.graphics.add(myGraphic)
         mv.graphicsOverlays.add(myGraphicsOverlay)
-        //Text symbol
-
-
     }
 
     /**
@@ -435,15 +433,6 @@ class MapFragment : Fragment() {
             Toast.makeText(this.context, resources.getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show()
         }
 
-        /*if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                viewFinder.post { startCamera() }
-            } else {
-                Toast.makeText(this.context,
-                    "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        }*/
     }
     /**
      * Check if all permission specified in the manifest have been granted
@@ -458,7 +447,7 @@ class MapFragment : Fragment() {
      */
     @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
-    private fun createImageFile(v: View): File {
+    private fun createImageFile(v: View, requestCode: Int): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = v.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
@@ -468,39 +457,13 @@ class MapFragment : Fragment() {
             storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }
-    }
-
-
-    /**
-     *
-     */
-    private fun dispatchTakePictureIntent(v: View) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(v.context.packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile(v)
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    var photoURI: Uri = FileProvider.getUriForFile(
-                        v.context,
-                        "com.example.android.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
-                }
+            if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
+                currentPhotoBeforePath = absolutePath
+            }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
+                currentPhotoPath = absolutePath
             }
         }
     }
-
 
     private fun dispatchTakePictureIntentBefore(v: View) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -525,8 +488,9 @@ class MapFragment : Fragment() {
      * @param data - vrati bitmap v atribute extra
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE && resultCode == RESULT_OK) {
+        /*if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
+
             imageView_before.setImageBitmap(imageBitmap)
 
             // Get the data from an ImageView as bytes
@@ -553,7 +517,83 @@ class MapFragment : Fragment() {
             val dataByteArray = baos.toByteArray()
 
             byteArray_photo_after = dataByteArray
+        }*/
+        if (resultCode == RESULT_OK){
+            if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
+                setPic(imageView_before,REQUEST_IMAGE_CAPTURE_BEFORE)
+            }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
+                setPic(imageView_after,REQUEST_IMAGE_CAPTURE_AFTER)
+            }
+
         }
     }
 
+    private fun dispatchTakePictureIntent(root: View, requestCode: Int) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile(root,requestCode)
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
+                    uriPictureBefore = Uri.fromFile(photoFile)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriPictureBefore)
+                    startActivityForResult(takePictureIntent, requestCode)
+                }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
+                    uriPictureAfter = Uri.fromFile(photoFile)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriPictureAfter)
+                    startActivityForResult(takePictureIntent, requestCode)
+                }
+
+
+                /*photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        root.context,
+                        "com.example.android.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                }*/
+            }
+        }
+    }
+
+    private fun setPic(imageView: ImageView, requestCode: Int) {
+        // Get the dimensions of the View
+        val targetW: Int = imageView.width
+        val targetH: Int = imageView.height
+
+        val bmOptions = BitmapFactory.Options().apply {
+            // Get the dimensions of the bitmap
+            inJustDecodeBounds = true
+
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
+
+            // Determine how much to scale down the image
+            val scaleFactor: Int = Math.min(photoW / targetW, photoH / targetH)
+
+            // Decode the image file into a Bitmap sized to fill the View
+            inJustDecodeBounds = false
+            inSampleSize = scaleFactor
+            inPurgeable = true
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
+            BitmapFactory.decodeFile(currentPhotoBeforePath, bmOptions)?.also { bitmap ->
+                imageView.setImageBitmap(bitmap)
+            }
+        }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
+            BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
+                imageView.setImageBitmap(bitmap)
+            }
+        }
+
+
+    }
 }

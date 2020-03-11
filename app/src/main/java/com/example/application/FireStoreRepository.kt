@@ -102,12 +102,16 @@ class FireStoreRepository{
         return documentReference.set(event)
     }
 
-    fun getEventItems(): CollectionReference {
+    fun getMyEventItems(): CollectionReference {
         var collectionReference = firestoreDB.collection("users")
             .document(user!!.uid)
             .collection("events")
 
         return collectionReference
+    }
+
+    fun getAllEventItems():Query{
+        return firestoreDB.collectionGroup("events")
     }
 
     fun saveRatingByUser(placeID:String, oldCount: Int,oldRating:Float,newRating:Float,comment:String): Task<Void>{

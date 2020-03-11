@@ -1,6 +1,7 @@
 package com.example.application.ui.map
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.AsyncTask.execute
 import android.util.Log
 import androidx.lifecycle.LiveData
