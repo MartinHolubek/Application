@@ -4,10 +4,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@color/backgroundTheme"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/backgroundTheme"
+            android:backgroundTint="@color/backgroundTheme"
             android:orientation="vertical">
 
 
@@ -25,46 +28,56 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:background="#FFFFFF"
+                android:backgroundTint="@color/backgroundTheme"
                 android:text="@string/MarkPlace"
-                android:textSize="20dp"/>
+                android:textAlignment="center"
+                android:textColor="@color/GreenTheme"
+                android:textSize="24sp" />
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/backgroundTheme"
+                android:backgroundTint="@color/backgroundTheme">
+
             <FrameLayout
+                    android:id="@+id/framelayoutBeforePhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/framelayoutBeforePhoto">
+                    android:backgroundTint="@color/backgroundTheme">
+
                 <ImageView
                         android:id="@+id/imageView_before"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:contentDescription="TODO"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintHorizontal_bias="0.907"
-                        tools:srcCompat="@tools:sample/avatars"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:srcCompat="@drawable/ic_image_place" />
+
                 <TextView
                         android:id="@+id/textViewHintBeforePhoto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:layout_gravity="center"
-                        android:textColor="@android:color/darker_gray"
-                        android:text="@string/photo_hint"
                         android:gravity="center"
-                        android:textSize="20dp"/>
+                        android:padding="10dp"
+                        android:text="@string/photo_hint"
+                        android:textColor="@color/cardview_light_background"
+                        android:textSize="20dp" />
+
                 <TextView
                         android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:layout_gravity="bottom"
-                        android:textColor="@android:color/white"
-                        android:text="@string/photo_before"
+                        android:background="@color/GreenTheme"
                         android:gravity="center"
-                        android:textSize="20dp"
-                        android:background="#55000000" />
+                        android:padding="10dp"
+                        android:text="@string/photo_before"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textSize="20dp" />
             </FrameLayout>
 
             <Switch
@@ -73,12 +86,16 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/framelayoutBeforePhoto"
                     android:layout_centerInParent="true"
-                    android:text="@string/AddAfterPhoto" />
+                    android:backgroundTint="@color/backgroundTheme"
+                    android:text="@string/AddAfterPhoto"
+                    android:textColor="@color/GreenTheme" />
+
             <FrameLayout
+                    android:id="@+id/framelayoutAfterPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/switchAddAfterPhoto"
-                    android:id="@+id/framelayoutAfterPhoto">
+                    android:layout_below="@id/switchAddAfterPhoto">
+
                 <ImageView
                         android:id="@+id/imageView_after"
                         android:layout_width="match_parent"
@@ -86,31 +103,31 @@
                         android:contentDescription="TODO"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.907"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        tools:srcCompat="@drawable/ic_image_place" />
+
                 <TextView
                         android:id="@+id/textViewHintAfterPhoto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:layout_gravity="center"
-                        android:textColor="@android:color/darker_gray"
-                        android:text="@string/photo_hint"
                         android:gravity="center"
-                        android:textSize="20dp"/>
+                        android:padding="10dp"
+                        android:text="@string/photo_hint"
+                        android:textColor="@color/cardview_light_background"
+                        android:textSize="20dp" />
+
                 <TextView
                         android:id="@+id/titleAfterPhoto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:layout_gravity="bottom"
-                        android:textColor="@android:color/white"
-                        android:text="@string/photo_after"
+                        android:background="@color/GreenTheme"
                         android:gravity="center"
-                        android:textSize="20dp"
-                        android:background="#55000000" />
+                        android:padding="10dp"
+                        android:text="@string/photo_after"
+                        android:textColor="@android:color/primary_text_light_nodisable"
+                        android:textSize="20dp" />
             </FrameLayout>
-
-
 
 
         </RelativeLayout>
@@ -118,27 +135,35 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:background="#FFFFFF"
+                android:backgroundTint="@color/backgroundTheme"
                 android:text="@string/Info"
+                android:textColor="@color/GreenTheme"
+                android:textAlignment="center"
                 android:textSize="20dp" />
+
         <EditText
                 android:id="@+id/text_gallery"
                 android:layout_width="408dp"
                 android:layout_height="84dp"
-                android:textAlignment="center"
+                android:backgroundTint="@color/GreenTheme"
                 android:textSize="20sp"
+                android:hint="Informácie"
+                android:textColorHint="@color/cardview_light_background"
+                android:textColor="@color/cardview_light_background"
                 app:layout_constraintBottom_toTopOf="@+id/imageView_before"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
+
         <Button
                 android:id="@+id/button_clean"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/GreenTheme"
 
-                android:text="@string/button_clean"/>
+                android:text="@string/button_clean" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

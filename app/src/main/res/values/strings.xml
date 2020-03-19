@@ -165,4 +165,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_to_all_event">Všetky udalosti</string>
     <string name="button_to_my_event">Moje udalosti</string>
+    <string name="button_to_my_places">Moje príspevky</string>
+    <string name="Rate">Uložiť hodnotenie</string>
+    <string name="delete_place">Odstrániť príspevok</string>
+    <string name="button_to_attend_events">Zúčastním sa</string>
+    <string name="placeCleared">Odfotiť vyčistené miesto</string>
 </resources>

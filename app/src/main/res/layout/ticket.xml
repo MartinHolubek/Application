@@ -107,8 +107,7 @@
                 android:layout_width="477dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="false"
-                android:focusable="false"
+                android:isIndicator="true"
                 android:numStars="5"
                 android:stepSize="0.5">
 

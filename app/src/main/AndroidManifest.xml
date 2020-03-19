@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        package="com.example.application">
+        package="com.example.trashhunter">
     <!-- Pridanie povolení na pristup na internet,zápis do súboru a a získanie pozície zariadenia -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,9 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-feature
-            android:glEsVersion="0x00020000"
-            android:required="true" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <uses-feature
             android:name="android.hardware.camera"
             android:required="true" />
@@ -30,31 +28,20 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
 
-        <receiver android:name=".text_view">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/text_view_info" />
-        </receiver>
-
         <activity
-                android:name=".MainActivity"
+                android:name="com.example.trashhunter.MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".StartActivity">
+        <activity android:name="com.example.trashhunter.StartActivity"/>
+        <activity android:name="com.example.trashhunter.FindLocationActivity" />
+        <activity android:name="com.example.trashhunter.CreateUserActivity" />
+        <activity android:name="com.example.trashhunter.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapActivity" />
-        <activity android:name=".CreateUserActivity" />
-        <activity android:name=".LoginActivity" />
 
         <provider
 

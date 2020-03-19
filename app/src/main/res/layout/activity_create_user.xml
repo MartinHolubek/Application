@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/GreenTheme"
+        android:backgroundTint="@color/backgroundTheme"
         tools:context=".CreateUserActivity">
 
     <EditText
@@ -12,56 +13,62 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/GreenTheme"
             android:ems="10"
             android:hint="@string/EmailSingUp"
             android:inputType="textEmailAddress"
+            android:textColorHint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_name" />
 
     <Button
-            android:id="@+id/button"
+            android:id="@+id/button_create_user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="32dp"
-            android:onClick="SingUpOnClicked"
+            android:backgroundTint="@color/GreenTheme"
             android:text="@string/SignUp"
+            android:textColor="@color/backgroundTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/singUpPass" />
+            app:layout_constraintTop_toBottomOf="@+id/add_image" />
 
     <Button
             android:id="@+id/add_image"
             android:layout_width="126dp"
-            android:layout_height="48dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/GreenTheme"
             android:onClick="onClickAddImage"
             android:text="@string/button_add_image"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            android:textColor="@color/backgroundTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/singUpPass"
-            app:layout_constraintVertical_bias="0.428" />
+            app:layout_constraintTop_toBottomOf="@+id/singUpPass" />
 
     <EditText
             android:id="@+id/sign_up_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="244dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/GreenTheme"
             android:ems="10"
             android:hint="@string/NameSingUp"
             android:inputType="textPersonName"
+            android:textColorHint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/create_user_image" />
 
     <EditText
             android:id="@+id/singUpPass"
@@ -70,9 +77,12 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/GreenTheme"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,12 +92,11 @@
             android:id="@+id/create_user_image"
             android:layout_width="173dp"
             android:layout_height="129dp"
-            app:layout_constraintBottom_toTopOf="@+id/sing_up_email"
+            android:layout_marginTop="128dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.181"
-            app:srcCompat="@drawable/arcgisruntime_mapview_esribanner_bgcolor" />
+            app:srcCompat="@drawable/ic_profile_picture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

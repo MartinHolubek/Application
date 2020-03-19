@@ -7,58 +7,78 @@
 
     <fragment
             android:id="@+id/nav_home"
-            android:name="com.example.application.ui.home.HomeFragment"
+            android:name="com.example.trashhunter.ui.home.HomeFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home" >
         <action
                 android:id="@+id/action_nav_home_to_place"
                 app:destination="@id/nav_place" />
         <argument android:name="placeID" />
+        <action
+                android:id="@+id/action_nav_home_to_myPlacesFragment"
+                app:destination="@id/myPlacesFragment" />
     </fragment>
 
     <fragment
             android:id="@+id/nav_map"
-            android:name="com.example.application.ui.map.MapFragment"
+            android:name="com.example.trashhunter.ui.map.MapFragment"
             android:label="@string/menu_map"
             tools:layout="@layout/fragment_map" />
 
     <fragment
             android:id="@+id/nav_addevent"
-            android:name="com.example.application.ui.addEvent.AddEventFragment"
+            android:name="com.example.trashhunter.ui.addEvent.AddEventFragment"
             android:label="@string/menu_addevent"
             tools:layout="@layout/fragment_addevent" />
 
     <fragment
             android:id="@+id/nav_events"
-            android:name="com.example.application.ui.events.EventsFragment"
+            android:name="com.example.trashhunter.ui.events.EventsFragment"
             android:label="@string/menu_events"
             tools:layout="@layout/fragment_events" >
         <action
                 android:id="@+id/action_nav_events_to_myEventsFragment"
                 app:destination="@id/myEventsFragment" />
+        <action
+                android:id="@+id/action_nav_events_to_attendEventsFragment"
+                app:destination="@id/attendEventsFragment" />
     </fragment>
 
     <fragment
             android:id="@+id/nav_friends"
-            android:name="com.example.application.ui.friends.FriendsFragment"
+            android:name="com.example.trashhunter.ui.friends.FriendsFragment"
             android:label="@string/menu_friends"
             tools:layout="@layout/fragment_friends" />
 
     <fragment
             android:id="@+id/nav_addfriend"
-            android:name="com.example.application.ui.addFriend.AddFriendFragment"
+            android:name="com.example.trashhunter.ui.addFriend.AddFriendFragment"
             android:label="@string/menu_addfriend" />
     <fragment
             android:id="@+id/nav_place"
-            android:name="com.example.application.ui.place.PlaceFragment"
+            android:name="com.example.trashhunter.ui.place.PlaceFragment"
             android:label="PlaceFragment" />
     <fragment
             android:id="@+id/myEventsFragment"
-            android:name="com.example.application.ui.MyEventsFragment"
+            android:name="com.example.trashhunter.ui.myEvents.MyEventsFragment"
             android:label="my_events_fragment"
             tools:layout="@layout/my_events_fragment" >
         <action
                 android:id="@+id/action_myEventsFragment_to_nav_events"
                 app:destination="@id/nav_events" />
     </fragment>
+    <fragment
+            android:id="@+id/myPlacesFragment"
+            android:name="com.example.trashhunter.ui.myPlaces.MyPlacesFragment"
+            android:label="my_places_fragment"
+            tools:layout="@layout/my_places_fragment" >
+        <action
+                android:id="@+id/action_myPlacesFragment_to_nav_place"
+                app:destination="@id/nav_place" />
+    </fragment>
+    <fragment
+            android:id="@+id/attendEventsFragment"
+            android:name="com.example.trashhunter.ui.attendEventsFragment"
+            android:label="attend_events_fragment"
+            tools:layout="@layout/attend_events_fragment" />
 </navigation>
