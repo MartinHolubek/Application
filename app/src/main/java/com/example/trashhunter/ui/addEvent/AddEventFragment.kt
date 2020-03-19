@@ -63,15 +63,12 @@ class AddEventFragment : Fragment() {
         lateinit var localDate : ArrayList<Int>
 
     }
-
-
     //objekt na zistenie adresy
     private lateinit var mLocatorTask : LocatorTask
     private lateinit var graphicOverlay : GraphicsOverlay
 
     //pole adries
     var addresses : ArrayList<String>? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -191,7 +188,7 @@ class AddEventFragment : Fragment() {
     /**
      * Zobrazi okno s vyberom datumu
      */
-    fun showDatePickerDialog(v: View) {
+    private fun showDatePickerDialog(v: View) {
         val newFragment = DatePickerFragment()
         newFragment.show(activity!!.supportFragmentManager, "datePicker")
     }
@@ -221,7 +218,7 @@ class AddEventFragment : Fragment() {
         }
     }
 
-    fun showTimePickerDialog(v: View) {
+    private fun showTimePickerDialog(v: View) {
         TimePickerFragment().show(activity!!.supportFragmentManager, "timePicker")
     }
 

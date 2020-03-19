@@ -1,20 +1,33 @@
 package com.example.trashhunter.ui.place
 
 import android.animation.ArgbEvaluator
+import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
+import android.content.ContentProvider
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.app.ShareCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -33,14 +46,20 @@ import com.example.trashhunter.Place
 import com.example.trashhunter.R
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
 
 class PlaceFragment : Fragment() {
 
     companion object {
         fun newInstance() = PlaceFragment()
     }
+    private var PICTURE_REQUEST_CODE = 1
+
     private lateinit var viewPager:ViewPager
     private lateinit var viewPagerComments:ViewPager
     private lateinit var argbEvaluator: ArgbEvaluator
@@ -50,12 +69,12 @@ class PlaceFragment : Fragment() {
     private lateinit var comments: List<Comment>
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var mapView:MapView
+    private lateinit var uriPictureAfter:Uri
+    private var pictureFile:File?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
     }
 
     override fun onCreateView(
@@ -93,11 +112,106 @@ class PlaceFragment : Fragment() {
 
             placeViewModel.saveRating(place.pointID.toString(),
                 place.countOfRating!!,place.rating!!,ratingbarPlace.rating,comment.text.toString())
-
         })
 
-
+        var buttonTakePicture = root.findViewById<Button>(R.id.button_takeAftPicture)
+        buttonTakePicture.setOnClickListener {
+            dispatchTakePictureIntent(root)
+            //dsPicture(root)
+        }
         return root
+    }
+    private fun dsPicture(root: View){
+        val photoFile: File? = try {
+            createImageFile(root)
+        } catch (ex: IOException) {
+            // Error occurred while creating the File
+            null
+        }
+        // Continue only if the File was successfully created
+
+        uriPictureAfter = Uri.fromFile(photoFile)
+        var intent = ShareCompat.IntentBuilder.from(activity)
+            .setStream(uriPictureAfter)
+            .intent
+            .setAction(MediaStore.ACTION_IMAGE_CAPTURE)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPictureAfter)
+        startActivityForResult(intent, PICTURE_REQUEST_CODE)
+    }
+
+    private fun dispatchTakePictureIntent(root: View) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
+                // Create the File where the photo should go
+                thread {
+                    pictureFile = try {
+                        createImageFile(root)
+                    } catch (ex: IOException) {
+                        // Error occurred while creating the File
+                        null
+                    }
+                    // Continue only if the File was successfully created
+
+                    uriPictureAfter = Uri.fromFile(pictureFile)
+
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriPictureAfter)
+                    startActivityForResult(takePictureIntent, PICTURE_REQUEST_CODE)
+                }
+            }
+        }
+    }
+
+    private fun setPic(): Bitmap {
+
+        val bmOptions = BitmapFactory.Options().apply {
+            // Get the dimensions of the bitmap
+            inJustDecodeBounds = true
+
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
+
+            // Decode the image file into a Bitmap sized to fill the View
+            inJustDecodeBounds = false
+            inPurgeable = true
+        }
+        return BitmapFactory.decodeFile(pictureFile?.absolutePath, bmOptions)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //data su niekedy null niekedy nie, tak treba zistit cestu k suboru kde sa nachadza fotka
+        if (resultCode== RESULT_OK){
+            if(requestCode== PICTURE_REQUEST_CODE){
+
+                if (pictures.size == 2){
+                    pictures.removeAt(1)
+                }
+                var bm = setPic()
+                pictures.add(Picture(bm,"Fotka po"))
+                updatePictures(view!!)
+            }
+        }
+    }
+
+    /**
+     * Metoda vráti jedinečný názov súboru pre novú fotografiu s použitím časovej pečiatky
+     */
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    private fun createImageFile(v: View): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = v.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            uriPictureAfter = absolutePath.toUri()
+        }
     }
 
     private fun updateComments(root: View) {
