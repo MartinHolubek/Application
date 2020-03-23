@@ -4,7 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/backgroundTheme">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -33,13 +34,15 @@
                         android:layout_width="482dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/text_margin"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:textColor="@color/textColor"/>
                 <Button
                         android:id="@+id/button_takeAftPicture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/placeCleared"
+                        android:background="@color/GreenTheme"
                         />
             </LinearLayout>
 
@@ -47,17 +50,20 @@
                     android:id="@+id/placeUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"/>
+                    android:layout_margin="@dimen/text_margin"
+                    android:textColor="@color/textColor"/>
             <TextView
                     android:id="@+id/placeDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"/>
+                    android:layout_margin="@dimen/text_margin"
+                    android:textColor="@color/textColor"/>
             <TextView
                     android:id="@+id/placeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"/>
+                    android:layout_margin="@dimen/text_margin"
+                    android:textColor="@color/textColor"/>
         </LinearLayout>
 
 
@@ -104,12 +110,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:text="@string/RatePlace"
-                android:textSize="20dp"/>
+                android:textSize="20dp"
+                android:textColor="@color/textColor"/>
         <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/placeTextRating"
+                android:id="@+id/eventTextRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/Comment"/>
+                android:hint="@string/Comment"
+                android:backgroundTint="@color/GreenTheme"
+                android:textColor="@color/textColor"/>
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,7 +137,9 @@
             <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/buttonPlaceRate"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_comment"
+                    android:background="@color/GreenTheme"/>
         </LinearLayout>
 
         <TextView
@@ -136,7 +147,8 @@
                 android:layout_height="match_parent"
                 android:text="@string/Comments"
                 android:textSize="20dp"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/textColor"/>
 
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerComments"
@@ -145,7 +157,7 @@
                 android:clipToPadding="false"
                 android:foregroundGravity="center"
                 android:overScrollMode="never"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/backgroundTheme"/>
     </LinearLayout>
 
 

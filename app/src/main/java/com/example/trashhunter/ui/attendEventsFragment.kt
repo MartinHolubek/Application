@@ -13,6 +13,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.trashhunter.Event
 
 import com.example.trashhunter.R
@@ -73,11 +74,16 @@ class attendEventsFragment : Fragment() {
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var eventView=layoutInflater.inflate(R.layout.ticket_event,null)
-            var currentevent=listEventAdapter[position]
-            eventView.textViewEventDate.text = Date(currentevent.startDate!!.seconds).toString()
-            eventView.textViewEventTitle.text = currentevent.title.toString()
-            eventView.textViewOrganizerValue.text = currentevent.organizer
+            var currentEvent=listEventAdapter[position]
+            eventView.textViewEventStartDate.text = Date(currentEvent.startDate!!.seconds).toString()
+            eventView.textViewEventLocation.text = currentEvent.title.toString()
 
+            eventView.setOnClickListener(View.OnClickListener {
+                val bundle = Bundle()
+                bundle.putString("EVENT_ID",currentEvent.id)
+                bundle.putString("ORGANIZER_ID",currentEvent.organizerID)
+                findNavController().navigate(R.id.action_attendEventsFragment_to_eventFragment,bundle)
+            })
             eventView.buttonAddEventInterest.setBackgroundResource(R.drawable.ic_delete_black_24dp)
             eventView.buttonAddEventInterest.setOnClickListener {
                 viewModel.deleteEvent(listEventAdapter[position])
@@ -91,7 +97,7 @@ class attendEventsFragment : Fragment() {
             //Referencia na obrázok v úložisku Firebase
             var photoRef = FirebaseStorage.getInstance()
                 .reference
-                .child(currentevent.picture.toString())
+                .child(currentEvent.picture.toString())
 
             /*photoRef.downloadUrl.addOnSuccessListener {
                 image.setImageURI(it)

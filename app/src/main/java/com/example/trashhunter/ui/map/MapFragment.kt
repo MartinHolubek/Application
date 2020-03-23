@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -50,20 +51,17 @@ class MapFragment : Fragment() {
 
     private lateinit var mapViewModel: MapViewModel
     private lateinit var mapView: MapView
-    private lateinit var map: ArcGISMap
     private lateinit var imageBeforePhoto: ImageView
+    private lateinit var imageAfterPhoto: ImageView
     private var mLocationDisplay: LocationDisplay? = null
-
-    private var byteArray_photo_before: ByteArray? = null
-    private var byteArray_photo_after: ByteArray? = null
 
     private var uriPictureBefore:Uri?=null
     private var uriPictureAfter:Uri?=null
 
     lateinit var listUsersPlaces : List<Place>
-    var currentPhotoBeforePath:String?=null
-    var currentPhotoPath: String? = null
-    val REQUEST_TAKE_PHOTO = 3
+    var currentPhotoPathBefore:String?=null
+    var currentPhotoPathAfter: String? = null
+
     val REQUEST_IMAGE_CAPTURE_BEFORE = 1
     val REQUEST_IMAGE_CAPTURE_AFTER = 2
 
@@ -80,7 +78,6 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         mapViewModel =
             ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_map, container, false)
@@ -102,7 +99,7 @@ class MapFragment : Fragment() {
             mapView!!.map = it
         })
 
-        mapViewModel.savedPlaces.observe(this, Observer {
+        mapViewModel.getFriendsPlace().observe(this, Observer {
             thread {
                 listUsersPlaces = it
                 if (mapView!!.map != null){
@@ -129,98 +126,35 @@ class MapFragment : Fragment() {
 
         val buttonClean : Button = root.findViewById(R.id.button_clean)
         buttonClean.setOnClickListener(View.OnClickListener {
-            /*mLocationDisplay = mapView.locationDisplay
-
-            var x = mLocationDisplay?.location?.position?.x
-            var y = mLocationDisplay?.location?.position?.y
-            if(x != null && y != null){
-                addPoint(mapView,x,y)
-            }else{
-                Toast.makeText(root.context,resources.getString(R.string.undefined_location),Toast.LENGTH_SHORT).show()
-            }
-            var currentTime = Calendar.getInstance().time
-
-
-            //urobit if ak sa byteaaray rovna null
-            val point = hashMapOf(
-                "x" to x,
-                "y" to y,
-                "date" to currentTime
-            )
-            val point2 = Place()
-            point2.ClearText = "text miesta"
-            point2.date = Calendar.getInstance().time
-            point2.placeName = "Dumbier"
-            point2.coordinates = GeoPoint(x!!,y!!)
-            point2.rating = 0F
-            point2.countOfRating = 0
-
-            var bitmap = (imageView_before.drawable as BitmapDrawable).bitmap
-            val baos =ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
-            val data = baos.toByteArray()
-
-            if (uriPictureAfter == null){
-
-            }
-            var bitmap2 = (imageView_after.drawable as BitmapDrawable).bitmap
-            val baos2 =ByteArrayOutputStream()
-            bitmap2.compress(Bitmap.CompressFormat.JPEG, 50, baos2)
-            val data2 = baos2.toByteArray()
-
-            var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(x,y))
-            addressInfo.addDoneListener(Runnable {
-                kotlin.run {
-                    if (addressInfo.get().size> 0){
-                        var address =addressInfo.get().get(0).attributes.getValue("Address").toString() + "," +
-                                addressInfo.get().get(0).attributes.getValue("City")
-                        point2.placeName = address
-
-                        Toast.makeText(root.context,mapViewModel.addPoint2(point2,data, data2), Toast.LENGTH_LONG).show()
-
-                    }
-                }
-            })*/
             savePoint(root)
         })
 
-        /*val buttonGPS : Button = root.findViewById(R.id.button_gps)
-        buttonGPS.setOnClickListener(View.OnClickListener {
-            mapViewModel.changeText("GPS spustena")
-            setupLocationDisplay(root, mapView)
-
-        })*/
         imageBeforePhoto = root.findViewById(R.id.imageView_before)
         val textViewHintBefore = root.findViewById<TextView>(R.id.textViewHintBeforePhoto)
         imageBeforePhoto.setOnClickListener(View.OnClickListener {
-
-            dispatchTakePictureIntent(root,REQUEST_IMAGE_CAPTURE_BEFORE)
-            textViewHintBefore.visibility = View.GONE
-            /*if (uriPictureBefore != null){
+            //dispatchTakePictureIntent(root,REQUEST_IMAGE_CAPTURE_BEFORE)
+            //textViewHintBefore.visibility = View.GONE
+            if (uriPictureBefore != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",true)
             }else{
                 //dispatchTakePictureIntentBefore(root)
                 dispatchTakePictureIntent(root,REQUEST_IMAGE_CAPTURE_BEFORE)
                 textViewHintBefore.visibility = View.GONE
-            }*/
-
+            }
         })
-        val imageAfterPhoto = root.findViewById<ImageView>(R.id.imageView_after)
+        imageAfterPhoto = root.findViewById<ImageView>(R.id.imageView_after)
         val textViewHintAfter = root.findViewById<TextView>(R.id.textViewHintAfterPhoto)
 
         imageAfterPhoto.setOnClickListener(View.OnClickListener {
-
-            dispatchTakePictureIntent(root, REQUEST_IMAGE_CAPTURE_AFTER)
-            textViewHintAfter.visibility = View.GONE
-            /*if (uriPictureAfter != null){
+            //dispatchTakePictureIntent(root, REQUEST_IMAGE_CAPTURE_AFTER)
+            //textViewHintAfter.visibility = View.GONE
+            if (uriPictureAfter != null){
                 showDialog(root,"Fotka je už nahratá, chcete zmeniť fotku?",false)
             }else{
                 //dispatchTakePictureIntentAfter(root)
                 dispatchTakePictureIntent(root, REQUEST_IMAGE_CAPTURE_AFTER)
                 textViewHintAfter.visibility = View.GONE
-            }*/
-
-            //mapViewModel.getURL()
+            }
         })
         val frameLayout = root.findViewById<FrameLayout>(R.id.framelayoutAfterPhoto)
         frameLayout.visibility = View.GONE
@@ -289,7 +223,6 @@ class MapFragment : Fragment() {
 
                         Toast.makeText(root.context,mapViewModel.addPoint2(point2,data, data2), Toast.LENGTH_LONG).show()
                     }
-
                 }
             }
         })
@@ -297,6 +230,23 @@ class MapFragment : Fragment() {
 
     private fun setOnTouchListener(root:View) {
         mapView.onTouchListener = object:DefaultMapViewOnTouchListener(root.context, mapView) {
+
+            override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+
+                var sv = root.findViewById<NestedScrollView>(R.id.scroll_map)
+                var action = event?.action
+
+                when(action){
+                    MotionEvent.ACTION_DOWN ->{
+                        sv.requestDisallowInterceptTouchEvent(true)
+                    }
+                    MotionEvent.ACTION_UP ->{
+                        sv.requestDisallowInterceptTouchEvent(true)
+                    }
+                }
+                super.onTouch(view, event)
+                return true
+            }
 
             override fun onSingleTapConfirmed(e:MotionEvent):Boolean {
                 val screenPoint : android.graphics.Point = android.graphics.Point(e.x.toInt(),e.y.toInt())
@@ -498,9 +448,9 @@ class MapFragment : Fragment() {
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
-                currentPhotoBeforePath = absolutePath
+                currentPhotoPathBefore = absolutePath
             }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
-                currentPhotoPath = absolutePath
+                currentPhotoPathAfter = absolutePath
             }
         }
     }
@@ -583,32 +533,13 @@ class MapFragment : Fragment() {
             inPurgeable = true
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE_BEFORE){
-
-            BitmapFactory.decodeFile(currentPhotoBeforePath, bmOptions)?.also { bitmap ->
-                //imageView.setImageBitmap(bitmap)
-                imageView.post(object : Thread() {
-                    override fun run() {
-                        super.run()
-                        imageView.setImageURI(null)
-                        imageView.setImageURI(uriPictureBefore)
-                        //imageView.setImageBitmap(bitmap)
-                    }
-                })
+            BitmapFactory.decodeFile(currentPhotoPathBefore, bmOptions)?.also { bitmap ->
+                imageBeforePhoto.setImageBitmap(bitmap)
             }
         }else if(requestCode == REQUEST_IMAGE_CAPTURE_AFTER){
-            BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
-                //imageView.setImageBitmap(bitmap)
-                imageView.post(object : Thread() {
-                    override fun run() {
-                        super.run()
-                        imageView.setImageURI(null)
-                        imageView.setImageURI(uriPictureAfter)
-                        //imageView.setImageBitmap(bitmap)
-                    }
-                })
+            BitmapFactory.decodeFile(currentPhotoPathAfter, bmOptions)?.also { bitmap ->
+                imageAfterPhoto.setImageBitmap(bitmap)
             }
         }
-
-
     }
 }

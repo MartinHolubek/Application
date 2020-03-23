@@ -1,9 +1,6 @@
 package com.example.trashhunter.firebase
 
-import com.example.trashhunter.Comment
-import com.example.trashhunter.Event
-import com.example.trashhunter.Friend
-import com.example.trashhunter.Place
+import com.example.trashhunter.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -14,6 +11,12 @@ class FirebaseRepository{
     val TAG = "FIREBASE_REPOSITORY"
     var firestoreDB = FirebaseFirestore.getInstance()
     var user = FirebaseAuth.getInstance().currentUser
+
+    fun getUserInfo(): DocumentReference{
+        var documentReference = firestoreDB.collection("users")
+            .document(user!!.uid)
+        return documentReference
+    }
 
     //ulozit miesto do firebase
     fun savePlaceItem(place: Place): Task<Void>{
@@ -58,6 +61,15 @@ class FirebaseRepository{
         return documentReference.set(friend)
     }
 
+    fun saveFriendItem2(friend: Friend): Task<Void>{
+        var documentReference = firestoreDB.collection("users")
+            .document(user!!.uid)
+            .collection("friends")
+            .document(friend.uid.toString())
+        return documentReference.set(hashMapOf(
+            "friend" to firestoreDB.collection("users").document(friend.uid.toString())))
+    }
+
     fun getFriendItems(): CollectionReference {
         var collectionReference = firestoreDB.collection("users")
             .document(user!!.uid)
@@ -97,7 +109,7 @@ class FirebaseRepository{
 
     fun saveEventItem(event: Event): Task<Void> {
         event.organizerID = user!!.uid
-        var documentReference = firestoreDB.collection("users")
+        val documentReference = firestoreDB.collection("users")
             .document(user!!.uid)
             .collection("events")
             .document()
@@ -125,19 +137,19 @@ class FirebaseRepository{
         return collectionReference
     }
 
-    fun saveRatingByUser(placeID:String, oldCount: Int,oldRating:Float,newRating:Float,comment:String): Task<Void>{
-        var userID = placeID.dropLast(15)
+    fun saveRatingByUser(ID:String, oldCount: Int,oldRating:Float,newRating:Float,comment:String): Task<Void>{
+        var userID = ID.dropLast(15)
         var documentReference = firestoreDB.collection("users")
             .document(userID)
             .collection("places")
-            .document(placeID)
+            .document(ID)
         var newCount = oldCount + 1
         var actualRating = (oldRating + newRating)/2
 
         var ratingReference = firestoreDB.collection("users")
             .document(userID)
             .collection("places")
-            .document(placeID)
+            .document(ID)
             .collection("rating")
             .document()
         return documentReference.also{
@@ -154,12 +166,64 @@ class FirebaseRepository{
         }.update("countOfRating", newCount,"rating", actualRating)
     }
 
-    fun getComments(placeID:String): CollectionReference{
+    fun saveEventRatingByUser(eventID:String, userID:String,
+                              oldCount: Int, oldRating:Float, newRating:Float, comment:String): Task<Void>{
+        var documentReference = firestoreDB.collection("users")
+            .document(userID)
+            .collection("events")
+            .document(eventID)
+
+        var ratingReference = firestoreDB.collection("users")
+            .document(userID)
+            .collection("events")
+            .document(eventID)
+            .collection("rating")
+            .document()
+
+        var newCount = oldCount + 1
+        var actualRating = (oldRating + newRating)/2
+
+        return documentReference.also{
+            var uid =user!!.uid
+            var dn = user!!.displayName
+            var commentToSave = Comment(
+                uid,
+                dn,
+                newRating,
+                comment,
+                Calendar.getInstance().time
+            )
+            ratingReference.set(commentToSave)
+        }.update("countOfRating", newCount,"rating", actualRating)
+    }
+
+    fun updatePlace(placeID:String, path: String): Task<Void>{
+        var userID = placeID.dropLast(15)
+        return firestoreDB.collection("users")
+            .document(userID)
+            .collection("places")
+            .document(placeID).update(
+                "photoAfter",path,"cleared", true,"clearedBy", user!!.uid
+            )
+    }
+
+    fun getPlaceComments(placeID:String): CollectionReference{
         var userID = placeID.dropLast(15)
         var collectionReference = firestoreDB.collection("users")
             .document(userID)
             .collection("places")
             .document(placeID)
+            .collection("rating")
+
+        return collectionReference
+    }
+
+    fun getEventComments(eventID:String, userID: String): CollectionReference{
+
+        var collectionReference = firestoreDB.collection("users")
+            .document(userID)
+            .collection("events")
+            .document(eventID)
             .collection("rating")
 
         return collectionReference
@@ -172,6 +236,8 @@ class FirebaseRepository{
     }
 
     fun getPlaces(): Query{
+        getFriendItems()
+
 
         return firestoreDB.collectionGroup("places")
     }
@@ -202,15 +268,27 @@ class FirebaseRepository{
         return documentReference.delete()
     }
 
-    fun saveAccountInfo(name: String?):Task<Void> {
+    fun saveAccountInfo(name: String?, image: String):Task<Void> {
         val account = hashMapOf(
             "displayName" to name,
-            "uid" to user!!.uid
+            "uid" to user!!.uid,
+            "image" to image
         )
 
         return firestoreDB.collection("users")
             .document(user!!.uid)
             .set(account)
+    }
+
+    fun getUsers(uids: ArrayList<String>): Query {
+        return firestoreDB.collectionGroup("users").whereIn("uid",uids)
+    }
+
+    fun getEventItem(eventID: String, organizerID: String): DocumentReference{
+        return firestoreDB.collection("users")
+            .document(organizerID)
+            .collection("events")
+            .document(eventID)
     }
 
 

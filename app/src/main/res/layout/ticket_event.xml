@@ -2,116 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10pt">
+        android:layout_margin="10pt"
+        android:background="@color/backgroundTheme">
+
+    <ImageView
+            android:id="@+id/imageTicketEvent"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+    <TextView
+            android:id="@+id/textViewEventStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/textColor" />
+
+    <TextView
+            android:id="@+id/textViewEventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/textColor"/>
+    <TextView
+            android:id="@+id/textViewEventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:layout_weight="1"/>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:orientation="horizontal">
-
-        <ImageView
-                android:id="@+id/imageTicketEvent"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:textSize="24sp" />
+            android:orientation="vertical">
 
 
-        <LinearLayout
-                android:layout_width="173dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            <TextView
-                    android:id="@+id/textViewEventDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-            <TextView
-                    android:id="@+id/textViewEventTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-            <TextView
-                    android:id="@+id/textViewEventType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/event" />
-        </LinearLayout>
         <Button
                 android:id="@+id/buttonAddEventInterest"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/ic_add_button"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:id="@+id/textViewOrganizer"
-                    android:layout_width="208dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/organizer" />
-
-            <TextView
-                    android:id="@+id/textViewOrganizerValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-        </LinearLayout>
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:id="@+id/textViewEventLocation"
-                    android:layout_width="208dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/LocationEvent" />
-
-            <TextView
-                    android:id="@+id/textViewEventLocationValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:id="@+id/textViewParticipate"
-                    android:layout_width="208dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/interest" />
-
-            <TextView
-                    android:id="@+id/textViewParticipateValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

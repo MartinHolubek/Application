@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10pt"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/backgroundTheme">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,8 @@
                 android:layout_weight="1"
                 android:text="@string/Description"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
 
@@ -46,16 +48,18 @@
 
         <TextView
                 android:id="@+id/textViewDate"
-                android:layout_width="match_parent"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/date_ticket" />
+                android:text="@string/date_ticket"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valueDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -66,16 +70,18 @@
 
         <TextView
                 android:id="@+id/textViewAddress"
-                android:layout_width="match_parent"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Address" />
+                android:text="@string/Address"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valuePlaceName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -85,16 +91,18 @@
 
         <TextView
                 android:id="@+id/textViewUser"
-                android:layout_width="match_parent"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/user_name" />
+                android:text="@string/user_name"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valueUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
     <LinearLayout
@@ -119,7 +127,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:text=""/>
+                android:text=""
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
     <LinearLayout
@@ -131,6 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/delete_place"
+                android:background="@color/GreenTheme"
                 />
 
     </LinearLayout>

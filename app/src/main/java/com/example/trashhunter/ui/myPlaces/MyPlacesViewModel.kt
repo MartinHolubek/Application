@@ -52,7 +52,7 @@ class MyPlacesViewModel : ViewModel() {
 
     fun getImagePlace(path: String): LiveData<Bitmap>{
         var bmp :MutableLiveData<Bitmap> = MutableLiveData()
-        firebaseStorage.getImagePlace(path).addOnSuccessListener {
+        firebaseStorage.getImage(path).addOnSuccessListener {
             // Konvertujeme byteArray na bitmap
             bmp.value = BitmapFactory.decodeByteArray(it, 0, it.size)
             //imageBeforeView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageBeforeView.width,imageBeforeView.height,false))

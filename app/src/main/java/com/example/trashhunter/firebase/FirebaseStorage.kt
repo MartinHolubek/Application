@@ -38,6 +38,24 @@ class FirebaseStorage{
         return uploadTask
     }
 
+    fun saveImageUser(ba: ByteArray?): UploadTask{
+        var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        val reference = mFirebaseStorage.getReference("Pictures_users/" + mFirebaseUser!!.uid)
+        var pictureRef = reference.child("picture_$timeStamp")
+
+        var uploadTask = pictureRef.putBytes(ba!!)
+
+        return uploadTask
+    }
+
+    fun getImageUser(path : String): Task<ByteArray>{
+        val ONE_MEGABYTE: Long = 1024 * 1024
+        var photoBeforeRef = mFirebaseStorage
+            .reference
+            .child(path)
+        return photoBeforeRef.getBytes(ONE_MEGABYTE)
+    }
+
     fun deletePlaceImages(path: String):Task<Void>{
         val reference = mFirebaseStorage.getReference(path)
 
@@ -59,7 +77,13 @@ class FirebaseStorage{
         return uploadTask!!
     }
 
-    fun getImagePlace(path : String): Task<ByteArray>{
+    fun saveImageAfter(userID: String, eventID: String, ba: ByteArray): UploadTask{
+        var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        val reference = mFirebaseStorage.getReference("Pictures/" + userID)
+        return reference.child("pictureAfter_$timeStamp").putBytes(ba)
+    }
+
+    fun getImage(path : String): Task<ByteArray>{
         val ONE_MEGABYTE: Long = 1024 * 1024
         var photoBeforeRef = mFirebaseStorage
             .reference

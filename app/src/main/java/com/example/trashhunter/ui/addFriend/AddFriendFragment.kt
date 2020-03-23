@@ -1,19 +1,18 @@
 package com.example.trashhunter.ui.addFriend
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashhunter.Friend
 import com.example.trashhunter.R
+import com.example.trashhunter.firebase.FirebaseStorage
 import kotlinx.android.synthetic.main.ticket_friend.view.*
 
 class AddFriendFragment : Fragment() {
@@ -21,15 +20,20 @@ class AddFriendFragment : Fragment() {
     private lateinit var addFriendViewModel: AddFriendViewModel
 
     lateinit var  listViewFriends : ListView
+
+    //zoznam uzivatelov
     lateinit var listPotentionalFriends : ArrayList<Friend>
+
+    //zoznam priatelov
     lateinit var listFriends : ArrayList<Friend>
+
+    lateinit var firebaseStorage : FirebaseStorage
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         addFriendViewModel =
             ViewModelProviders.of(this).get(AddFriendViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addfriend, container, false)
@@ -46,10 +50,15 @@ class AddFriendFragment : Fragment() {
             listFriends = ArrayList(it)
         })
 
+        firebaseStorage = FirebaseStorage()
+
         var buttonSearch = root.findViewById<Button>(R.id.buttonSearchFriend)
         buttonSearch.setOnClickListener(View.OnClickListener {
+
             if (!textView.text.toString().equals("")){
                 addFriendViewModel.getPotentionalFriends(textView.text.toString())
+            }else{
+                Toast.makeText(root.context,"Vlože vyhladavaci text",Toast.LENGTH_SHORT).show()
             }
         })
         return root
@@ -58,10 +67,14 @@ class AddFriendFragment : Fragment() {
     fun updateList(view : View){
 
         listViewFriends = view.findViewById<ListView>(R.id.lvPotentionalFriends)
-        var myfoodAdapter= foodAdapter(view.context,listPotentionalFriends)
+        var myfoodAdapter= friendAdapter(view.context,listPotentionalFriends)
         listViewFriends.adapter=myfoodAdapter
     }
 
+
+    /**
+     *
+     */
     fun isFriend(friend: Friend): Boolean{
         var equal = false
         for (obj in listFriends){
@@ -72,7 +85,7 @@ class AddFriendFragment : Fragment() {
         return equal
     }
 
-    inner class foodAdapter: BaseAdapter {
+    inner class friendAdapter: BaseAdapter {
         var listFriendAdapter : ArrayList<Friend>
         var context: Context?=null
         constructor(context: Context, listPlaceAdapter: ArrayList<Friend>):super(){
@@ -87,7 +100,12 @@ class AddFriendFragment : Fragment() {
             var friendView=layoutInflater.inflate(R.layout.ticket_friend,null)
             var currentfriend=listFriendAdapter[position]
             friendView.textViewName.text = currentfriend.displayName.toString()
-            friendView.addFriend.text = currentfriend.uid.toString()
+
+
+            firebaseStorage.getImageUser(currentfriend.image.toString()).addOnSuccessListener {
+                var bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                friendView.imageTicket.setImageBitmap(bitMap)
+            }
 
             if (isFriend(listFriendAdapter[position])){
                 //buttonAddFriend.text = getText(R.string.RemoveFriend)

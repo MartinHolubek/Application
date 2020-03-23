@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.Menu
 
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.esri.arcgisruntime.loadable.LoadStatus
@@ -33,13 +34,15 @@ class FindLocationActivity : AppCompatActivity() {
         mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
         mLocatorTask.loadAsync()
 
+        var text_address = findViewById<TextView>(R.id.text_view_address)
+
         textLocation = findViewById<AutoCompleteTextView>(R.id.inputEventLocation)
         textLocation.addTextChangedListener(object : TextWatcher {
+
             override fun afterTextChanged(p0: Editable?) {
                 if (mLocatorTask.loadStatus == LoadStatus.LOADED && p0.toString() !=""){
                     if (mLocatorTask.locatorInfo.isSupportsSuggestions){
                         //ziskaj aktualne rozsirenie mapy
-                        //var currentExtent = mapView!!.getCurrentViewpoint(Viewpoint.Type.BOUNDING_GEOMETRY).targetGeometry
 
                         //Obmedzte vyhľadávanie na tento rozsah máp a nie viac ako 10 návrhov
                         var suggestParams = SuggestParameters()
@@ -70,6 +73,7 @@ class FindLocationActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+
             }
 
         })
@@ -88,37 +92,6 @@ class FindLocationActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu;
         menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-    //metoda na spustenie gps
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        /*when (item.getItemId()) {
-            R.id.gps1 ->
-                map?.addDoneLoadingListener(Runnable {
-                    //zatvorí menu s miestami
-                    clearPlaceList?.setVisibility(View.GONE)
-                    myFlag = false
-                    //vytvoreny lokator, ktorý zobrazuje na mape polohu zariadenia
-                    var myLocation = mapView!!.locationDisplay as LocationDisplay
-                    if (myLocation.isStarted){
-                        myLocation.stop()
-                    }else{
-                        myLocation.autoPanMode = LocationDisplay.AutoPanMode.COMPASS_NAVIGATION
-                        myLocation.startAsync()
-                        myLocation.initialZoomScale = 2000.0
-                        println( " old: " + mapView!!.locationDisplay.initialZoomScale.toString())
-                        println("new: " + myLocation.initialZoomScale)
-                    }
-                })
-            R.id.menuItem ->
-                if (myFlag) {
-                    clearPlaceList?.setVisibility(View.GONE)
-                    myFlag = false
-                }else {
-                    clearPlaceList?.setVisibility(View.VISIBLE)
-                    myFlag = true
-                }
-        }*/
         return true
     }
 

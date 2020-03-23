@@ -1,6 +1,7 @@
 package com.example.trashhunter
 
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.model.value.ReferenceValue
 import java.util.*
 
 class Place(){
@@ -16,6 +17,7 @@ class Place(){
     var rating:Float?=null
     var countOfRating:Int?=null
     var cleared:Boolean?=null
+    var clearedBy:String?= null
     constructor(pointID:String, userName:String, date:Date, placeName:String, clearText:String,
                 photoBefore:String,photoAfter:String, coords:GeoPoint) : this() {
         this.pointID=pointID

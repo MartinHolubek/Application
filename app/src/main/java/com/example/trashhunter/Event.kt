@@ -13,8 +13,11 @@ class Event(){
     var startDate :Timestamp?=null
     var endDate :Date?=null
     var coordinates : GeoPoint?=null
+    var placeName: String?=null
     var picture : String?=null
     var details : String?=null
     var participants : ArrayList<Friend>?=null
+    var rating:Float?=0F
+    var countOfRating:Int?=0
 
 }

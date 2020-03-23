@@ -170,4 +170,6 @@
     <string name="delete_place">Odstrániť príspevok</string>
     <string name="button_to_attend_events">Zúčastním sa</string>
     <string name="placeCleared">Odfotiť vyčistené miesto</string>
+    <string name="RateEvent">Ohodnotit udalosť</string>
+    <string name="add_comment">Pridať komentár</string>
 </resources>

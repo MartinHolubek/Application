@@ -24,8 +24,8 @@ class MapViewModel : ViewModel() {
         FirebaseRepository()
 
     var mFirebaseStorage = com.example.trashhunter.firebase.FirebaseStorage()
-    //var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData()
-    var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData<List<Place>>().apply {
+    var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData()
+    /*var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData<List<Place>>().apply {
 
         thread {
             fireStoreRepository.getPlaces()
@@ -46,8 +46,48 @@ class MapViewModel : ViewModel() {
                 })
         }
 
-    }
+    }*/
     var savedPlaces : LiveData<List<Place>> = savedUsersPlaces
+    var savedFriends: MutableLiveData<List<String>> = MutableLiveData()
+
+    fun getFriendsPlace() : LiveData<List<Place>>{
+        fireStoreRepository.getFriendItems().addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
+            if (e != null) {
+                Log.w(TAG, "Chyba pri načitaní priatelov")
+                savedFriends.value = null
+
+                return@EventListener
+            }
+
+            var savedFriendList : MutableList<String> = mutableListOf()
+            for (doc in value!!) {
+                var friend = doc.toObject(Friend::class.java)
+                savedFriendList.add(friend.uid.toString())
+            }
+            if (savedFriendList.isEmpty()){
+                savedUsersPlaces.value = listOf<Place>()
+            }else{
+                fireStoreRepository.getPlaces(savedFriendList).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Chyba pri načitaní priatelov")
+                        savedFriends.value = null
+
+                        return@EventListener
+                    }
+                    var savedPlacesList : MutableList<Place> = mutableListOf()
+                    for (doc in value!!){
+                        var placeItem = doc.toObject(Place::class.java)
+                        savedPlacesList.add(placeItem)
+                    }
+
+                    savedUsersPlaces.value = savedPlacesList
+                })
+            }
+            savedFriends.value = savedFriendList
+        })
+        return savedPlaces
+    }
+
 
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
@@ -74,26 +114,6 @@ class MapViewModel : ViewModel() {
 
     }
     val map: LiveData<ArcGISMap> = _map
-
-    fun startGPS(){
-
-        /*map.addDoneLoadingListener(Runnable {
-            //zatvorí menu s miestami
-            //clearPlaceList?.setVisibility(View.GONE)
-            //myFlag = false
-            //vytvoreny lokator, ktorý zobrazuje na mape polohu zariadenia
-            var myLocation = map!!.locationDisplay as LocationDisplay
-            if (myLocation.isStarted){
-                myLocation.stop()
-            }else{
-                myLocation.autoPanMode = LocationDisplay.AutoPanMode.COMPASS_NAVIGATION
-                myLocation.startAsync()
-                myLocation.initialZoomScale = 2000.0
-                println( " old: " + mapView!!.locationDisplay.initialZoomScale.toString())
-                println("new: " + myLocation.initialZoomScale)
-            }
-        })*/
-    }
 
     fun changeText(s: String){
         _text.value = s

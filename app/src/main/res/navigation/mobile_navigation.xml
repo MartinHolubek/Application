@@ -42,6 +42,9 @@
         <action
                 android:id="@+id/action_nav_events_to_attendEventsFragment"
                 app:destination="@id/attendEventsFragment" />
+        <action
+                android:id="@+id/action_nav_events_to_eventFragment"
+                app:destination="@id/eventFragment" />
     </fragment>
 
     <fragment
@@ -57,21 +60,24 @@
     <fragment
             android:id="@+id/nav_place"
             android:name="com.example.trashhunter.ui.place.PlaceFragment"
-            android:label="PlaceFragment" />
+            android:label="Príspevok" />
     <fragment
             android:id="@+id/myEventsFragment"
             android:name="com.example.trashhunter.ui.myEvents.MyEventsFragment"
-            android:label="my_events_fragment"
-            tools:layout="@layout/my_events_fragment" >
+            android:label="Moje udalosti"
+            tools:layout="@layout/my_events_fragment">
         <action
                 android:id="@+id/action_myEventsFragment_to_nav_events"
                 app:destination="@id/nav_events" />
+        <action
+                android:id="@+id/action_myEventsFragment_to_eventFragment"
+                app:destination="@id/eventFragment" />
     </fragment>
     <fragment
             android:id="@+id/myPlacesFragment"
             android:name="com.example.trashhunter.ui.myPlaces.MyPlacesFragment"
-            android:label="my_places_fragment"
-            tools:layout="@layout/my_places_fragment" >
+            android:label="Moje príspevky"
+            tools:layout="@layout/my_places_fragment">
         <action
                 android:id="@+id/action_myPlacesFragment_to_nav_place"
                 app:destination="@id/nav_place" />
@@ -79,6 +85,15 @@
     <fragment
             android:id="@+id/attendEventsFragment"
             android:name="com.example.trashhunter.ui.attendEventsFragment"
-            android:label="attend_events_fragment"
-            tools:layout="@layout/attend_events_fragment" />
+            android:label="Udalosti na ktorých sa zúčastním"
+            tools:layout="@layout/attend_events_fragment">
+        <action
+                android:id="@+id/action_attendEventsFragment_to_eventFragment"
+                app:destination="@id/eventFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/eventFragment"
+            android:name="com.example.trashhunter.ui.event.EventFragment"
+            android:label="Udalosť"
+            tools:layout="@layout/fragment_event" />
 </navigation>

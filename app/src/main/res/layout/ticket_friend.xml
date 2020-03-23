@@ -5,51 +5,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10pt"
-        android:orientation="vertical">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/custom_ticket">
 
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal">
-
-        <ImageView
-                android:id="@+id/imageTicket"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:textSize="24sp" />
-
-        <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="173dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/user_name"
-                android:textAlignment="center"
-                android:textSize="24sp" />
-
-    </LinearLayout>
-
+    <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageTicket"
+            android:layout_width="96dp"
+            android:layout_height="96dp"/>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
+            android:orientation="vertical">
         <TextView
-                android:id="@+id/addFriend"
+                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/add_friend" />
+                android:text="@string/user_name"
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
 
         <Button
                 android:id="@+id/buttonAddFriend"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
+                android:layout_height="66dp"
+                android:layout_weight="1"
 
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/GreenTheme"
+                android:text="Button" />
     </LinearLayout>
+
 
 </LinearLayout>

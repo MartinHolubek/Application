@@ -1,6 +1,7 @@
 package com.example.trashhunter
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,11 +17,15 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment
+import com.example.trashhunter.firebase.FirebaseRepository
+import com.example.trashhunter.firebase.FirebaseStorage
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,12 +34,22 @@ class MainActivity : AppCompatActivity() {
 
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
+    private lateinit var mFirebaseStorage: FirebaseStorage
+    private lateinit var mFirebaseRepository: FirebaseRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var image : ByteArray?=null
+        if (savedInstanceState == null) {
+            val extras = intent.extras
+            if (extras == null) {
+
+            } else {
+                image = extras.getByteArray("image")!!
+            }
+        }
 
         setContentView(R.layout.activity_main)
-
         // license with a license key
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud3079624525,none,E9PJD4SZ8P6PH6JRP224")
 
@@ -64,8 +79,15 @@ class MainActivity : AppCompatActivity() {
 
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
+        mFirebaseStorage = FirebaseStorage()
+        mFirebaseRepository = FirebaseRepository()
 
-        updateUI()
+        if (image == null){
+            updateUI()
+        }else{
+            updateUI(image)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -102,32 +124,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI() {
+    private fun updateUI(imageByteArray: ByteArray? = null) {
         var uemail = findViewById(R.id.nav_view) as NavigationView
         var navHead = uemail.getHeaderView(0)
         var tvEmail = navHead.findViewById(R.id.nav_header_email) as TextView
         var tvDisplayName = navHead.findViewById(R.id.nav_header_name) as TextView
         var tvImage = navHead.findViewById(R.id.nav_header_image) as ImageView
+
+        if(imageByteArray == null){
+            mFirebaseRepository.getUserInfo().addSnapshotListener(EventListener<DocumentSnapshot>{ value, e ->
+                if (e != null) {
+                    return@EventListener
+                }
+                var imagePath = value?.data?.get("image").toString()
+                mFirebaseStorage.getImageUser(imagePath).addOnSuccessListener {
+                    var bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                    tvImage.setImageBitmap(bitMap)
+                }
+            })
+        }else{
+            var bitMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+            tvImage.setImageBitmap(bitMap)
+        }
         tvEmail.text = mFirebaseUser?.email
         tvDisplayName.text = mFirebaseUser?.displayName
-
-
-
-
-        /*val myUrlStr = "xyz"
-        val url: URL
-        var uri: Uri = Uri.EMPTY
-        try {
-            url = URL(mFirebaseUser?.photoUrl.toString())
-            uri = Uri.parse(url.toURI().toString())
-        } catch (e1: MalformedURLException) {
-            e1.printStackTrace()
-        } catch (e: URISyntaxException) {
-            e.printStackTrace()
-        }
-
-        tvImage.setImageURI(null)
-        tvImage.setImageURI(uri)*/
 
     }
 }

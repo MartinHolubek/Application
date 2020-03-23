@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+android:background="@color/backgroundTheme"
+tools:context="com.example.trashhunter.ui.event.EventFragment">
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.place.PlaceFragment"
+        android:orientation="vertical">
+
+    <ImageView
+            android:id="@+id/event_image"
+            android:layout_width="match_parent"
+            android:layout_height="240dp" />
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/textColor"/>
+        <TextView
+                android:id="@+id/eventDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/textColor"/>
+        <TextView
+                android:id="@+id/eventDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/textColor"/>
+    </LinearLayout>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            cardCornerRadius="20dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <com.esri.arcgisruntime.mapping.view.MapView
+                    android:id="@+id/eventMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    app:layout_constraintHorizontal_bias="0.6" />
+
+            <TextView
+                    android:id="@+id/eventLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/eventMap"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/eventCoordination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/eventLocation"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/RateEvent"
+            android:textSize="20dp"
+            android:textColor="@color/textColor"/>
+    <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/eventTextRating"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/Comment"
+            android:backgroundTint="@color/GreenTheme"
+            android:textColorHint="@color/cardview_shadow_start_color"
+            android:textColor="@color/textColor"/>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/eventRatingBar"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:numStars="5"
+                android:stepSize="0.5"
+                />
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonEventRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pridať komentár"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/Comments"
+            android:textSize="20dp"
+            android:layout_margin="@dimen/text_margin"
+            android:textColor="@color/textColor"/>
+
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPagerComments"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:clipToPadding="false"
+            android:foregroundGravity="center"
+            android:overScrollMode="never"
+            android:background="@color/colorPrimary"/>
+</LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
+
+
+

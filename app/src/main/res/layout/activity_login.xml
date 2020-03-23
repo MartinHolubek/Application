@@ -40,18 +40,15 @@
             android:text="a@b.com"
             android:textColor="#FCFFFFFF"
             android:textColorHint="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
             android:id="@+id/nav_header_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="116dp"
-            android:layout_marginEnd="128dp"
             android:backgroundTint="@color/colorPrimary"
             android:gravity="center"
             android:text="@string/textLogin"
@@ -64,7 +61,7 @@
     <Button
             android:id="@+id/LoginCreateActivityButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="64dp"
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="16dp"
@@ -73,14 +70,15 @@
             android:text="@string/SignUp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.125"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_header_email" />
+            app:layout_constraintTop_toBottomOf="@+id/nav_header_email"
+            app:layout_constraintVertical_bias="0.146" />
 
     <Button
             android:id="@+id/LoginButton"
             android:layout_width="0dp"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
@@ -92,11 +90,16 @@
             app:layout_constraintTop_toBottomOf="@+id/passwordUserLogin" />
 
     <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@+id/emailUserLogin"
             android:id="@+id/imageView"
-            android:layout_width="365dp"
-            android:layout_height="277dp"
             android:background="#00272424"
+            app:layout_constraintBottom_toTopOf="@+id/emailUserLogin"
+
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_max="300dp"
+            app:layout_constraintHeight_min="200dp"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />

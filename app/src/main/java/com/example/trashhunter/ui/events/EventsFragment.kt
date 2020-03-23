@@ -33,7 +33,6 @@ class EventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         eventsViewModel =
             ViewModelProviders.of(this).get(EventsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_events, container, false)
@@ -79,17 +78,16 @@ class EventsFragment : Fragment() {
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var eventView=layoutInflater.inflate(R.layout.ticket_event,null)
-            var currentevent=listEventAdapter[position]
-            eventView.textViewEventDate.text = Date(currentevent.startDate!!.seconds).toString()
-            eventView.textViewEventTitle.text = currentevent.title.toString()
-            eventView.textViewOrganizerValue.text = currentevent.organizer
+            var currentEvent=listEventAdapter[position]
+            eventView.textViewEventStartDate.text = Date(currentEvent.startDate!!.seconds).toString()
+            eventView.textViewEventLocation.text = currentEvent.title.toString()
 
             val image = eventView.findViewById<ImageView>(R.id.imageTicketEvent)
 
             //Referencia na obrázok v úložisku Firebase
             var photoRef = FirebaseStorage.getInstance()
                 .reference
-                .child(currentevent.picture.toString())
+                .child(currentEvent.picture.toString())
 
             /*photoRef.downloadUrl.addOnSuccessListener {
                 image.setImageURI(it)
@@ -98,6 +96,13 @@ class EventsFragment : Fragment() {
             eventView.buttonAddEventInterest.setOnClickListener {
                 eventsViewModel.saveAttendEvent(listEventAdapter[position])
             }
+
+            eventView.setOnClickListener(View.OnClickListener {
+                val bundle = Bundle()
+                bundle.putString("EVENT_ID",currentEvent.id)
+                bundle.putString("ORGANIZER_ID",currentEvent.organizerID)
+                findNavController().navigate(R.id.action_nav_events_to_eventFragment,bundle)
+            })
 
             val ONE_MEGABYTE: Long = 1024 * 1024
             photoRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {

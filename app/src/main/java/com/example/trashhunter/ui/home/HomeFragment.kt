@@ -33,10 +33,6 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         listFriends = listOf()
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
 
         homeViewModel.getFriends().observe(this, Observer {
             listPlaces2 = it
@@ -47,17 +43,6 @@ class HomeFragment : Fragment() {
         buttonMyPlaces.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_myPlacesFragment)
         }
-
-        /*homeViewModel.getSavedPlaces().observe(this, Observer { it ->
-            listPlaces2 = it
-            updateList2(root)
-        })*/
-
-        /*var list = listOf<String>("Qs3QLZEy78SM3DPRFHEYf54TSZx2","UI98XTlfQwhcoGysy0TAC3RTvcI2")
-        homeViewModel.getPlaces(list).observe(this, Observer { it ->
-            listPlaces2 = it
-            updateList2(root)
-        })*/
         return root
     }
 
@@ -103,23 +88,7 @@ class HomeFragment : Fragment() {
 
                 bundle.putString("POINT_ID",currentPlace.pointID.toString())
                 findNavController().navigate(R.id.action_nav_home_to_place,bundle)
-                /*var placeFragment =
-                    PlaceFragment()
-
-                val bundle = Bundle()
-
-                bundle.putString("POINT_ID",currentPlace.pointID.toString())
-                placeFragment.arguments = bundle
-
-                var uidUser = currentPlace.pointID?.dropLast(15)
-                var fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                fragmentTransaction?.replace(R.id.nav_host_fragment, placeFragment)
-                fragmentTransaction?.addToBackStack(null)
-                fragmentTransaction?.commit()*/
-
             })
-
-
 
             //Referencia na obrázok v úložisku Firebase
             var photoBeforeRef = FirebaseStorage.getInstance()
@@ -136,18 +105,6 @@ class HomeFragment : Fragment() {
             }.addOnFailureListener {
                 // Handle any errors
             }
-
-            /*val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
-            var photoAfterRef = FirebaseStorage.getInstance()
-                .reference
-                .child(currentPlace.photoAfter.toString())
-            photoAfterRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-                // Konvertujeme byteArray na bitmap
-                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                imageAfterView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageAfterView.width,imageAfterView.height,false))
-            }.addOnFailureListener {
-                // Handle any errors
-            }*/
 
             return placeView
         }

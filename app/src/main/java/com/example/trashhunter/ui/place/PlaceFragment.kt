@@ -3,8 +3,6 @@ package com.example.trashhunter.ui.place
 import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.content.ContentProvider
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -26,7 +24,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.app.ShareCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
@@ -46,6 +43,7 @@ import com.example.trashhunter.Place
 import com.example.trashhunter.R
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -108,7 +106,7 @@ class PlaceFragment : Fragment() {
         buttonRatePlace.setOnClickListener(View.OnClickListener {
 
             var ratingbarPlace = root.findViewById<RatingBar>(R.id.placeRatingBar)
-            var comment = root.findViewById<AppCompatEditText>(R.id.placeTextRating)
+            var comment = root.findViewById<AppCompatEditText>(R.id.eventTextRating)
 
             placeViewModel.saveRating(place.pointID.toString(),
                 place.countOfRating!!,place.rating!!,ratingbarPlace.rating,comment.text.toString())
@@ -190,6 +188,10 @@ class PlaceFragment : Fragment() {
                 }
                 var bm = setPic()
                 pictures.add(Picture(bm,"Fotka po"))
+                val baos = ByteArrayOutputStream()
+                bm.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                val data = baos.toByteArray()
+                placeViewModel.clearPlace(placeID.toString(),data)
                 updatePictures(view!!)
             }
         }
@@ -315,6 +317,8 @@ class PlaceFragment : Fragment() {
 
         viewPager.adapter = adapterPictures
         viewPager.setPadding(130,0,130,0)
+
+
     }
 
     inner class AdapterPictures : PagerAdapter{

@@ -7,4 +7,5 @@
     <color name="GreenTheme">#75DB78</color>
     <color name="BackgroundTheme">#22222222</color>
     <color name="backgroundTheme">#222222</color>
+    <color name="textColor">#FFFFFF</color>
 </resources>

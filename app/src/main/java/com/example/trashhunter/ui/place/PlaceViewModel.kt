@@ -1,5 +1,6 @@
 package com.example.trashhunter.ui.place
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,14 +9,18 @@ import com.example.trashhunter.Comment
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.Place
 import com.example.trashhunter.User
+import com.example.trashhunter.firebase.FirebaseStorage
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.EventListener
+import java.text.SimpleDateFormat
 
 class PlaceViewModel : ViewModel() {
     val TAG = "PLACE_VIEW_MODEL"
     var firebaseRepository =
         FirebaseRepository()
+    var firebaseStorage = FirebaseStorage()
+
 
     var savedPlace : MutableLiveData<Place> = MutableLiveData()
     var savedComments : MutableLiveData<List<Comment>> = MutableLiveData()
@@ -46,7 +51,7 @@ class PlaceViewModel : ViewModel() {
 
     fun getComments(placeID: String):LiveData<List<Comment>>{
 
-        firebaseRepository.getComments(placeID).addSnapshotListener(EventListener<QuerySnapshot>{value, e ->
+        firebaseRepository.getPlaceComments(placeID).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
             if (e != null) {
                 Log.w(TAG, "Chyba pri načitaní komentárov")
                 savedComments.value = null
@@ -80,5 +85,16 @@ class PlaceViewModel : ViewModel() {
             savedUser.value = user
         })
         return savedUser
+    }
+    fun clearPlace(placeID: String, ba : ByteArray){
+        var userID = placeID.dropLast(15)
+        var path: String
+        firebaseStorage.saveImageAfter(userID,placeID,ba).addOnSuccessListener { taskSnapshot ->
+            path = taskSnapshot.metadata?.path!!
+
+            firebaseRepository.updatePlace(placeID, path).addOnFailureListener{
+                Log.e("placeViewModel", "Chyba pri aktualizovani prispevku")
+            }
+        }
     }
 }

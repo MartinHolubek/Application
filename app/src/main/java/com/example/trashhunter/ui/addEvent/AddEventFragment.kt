@@ -1,5 +1,6 @@
 package com.example.trashhunter.ui.addEvent
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -20,6 +21,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.view.Graphic
@@ -75,17 +77,13 @@ class AddEventFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         addEventViewModel =
             ViewModelProviders.of(this).get(AddEventViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addevent, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
+
 
         mapView = root.findViewById<MapView>(R.id.mapEvent)
         mapView.locationDisplay.autoPanMode = LocationDisplay.AutoPanMode.RECENTER
-        addEventViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
         addEventViewModel.map.observe(this, Observer {
             mapView!!.map = it
         })
@@ -93,7 +91,8 @@ class AddEventFragment : Fragment() {
         startDate = root.findViewById(R.id.inputStartDateEvent)
         startTime = root.findViewById(R.id.inputStartTimeEvent)
         imageViewPhotoEvent = root.findViewById(R.id.imageViewPhotoEvent)
-        localDate = ArrayList()
+        localDate = ArrayList(5)
+        for (x in 0..5)localDate.add(0)
 
         addresses = ArrayList()
         // create a LocatorTask from an online service
@@ -136,8 +135,18 @@ class AddEventFragment : Fragment() {
         event.startDate = Timestamp(date)
         event.coordinates = point
         event.picture = imageUri.toString()
-
-        addEventViewModel.saveEventToFirebase(event)
+        var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(point.longitude,point.latitude))
+        addressInfo.addDoneListener(Runnable {
+            kotlin.run {
+                if (addressInfo.get().size> 0) {
+                    var address =
+                        addressInfo.get().get(0).attributes.getValue("Address").toString() + "," +
+                                addressInfo.get().get(0).attributes.getValue("City")
+                    event.placeName = address
+                    addEventViewModel.saveEventToFirebase(event)
+                }
+            }
+        })
         return true
     }
 
@@ -149,34 +158,35 @@ class AddEventFragment : Fragment() {
             var address = data?.getStringExtra(EXTRA_KEY)
             textLocation.setText(address)
 
-            val geocodeFuture = mLocatorTask.geocodeAsync(address)
-            geocodeFuture.addDoneListener(Runnable { kotlin.run {
-                try {
-                    val geocodeResults = geocodeFuture.get()
-                    if (geocodeResults.size>0){
-                        var topResult = geocodeResults.get(0)
-                        var loc = topResult.displayLocation
-                        //inicializacia point
-                        point = GeoPoint(loc.x,loc.y)
+            if(!address.equals("")){
+                val geocodeFuture = mLocatorTask.geocodeAsync(address)
+                geocodeFuture.addDoneListener(Runnable { kotlin.run {
+                    try {
+                        val geocodeResults = geocodeFuture.get()
+                        if (geocodeResults.size>0){
+                            var topResult = geocodeResults.get(0)
+                            var loc = topResult.displayLocation
+                            //inicializacia point
+                            point = GeoPoint(loc.x,loc.y)
 
-                        var att = topResult.attributes
-                        var symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE,
-                            Color.rgb(255,0,0),20.0f)
-                        var geocodeLocation = Graphic(loc,att,symbol)
-                        var graphicsOverlay = GraphicsOverlay()
-                        mapView.graphicsOverlays.add(graphicsOverlay)
-                        mapView.graphicsOverlays.get(0).graphics.add(geocodeLocation)
-                        var spatialReference = SpatialReference.create(2229)
-                        mapView.run {
-                            setViewpointCenterAsync(loc,7000.0)
+                            var att = topResult.attributes
+                            var symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE,
+                                Color.rgb(255,0,0),20.0f)
+                            var geocodeLocation = Graphic(loc,att,symbol)
+                            var graphicsOverlay = GraphicsOverlay()
+                            mapView.graphicsOverlays.add(graphicsOverlay)
+                            mapView.graphicsOverlays.get(0).graphics.add(geocodeLocation)
+                            var spatialReference = SpatialReference.create(2229)
+                            mapView.run {
+                                setViewpointCenterAsync(loc,7000.0)
+                            }
                         }
+                    }catch (e:Error){
+                        Toast.makeText(this.context,e.toString(),Toast.LENGTH_SHORT).show()
                     }
+                } })
+            }
 
-                }catch (e:Error){
-
-                    Toast.makeText(this.context,e.toString(),Toast.LENGTH_SHORT).show()
-                }
-            } })
         }else if(resultCode== Activity.RESULT_OK && requestCode== SELECT_IMAGE){
             imageUri = data?.data
             if (imageUri != null){
@@ -234,6 +244,7 @@ class AddEventFragment : Fragment() {
                 DateFormat.is24HourFormat(activity))
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
             // Do something with the time chosen by the user
             var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)

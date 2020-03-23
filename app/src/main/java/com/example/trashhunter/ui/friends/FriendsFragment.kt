@@ -1,6 +1,7 @@
 package com.example.trashhunter.ui.friends
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashhunter.Friend
 import com.example.trashhunter.R
+import com.example.trashhunter.firebase.FirebaseStorage
 import kotlinx.android.synthetic.main.ticket_friend.view.*
 
 class FriendsFragment : Fragment() {
@@ -22,26 +24,22 @@ class FriendsFragment : Fragment() {
     lateinit var  listViewFriends : ListView
     lateinit var listFriends : ArrayList<Friend>
 
+    lateinit var firebaseStorage: FirebaseStorage
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.removeAllViews()
         friendsViewModel =
             ViewModelProviders.of(this).get(FriendsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_friends, container, false)
-        val textView: TextView = root.findViewById(R.id.text_share)
-        friendsViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
 
+        firebaseStorage = FirebaseStorage()
         listFriends = arrayListOf()
         friendsViewModel.getFriends().observe(this, Observer {
             listFriends = ArrayList(it)
-
             updateList(root)
-
         })
 
         return root
@@ -69,13 +67,17 @@ class FriendsFragment : Fragment() {
             var friendView=layoutInflater.inflate(R.layout.ticket_friend,null)
             var currentfriend=listFriendAdapter[position]
             friendView.textViewName.text = currentfriend.displayName.toString()
-            friendView.addFriend.text = currentfriend.uid.toString()
+
+            firebaseStorage.getImageUser(currentfriend.image.toString()).addOnSuccessListener {
+                var bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                friendView.imageTicket.setImageBitmap(bitMap)
+            }
             friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
             friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
                 //shareViewModel.saveFriendsToFirebase(listFriendAdapter[position])
                 friendsViewModel.deleteFriendItem(listFriendAdapter[position])
-            })
 
+            })
             return friendView
         }
 

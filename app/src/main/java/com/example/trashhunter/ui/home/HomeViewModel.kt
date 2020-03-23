@@ -19,12 +19,6 @@ class HomeViewModel : ViewModel() {
     var savedFriends: MutableLiveData<List<String>> = MutableLiveData()
     var savedPlaces : MutableLiveData<List<Place>> = MutableLiveData()
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    var text: LiveData<String> = _text
-
-
     /**
      * Metóda, ktorá naplní z databázi pole miest
      * @return vráti pole s miestami
