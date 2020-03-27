@@ -15,7 +15,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
-import kotlin.concurrent.thread
 
 class MapViewModel : ViewModel() {
 
@@ -24,33 +23,12 @@ class MapViewModel : ViewModel() {
         FirebaseRepository()
 
     var mFirebaseStorage = com.example.trashhunter.firebase.FirebaseStorage()
-    var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData()
-    /*var savedUsersPlaces: MutableLiveData<List<Place>> = MutableLiveData<List<Place>>().apply {
+    var savedFriendsPlaces: MutableLiveData<List<Place>> = MutableLiveData()
 
-        thread {
-            fireStoreRepository.getPlaces()
-                .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
-                    if (e != null) {
-                        Log.w(TAG, "Chyba pri načitaní priatelov")
-
-                        return@EventListener
-                    }
-
-                    var savedPlacesList: MutableList<Place> = mutableListOf()
-                    for (doc in value!!) {
-                        var place = doc.toObject(Place::class.java)
-                        savedPlacesList.add(place)
-                    }
-                    this.postValue(savedPlacesList)
-
-                })
-        }
-
-    }*/
-    var savedPlaces : LiveData<List<Place>> = savedUsersPlaces
+    var savedPlaces : LiveData<List<Place>> = savedFriendsPlaces
     var savedFriends: MutableLiveData<List<String>> = MutableLiveData()
 
-    fun getFriendsPlace() : LiveData<List<Place>>{
+    fun getPlacesOfFriends() : LiveData<List<Place>>{
         fireStoreRepository.getFriendItems().addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
             if (e != null) {
                 Log.w(TAG, "Chyba pri načitaní priatelov")
@@ -58,14 +36,13 @@ class MapViewModel : ViewModel() {
 
                 return@EventListener
             }
-
             var savedFriendList : MutableList<String> = mutableListOf()
             for (doc in value!!) {
                 var friend = doc.toObject(Friend::class.java)
                 savedFriendList.add(friend.uid.toString())
             }
             if (savedFriendList.isEmpty()){
-                savedUsersPlaces.value = listOf<Place>()
+                savedFriendsPlaces.value = listOf<Place>()
             }else{
                 fireStoreRepository.getPlaces(savedFriendList).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
                     if (e != null) {
@@ -79,8 +56,7 @@ class MapViewModel : ViewModel() {
                         var placeItem = doc.toObject(Place::class.java)
                         savedPlacesList.add(placeItem)
                     }
-
-                    savedUsersPlaces.value = savedPlacesList
+                    savedFriendsPlaces.value = savedPlacesList
                 })
             }
             savedFriends.value = savedFriendList
@@ -129,18 +105,7 @@ class MapViewModel : ViewModel() {
         point.creatorID = mFirebaseUser!!.uid
         point.pointID = mFirebaseUser!!.uid + timeStamp
         point.userName = mFirebaseUser!!.displayName
-        /*var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-        val reference = storage.getReference("Pictures/" + mFirebaseUser!!.uid)
-        var pictureRef = reference.child("pictureBefore_$timeStamp")
-        var uploadTask = pictureRef.putBytes(ba1!!)
 
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-
-        }*/
         mFirebaseStorage.saveImagePlace(ba1,timeStamp, false).addOnFailureListener {
             // Handle unsuccessful uploads
 
@@ -167,31 +132,6 @@ class MapViewModel : ViewModel() {
                 }
             }
         }
-
-        //point.put("pict",pictureRef.path)
-        //point.photoBefore = pictureRef.path
-
-        /*timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-        pictureRef = reference.child("pictureAfter_$timeStamp")
-        uploadTask =pictureRef.putBytes(ba2!!)
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-
-        }*/
-        //point.photoAfter = pictureRef.path
-
-        /*point.creatorID = mFirebaseUser!!.uid
-        point.pointID = mFirebaseUser!!.uid + timeStamp
-        point.userName = mFirebaseUser!!.displayName
-
-        //Druhy sposob ukladania
-        fireStoreRepository.savePlaceItem(point).addOnFailureListener{
-            Log.e(TAG,"Chyba pri ukladani miesta")
-        }*/
-
         return "OK"
     }
 }

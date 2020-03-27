@@ -144,7 +144,7 @@ class FirebaseRepository{
             .collection("places")
             .document(ID)
         var newCount = oldCount + 1
-        var actualRating = (oldRating + newRating)/2
+        var actualRating = oldRating + newRating
 
         var ratingReference = firestoreDB.collection("users")
             .document(userID)
@@ -243,7 +243,6 @@ class FirebaseRepository{
     }
 
     fun getPlaces(listUsers:List<String>): Query {
-        //return firestoreDB.collection("users").whereIn("uid",listUsers)
         return firestoreDB.collectionGroup("places").whereIn("creatorID",listUsers)
     }
 

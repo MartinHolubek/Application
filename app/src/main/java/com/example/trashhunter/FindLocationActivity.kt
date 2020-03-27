@@ -8,15 +8,13 @@ import android.text.TextWatcher
 
 import android.view.Menu
 
-import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.esri.arcgisruntime.loadable.LoadStatus
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
 import com.example.trashhunter.ui.addEvent.AddEventFragment
-import kotlinx.android.synthetic.main.activity_map.*
+import kotlinx.android.synthetic.main.activity_find_location.*
 
 class FindLocationActivity : AppCompatActivity() {
 
@@ -28,7 +26,7 @@ class FindLocationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_find_location)
         addresses = ArrayList()
         //mapView = findViewById(R.id.mapEvent)
         mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")

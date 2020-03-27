@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.transition.Visibility
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -235,6 +237,14 @@ class PlaceFragment : Fragment() {
         var mapCoordination = root.findViewById<TextView>(R.id.placeCoordination)
 
         mapCoordination.text = "${place.coordinates!!.latitude.toString()}, ${place.coordinates!!.longitude.toString()}"
+
+        var ratingBar = root.findViewById<AppCompatRatingBar>(R.id.ratingPlace)
+        var ratingCount = root.findViewById<TextView>(R.id.countRatingText)
+        if (place.rating != 0F){
+            ratingBar.rating = place.rating!!.div(place.countOfRating!!)
+            ratingCount.text = place.countOfRating.toString()
+        }
+
     }
 
     private fun updateMap(map: MapView,point: GeoPoint) {
@@ -255,8 +265,11 @@ class PlaceFragment : Fragment() {
         var date = view.findViewById<TextView>(R.id.placeDate)
         var text = view.findViewById<TextView>(R.id.placeText)
 
+
         if (place.cleared!!){
             cleared.text = "Vyčistené"
+            var button = view.findViewById<Button>(R.id.button_takeAftPicture)
+            button.visibility = View.GONE
         }else{
             cleared.text = "Nevyčistené"
         }

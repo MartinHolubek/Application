@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.example.trashhunter.DateFormat
 import com.example.trashhunter.R
 import com.example.trashhunter.Place
 import com.google.firebase.storage.FirebaseStorage
@@ -73,7 +74,7 @@ class HomeFragment : Fragment() {
             //placeView.valueFoto.setImageURI()
             placeView.textViewDescription.text=currentPlace.ClearText.toString()
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
-            placeView.valueDate.text=currentPlace.date.toString()
+            placeView.valueDate.text = DateFormat.getDateFormat(currentPlace.date!!)
 
             val imageBeforeView = placeView.findViewById<ImageView>(R.id.imageTicketBefore)
             var ratingValue:Float

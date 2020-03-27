@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10pt"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/backgroundTheme">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,8 @@
                 android:layout_weight="1"
                 android:text="@string/Description"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
 
@@ -49,13 +51,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/date_ticket" />
+                android:text="@string/date_ticket"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valueDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -69,13 +73,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Address" />
+                android:text="@string/Address"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valuePlaceName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -88,13 +94,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/user_name" />
+                android:text="@string/user_name"
+                android:textColor="@color/textColor"/>
 
         <TextView
                 android:id="@+id/valueUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
     <LinearLayout
@@ -118,7 +126,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""/>
+                android:text=""
+                android:textColor="@color/textColor"/>
 
     </LinearLayout>
 

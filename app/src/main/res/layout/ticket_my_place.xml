@@ -20,7 +20,8 @@
                 android:scaleType="centerCrop"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                />
     </LinearLayout>
 
     <LinearLayout
@@ -59,6 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:hint=" Dátum vytvorenia príspevku"
+                android:textColorHint="@color/textColor"
                 android:textColor="@color/textColor"/>
     </LinearLayout>
 
@@ -81,6 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:hint=" Adresa, kde bol príspevok vytvorený"
+                android:textColorHint="@color/textColor"
                 android:textColor="@color/textColor"/>
     </LinearLayout>
 
@@ -102,6 +107,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:hint=" užívateľ, ktorý vytvoril príspevok"
+                android:textColorHint="@color/textColor"
                 android:textColor="@color/textColor"/>
 
     </LinearLayout>
@@ -117,17 +124,20 @@
                 android:layout_weight="1"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:stepSize="0.5">
+                android:stepSize="0.5"
+                android:rating="5"
+                >
 
 
         </androidx.appcompat.widget.AppCompatRatingBar>
+
         <TextView
                 android:id="@+id/textViewRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:text="Počet hodnotení"
                 android:textAlignment="center"
-                android:text=""
                 android:textColor="@color/textColor"/>
 
     </LinearLayout>

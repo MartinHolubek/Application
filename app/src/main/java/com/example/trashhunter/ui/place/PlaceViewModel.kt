@@ -21,24 +21,18 @@ class PlaceViewModel : ViewModel() {
         FirebaseRepository()
     var firebaseStorage = FirebaseStorage()
 
-
     var savedPlace : MutableLiveData<Place> = MutableLiveData()
     var savedComments : MutableLiveData<List<Comment>> = MutableLiveData()
     var savedUser:MutableLiveData<User> = MutableLiveData()
 
     fun getPlace(placeID:String): LiveData<Place>{
-
-        var place:Place
         firebaseRepository.getPlaceItem(placeID).addSnapshotListener(EventListener<DocumentSnapshot>{ value, e ->
             if (e != null) {
                 Log.w(TAG, "Chyba pri načitaní priatelov")
 
                 return@EventListener
             }
-
-            var place = value?.toObject(Place::class.java)
-
-            savedPlace.value = place
+            savedPlace.value = value?.toObject(Place::class.java)
         })
         return savedPlace
     }
@@ -59,7 +53,7 @@ class PlaceViewModel : ViewModel() {
                 return@EventListener
             }
 
-            var savedCommentList : MutableList<Comment> = mutableListOf()
+            val savedCommentList : MutableList<Comment> = mutableListOf()
             for (doc in value!!) {
                 var comment = doc.toObject(Comment::class.java)
 

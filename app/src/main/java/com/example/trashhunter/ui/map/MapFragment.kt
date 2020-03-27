@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.esri.arcgisruntime.concurrent.ListenableFuture
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
-import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.view.*
 import com.esri.arcgisruntime.mapping.view.LocationDisplay.DataSourceStatusChangedEvent
 import com.esri.arcgisruntime.mapping.view.LocationDisplay.DataSourceStatusChangedListener
@@ -91,31 +90,35 @@ class MapFragment : Fragment() {
         mLocatorTask = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
 
         mapView = root.findViewById<MapView>(R.id.map1)
-        mapViewModel.text.observe(this, Observer {
-            editText.setText(it)
-            //update UI
-        })
+
         mapViewModel.map.observe(this, Observer {
             mapView!!.map = it
+            mapView.invalidate()
         })
 
-        mapViewModel.getFriendsPlace().observe(this, Observer {
+
+        mapViewModel.getPlacesOfFriends().observe(this, Observer {
             thread {
                 listUsersPlaces = it
-                if (mapView!!.map != null){
+                if (mapView.map != null){
                     val myGraphicsOverlay = GraphicsOverlay()
                     for (item in listUsersPlaces){
                         val pt = Point(item.coordinates?.latitude!!,item.coordinates?.longitude!!, SpatialReference.create(4326))
                         val mySymbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 18.0F)
-                        val textSymbol = TextSymbol(30.0F,"Ahoj",Color.BLUE,TextSymbol.HorizontalAlignment.CENTER,TextSymbol.VerticalAlignment.BOTTOM)
-                        val myGraphic = Graphic(pt, mySymbol)
-                        myGraphic.attributes.set("username",item.userName)
-                        myGraphic.attributes.set("placename",item.placeName)
-                        myGraphic.attributes.set("date",item.date.toString())
-                        myGraphic.attributes.set("clearText",item.ClearText)
-                        myGraphic.attributes.set("rating",item.rating.toString())
-                        myGraphicsOverlay.graphics.add(myGraphic)
 
+                        val myGraphic = Graphic(pt, mySymbol)
+                        myGraphic.attributes["username"] = item.userName
+                        myGraphic.attributes["placename"] = item.placeName
+                        myGraphic.attributes["date"] = item.date.toString()
+                        myGraphic.attributes["clearText"] = item.ClearText
+                        if (item.countOfRating == null || item.countOfRating == 0){
+                            myGraphic.attributes["rating"] = "žiadne hodnotenie"
+                        }else{
+                            var rating = item.rating?.div(item.countOfRating!!)
+                            myGraphic.attributes["rating"] = rating.toString()
+                        }
+
+                        myGraphicsOverlay.graphics.add(myGraphic)
                     }
                     mapView.graphicsOverlays.add(myGraphicsOverlay)
                 }
@@ -129,7 +132,7 @@ class MapFragment : Fragment() {
             savePoint(root)
         })
 
-        imageBeforePhoto = root.findViewById(R.id.imageView_before)
+        imageBeforePhoto = root.findViewById<ImageView>(R.id.imageView_before)
         val textViewHintBefore = root.findViewById<TextView>(R.id.textViewHintBeforePhoto)
         imageBeforePhoto.setOnClickListener(View.OnClickListener {
             //dispatchTakePictureIntent(root,REQUEST_IMAGE_CAPTURE_BEFORE)
@@ -199,7 +202,6 @@ class MapFragment : Fragment() {
         point2.rating = 0F
         point2.countOfRating = 0
 
-
         var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(x,y))
         addressInfo.addDoneListener(Runnable {
             kotlin.run {
@@ -233,15 +235,14 @@ class MapFragment : Fragment() {
 
             override fun onTouch(view: View?, event: MotionEvent?): Boolean {
 
-                var sv = root.findViewById<NestedScrollView>(R.id.scroll_map)
-                var action = event?.action
+                val scrollView = root.findViewById<NestedScrollView>(R.id.scroll_map)
 
-                when(action){
+                when(event?.action){
                     MotionEvent.ACTION_DOWN ->{
-                        sv.requestDisallowInterceptTouchEvent(true)
+                        scrollView.requestDisallowInterceptTouchEvent(true)
                     }
                     MotionEvent.ACTION_UP ->{
-                        sv.requestDisallowInterceptTouchEvent(true)
+                        scrollView.requestDisallowInterceptTouchEvent(true)
                     }
                 }
                 super.onTouch(view, event)
@@ -259,7 +260,8 @@ class MapFragment : Fragment() {
                     kotlin.run {
                         Toast.makeText(root.context, identifyGraphics.get().size.toString() + ",,,", Toast.LENGTH_SHORT).show()
 
-                        //ak list obsahuje nejaky bod
+                        //ak  mapView obsahuje bod na súradniciach MotionEventu,
+                        // tak zobraz dialogove okno
                         if (identifyGraphics.get().size > 0 &&
                             identifyGraphics.get().get(0).graphics.size > 0){
                             identifyGraphics.get().get(0).graphics.get(0).isSelected = true
@@ -270,7 +272,6 @@ class MapFragment : Fragment() {
                             var date =   place.attributes.get("date").toString()
                             var text =   place.attributes.get("clearText").toString()
                             var rating =   place.attributes.get("rating").toString()
-
 
                             // zobraz9 dialogove okno
                             showDialog( root,username,placename,date,text,rating)

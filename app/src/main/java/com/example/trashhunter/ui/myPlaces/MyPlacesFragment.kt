@@ -14,6 +14,7 @@ import android.widget.ListView
 import android.widget.RatingBar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.trashhunter.DateFormat
 import com.example.trashhunter.Place
 
 import com.example.trashhunter.R
@@ -86,7 +87,7 @@ class MyPlacesFragment : Fragment() {
             //placeView.valueFoto.setImageURI()
             placeView.textViewDescription.text=currentPlace.ClearText.toString()
             placeView.valuePlaceName.text=currentPlace.placeName.toString()
-            placeView.valueDate.text=currentPlace.date.toString()
+            placeView.valueDate.text = DateFormat.getDateFormat(currentPlace.date!!)
 
             val imageBeforeView = placeView.findViewById<ImageView>(R.id.imageTicketBefore)
             var ratingValue:Float
@@ -123,24 +124,6 @@ class MyPlacesFragment : Fragment() {
                 }
 
             imageBeforeView.setImageBitmap(viewModel.getImagePlace(currentPlace.photoBefore.toString()).value)
-            /*if (currentPlace.photoAfter != null){
-                imageBeforeView.setImageBitmap(viewModel.getImagePlace(currentPlace.photoAfter.toString()).value)
-            }*/
-
-
-
-
-            /*val imageAfterView = placeView.findViewById<ImageView>(R.id.imageTicketAfter)
-            var photoAfterRef = FirebaseStorage.getInstance()
-                .reference
-                .child(currentPlace.photoAfter.toString())
-            photoAfterRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-                // Konvertujeme byteArray na bitmap
-                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                imageAfterView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageAfterView.width,imageAfterView.height,false))
-            }.addOnFailureListener {
-                // Handle any errors
-            }*/
 
             return placeView
         }

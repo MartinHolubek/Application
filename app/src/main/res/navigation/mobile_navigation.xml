@@ -84,7 +84,7 @@
     </fragment>
     <fragment
             android:id="@+id/attendEventsFragment"
-            android:name="com.example.trashhunter.ui.attendEventsFragment"
+            android:name="com.example.trashhunter.ui.attendEvents.attendEventsFragment"
             android:label="Udalosti na ktorých sa zúčastním"
             tools:layout="@layout/attend_events_fragment">
         <action
