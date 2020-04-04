@@ -56,7 +56,8 @@
                     android:id="@+id/framelayoutBeforePhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/backgroundTheme">
+                    android:backgroundTint="@color/backgroundTheme"
+                    android:layout_margin="@dimen/activity_vertical_margin">
 
                 <ImageView
                         android:id="@+id/imageView_before"
@@ -96,6 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/framelayoutBeforePhoto"
+                    android:layout_margin="@dimen/text_margin"
                     android:layout_centerInParent="true"
                     android:backgroundTint="@color/backgroundTheme"
                     android:text="@string/AddAfterPhoto"
@@ -105,7 +107,8 @@
                     android:id="@+id/framelayoutAfterPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/switchAddAfterPhoto">
+                    android:layout_below="@id/switchAddAfterPhoto"
+                    android:layout_margin="@dimen/activity_vertical_margin">
 
                 <ImageView
                         android:id="@+id/imageView_after"
@@ -154,25 +157,26 @@
                 android:textSize="20dp" />
 
         <EditText
-                android:id="@+id/text_gallery"
-                android:layout_width="408dp"
+                android:id="@+id/placeInfo"
+                android:layout_width="match_parent"
                 android:layout_height="84dp"
-                android:backgroundTint="@color/GreenTheme"
+                android:background="@drawable/custom_text_view"
+
+                android:gravity="center_horizontal"
+                android:layout_margin="@dimen/text_margin"
                 android:textSize="20sp"
-                android:hint="Informácie"
-                android:textColorHint="@color/cardview_light_background"
-                android:textColor="@color/cardview_light_background"
-                app:layout_constraintBottom_toTopOf="@+id/imageView_before"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:hint="..."
+                android:textColorHint="@drawable/selector"
+                android:textColor="@color/cardview_light_background" />
 
         <Button
                 android:id="@+id/button_clean"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:background="@color/GreenTheme"
+                android:layout_margin="@dimen/text_margin"
+                android:backgroundTint="@color/GreenTheme"
+                android:background="@drawable/custom_button"
                 android:text="@string/button_clean" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

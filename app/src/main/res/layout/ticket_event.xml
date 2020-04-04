@@ -19,32 +19,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/textColor" />
+            android:textColor="@color/textColor"
+            android:textSize="18dp"/>
 
     <TextView
             android:id="@+id/textViewEventTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/textColor"/>
+            android:textColor="@color/textColor"
+            android:textSize="18dp"/>
     <TextView
             android:id="@+id/textViewEventLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/textColor"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="18dp"/>
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="vertical">
+            android:layout_height="50dp"
+            android:orientation="horizontal">
 
+        <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
         <Button
                 android:id="@+id/buttonAddEventInterest"
-                android:layout_width="wrap_content"
+                android:layout_width="66dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_add_button"/>
+                android:background="@drawable/ic_add_button" />
 
     </LinearLayout>
 

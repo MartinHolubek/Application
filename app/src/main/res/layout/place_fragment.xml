@@ -48,25 +48,69 @@
             </LinearLayout>
 
             <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_margin"
+                    android:textSize="20dp"
+                    android:text="Príspevok vytvoril:"
+                    android:textColor="@color/textColor"/>
+            <TextView
                     android:id="@+id/placeUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
+                    android:textSize="16dp"
+                    android:textColor="@color/textColor"/>
+            <TextView
+                    android:id="@+id/clearUserNameLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
+                    android:text="Miesto vyčistil:"
+                    android:textColor="@color/textColor"/>
+            <TextView
+                    android:id="@+id/clearUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="16dp"
+                    android:textColor="@color/textColor"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_margin"
+                    android:textSize="20dp"
+                    android:text="Dátum zverejnenia:"
                     android:textColor="@color/textColor"/>
             <TextView
                     android:id="@+id/placeDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
+                    android:layout_margin = "@dimen/text_margin"
+                    android:textSize="16dp"
+                    android:textColor="@color/textColor"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
+                    android:text="Informácie:"
                     android:textColor="@color/textColor"/>
             <TextView
                     android:id="@+id/placeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:textSize="20dp"
+                    android:textSize="16dp"
                     android:textColor="@color/textColor"/>
 
             <LinearLayout
@@ -113,7 +157,7 @@
                         android:id="@+id/placeMap"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        app:layout_constraintBottom_toTopOf="@+id/text_gallery"
+                        app:layout_constraintBottom_toTopOf="@+id/placeInfo"
                         app:layout_constraintHorizontal_bias="0.6" />
 
                 <TextView

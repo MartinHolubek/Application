@@ -1,6 +1,8 @@
 package com.example.trashhunter
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -39,6 +43,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         var image : ByteArray?=null
         if (savedInstanceState == null) {
             val extras = intent.extras
@@ -82,6 +88,16 @@ class MainActivity : AppCompatActivity() {
             updateUI(image)
         }
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1)
+        } else {
+            // Permission has already been granted
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -111,11 +127,11 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode==2){
+        /*if (requestCode==2){
             var address = data?.getStringExtra("MESSAGE")
             var textLocation = findViewById<EditText>(R.id.inputLocation)
             textLocation.setText(address)
-        }
+        }*/
     }
 
     private fun updateUI(imageByteArray: ByteArray? = null) {

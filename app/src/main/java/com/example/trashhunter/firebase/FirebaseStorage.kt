@@ -9,16 +9,13 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
 
-class FirebaseStorage{
+class FirebaseStorage() {
     var mFirebaseAuth:FirebaseAuth
-    var mFirebaseUser:FirebaseUser
     var mFirebaseStorage:FirebaseStorage
 
 
-
-    constructor(){
+    init {
         mFirebaseAuth = FirebaseAuth.getInstance()
-        mFirebaseUser = mFirebaseAuth.currentUser!!
         mFirebaseStorage = FirebaseStorage.getInstance()
     }
 
@@ -29,7 +26,7 @@ class FirebaseStorage{
      */
     fun saveImageEvent(uri: Uri): UploadTask{
         var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-        val reference = mFirebaseStorage.getReference("Pictures_events/" + mFirebaseUser!!.uid)
+        val reference = mFirebaseStorage.getReference("Pictures_events/" + mFirebaseAuth.currentUser!!.uid)
         var pictureRef = reference.child("picture_$timeStamp")
 
         var uploadTask = pictureRef.putFile(uri)
@@ -39,8 +36,9 @@ class FirebaseStorage{
     }
 
     fun saveImageUser(ba: ByteArray?): UploadTask{
+
         var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-        val reference = mFirebaseStorage.getReference("Pictures_users/" + mFirebaseUser!!.uid)
+        val reference = mFirebaseStorage.getReference("Pictures_users/" + mFirebaseAuth.currentUser!!.uid)
         var pictureRef = reference.child("picture_$timeStamp")
 
         var uploadTask = pictureRef.putBytes(ba!!)
@@ -65,7 +63,7 @@ class FirebaseStorage{
 
     fun saveImagePlace(ba: ByteArray?, timeStamp: String, after : Boolean): UploadTask{
 
-        val reference = mFirebaseStorage.getReference("Pictures/" + mFirebaseUser!!.uid)
+        val reference = mFirebaseStorage.getReference("Pictures/" + mFirebaseAuth.currentUser!!.uid)
         var pictureRef : StorageReference? = null
         if (after){
             pictureRef = reference.child("pictureAfter_$timeStamp")

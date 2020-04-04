@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:adnroid="http://schemas.android.com/apk/res/android" adnroid:shape="rectangle">
+    <stroke adnroid:color="@color/GreenTheme"  adnroid:width="3dp"/>
+    <corners adnroid:radius="10dp" />
+</shape>

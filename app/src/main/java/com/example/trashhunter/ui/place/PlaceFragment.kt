@@ -8,12 +8,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.transition.Visibility
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,15 +42,18 @@ import com.esri.arcgisruntime.mapping.view.Graphic
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
-import com.example.trashhunter.Comment
-import com.example.trashhunter.Picture
-import com.example.trashhunter.Place
+import com.example.trashhunter.*
 
-import com.example.trashhunter.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,6 +78,7 @@ class PlaceFragment : Fragment() {
     private lateinit var mapView:MapView
     private lateinit var uriPictureAfter:Uri
     private var pictureFile:File?=null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,20 +171,16 @@ class PlaceFragment : Fragment() {
         }
     }
 
-    private fun setPic(): Bitmap {
-
-        val bmOptions = BitmapFactory.Options().apply {
-            // Get the dimensions of the bitmap
-            inJustDecodeBounds = true
-
-            val photoW: Int = outWidth
-            val photoH: Int = outHeight
-
-            // Decode the image file into a Bitmap sized to fill the View
-            inJustDecodeBounds = false
-            inPurgeable = true
+    private fun setPic() {
+        thread {
+            var bitmap = Picasso.get().load(uriPictureAfter).get().let {
+                pictures.add(Picture(it,"Fotka po"))
+                val baos = ByteArrayOutputStream()
+                it?.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                val data = baos.toByteArray()
+                placeViewModel.clearPlace(placeID.toString(),data)
+            }
         }
-        return BitmapFactory.decodeFile(pictureFile?.absolutePath, bmOptions)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -184,17 +188,14 @@ class PlaceFragment : Fragment() {
         //data su niekedy null niekedy nie, tak treba zistit cestu k suboru kde sa nachadza fotka
         if (resultCode== RESULT_OK){
             if(requestCode== PICTURE_REQUEST_CODE){
-
                 if (pictures.size == 2){
                     pictures.removeAt(1)
                 }
-                var bm = setPic()
-                pictures.add(Picture(bm,"Fotka po"))
-                val baos = ByteArrayOutputStream()
-                bm.compress(Bitmap.CompressFormat.JPEG, 50, baos)
-                val data = baos.toByteArray()
-                placeViewModel.clearPlace(placeID.toString(),data)
-                updatePictures(view!!)
+                view?.findViewById<TextView>(R.id.clearUserNameLabel)?.visibility = View.VISIBLE
+                var userNameClear = view?.findViewById<TextView>(R.id.clearUsername)
+                userNameClear?.visibility = View.VISIBLE
+                userNameClear?.text = FirebaseAuth.getInstance().currentUser?.displayName
+                setPic()
             }
         }
     }
@@ -264,20 +265,31 @@ class PlaceFragment : Fragment() {
         var userName = view.findViewById<TextView>(R.id.placeUsername)
         var date = view.findViewById<TextView>(R.id.placeDate)
         var text = view.findViewById<TextView>(R.id.placeText)
+        var clearedUsername = view.findViewById<TextView>(R.id.clearUsername)
+        var clearedUsernameLabel = view.findViewById<TextView>(R.id.clearUserNameLabel)
+
 
 
         if (place.cleared!!){
             cleared.text = "Vyčistené"
             var button = view.findViewById<Button>(R.id.button_takeAftPicture)
             button.visibility = View.GONE
+            clearedUsername.visibility = View.VISIBLE
+            clearedUsernameLabel.visibility = View.VISIBLE
+            if (place.clearedBy == null){
+                clearedUsername.text = place.userName
+            }else{
+                clearedUsername.text = place.clearedBy
+            }
         }else{
             cleared.text = "Nevyčistené"
+            clearedUsername.visibility = View.GONE
+            clearedUsernameLabel.visibility = View.GONE
         }
 
         userName.text = place.userName
 
-        var df = android.text.format.DateFormat.getDateFormat(view.context)
-        date.text = df.format(Date(place.date?.time!!))
+        date.text = DateFormat.getDateFormat(Date(place.date?.time!!))
 
         text.text = place.ClearText
     }
@@ -300,7 +312,7 @@ class PlaceFragment : Fragment() {
             var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
             pictures.add(Picture(bmp,"Fotka pred"))
 
-            updatePictures(view)
+            updatePictures()
         }.addOnFailureListener {
             // Handle any errors
         }
@@ -317,7 +329,7 @@ class PlaceFragment : Fragment() {
 
                 viewPager.adapter = adapterPictures
                 viewPager.setPadding(130,0,130,0)*/
-                updatePictures(view)
+                updatePictures()
             }.addOnFailureListener {
                 // Handle any errors
             }
@@ -325,8 +337,8 @@ class PlaceFragment : Fragment() {
 
     }
 
-    fun updatePictures(view: View){
-        var adapterPictures = AdapterPictures(pictures,view.context)
+    fun updatePictures(){
+        var adapterPictures = AdapterPictures(pictures,view!!.context)
 
         viewPager.adapter = adapterPictures
         viewPager.setPadding(130,0,130,0)
@@ -444,3 +456,4 @@ class PlaceFragment : Fragment() {
     }
 
 }
+

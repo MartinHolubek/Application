@@ -32,6 +32,7 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.example.trashhunter.Event
 import com.example.trashhunter.FindLocationActivity
+import com.example.trashhunter.Map
 import com.example.trashhunter.R
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -51,6 +52,8 @@ class AddEventFragment : Fragment() {
 
     private lateinit var startDate: EditText
     private lateinit var startTime: EditText
+    private lateinit var endDate: EditText
+    private lateinit var endTime: EditText
     private lateinit var imageViewPhotoEvent: ImageView
 
     private lateinit var point: GeoPoint
@@ -62,8 +65,8 @@ class AddEventFragment : Fragment() {
         val EXTRA_KEY = "address"
         val RESULT_CODE_LOCATION = 12
         val RESULT_CODE_PHOTO = 13
-        lateinit var localDate : ArrayList<Int>
-
+        lateinit var StartDateEvent : ArrayList<Int>
+        lateinit var EndDateEvent : ArrayList<Int>
     }
     //objekt na zistenie adresy
     private lateinit var mLocatorTask : LocatorTask
@@ -82,7 +85,7 @@ class AddEventFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_addevent, container, false)
 
 
-        mapView = root.findViewById<MapView>(R.id.mapEvent)
+        mapView = root.findViewById(R.id.mapEvent)
         mapView.locationDisplay.autoPanMode = LocationDisplay.AutoPanMode.RECENTER
         addEventViewModel.map.observe(this, Observer {
             mapView!!.map = it
@@ -90,9 +93,13 @@ class AddEventFragment : Fragment() {
 
         startDate = root.findViewById(R.id.inputStartDateEvent)
         startTime = root.findViewById(R.id.inputStartTimeEvent)
+        endDate = root.findViewById(R.id.inputEndDateEvent)
+        endTime = root.findViewById(R.id.inputEndTimeEvent)
         imageViewPhotoEvent = root.findViewById(R.id.imageViewPhotoEvent)
-        localDate = ArrayList(5)
-        for (x in 0..5)localDate.add(0)
+        StartDateEvent = ArrayList(5)
+        for (x in 0..5)StartDateEvent.add(0)
+        EndDateEvent = ArrayList(5)
+        for (x in 0..5)EndDateEvent.add(0)
 
         addresses = ArrayList()
         // create a LocatorTask from an online service
@@ -114,11 +121,20 @@ class AddEventFragment : Fragment() {
         })
 
         startDate.setOnClickListener(View.OnClickListener {
-            showDatePickerDialog(root)
+            showDatePickerDialog("startDate")
         })
         startTime.setOnClickListener(View.OnClickListener {
-            showTimePickerDialog(root)
+            showTimePickerDialog("startTime")
         })
+
+        endDate.setOnClickListener(View.OnClickListener {
+            showDatePickerDialog("endDate")
+        })
+        endTime.setOnClickListener(View.OnClickListener {
+            showTimePickerDialog("endTime")
+        })
+
+        Map.setMove(root,mapView)
 
         return root
     }
@@ -131,8 +147,10 @@ class AddEventFragment : Fragment() {
         var event = Event()
         event.title = view.findViewById<EditText>(R.id.inputTitleEvent).text.toString()
         event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).text.toString()
-        var date = GregorianCalendar(localDate[0],localDate[1],localDate[2],localDate[3],localDate[4]).time
-        event.startDate = Timestamp(date)
+        var startTimestamp = GregorianCalendar(StartDateEvent[0],StartDateEvent[1],StartDateEvent[2],StartDateEvent[3],StartDateEvent[4]).time
+        var endTimestamp = GregorianCalendar(EndDateEvent[0],EndDateEvent[1],EndDateEvent[2],EndDateEvent[3],EndDateEvent[4]).time
+        event.startDate = Timestamp(startTimestamp)
+        event.endDate = Timestamp(endTimestamp)
         event.coordinates = point
         event.picture = imageUri.toString()
         var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(point.longitude,point.latitude))
@@ -198,9 +216,9 @@ class AddEventFragment : Fragment() {
     /**
      * Zobrazi okno s vyberom datumu
      */
-    private fun showDatePickerDialog(v: View) {
+    private fun showDatePickerDialog(tag: String) {
         val newFragment = DatePickerFragment()
-        newFragment.show(activity!!.supportFragmentManager, "datePicker")
+        newFragment.show(activity!!.supportFragmentManager, tag)
     }
 
     class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
@@ -219,17 +237,27 @@ class AddEventFragment : Fragment() {
 
         override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
             // Do something with the date chosen by the user
-            var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
-            text?.setText("${month+1} ${day}, ${year}")
+            if (this.tag == "startDate"){
+                var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
+                text?.setText("${month+1} ${day}, ${year}")
+                StartDateEvent.add(0,year)
+                StartDateEvent.add(1,month)
+                StartDateEvent.add(2,day)
+            }else{
+                var text = this.activity?.findViewById<EditText>(R.id.inputEndDateEvent)
+                text?.setText("${month+1} ${day}, ${year}")
+                EndDateEvent.add(0,year)
+                EndDateEvent.add(1,month)
+                EndDateEvent.add(2,day)
+            }
 
-            localDate.add(0,year)
-            localDate.add(1,month)
-            localDate.add(2,day)
         }
     }
 
-    private fun showTimePickerDialog(v: View) {
-        TimePickerFragment().show(activity!!.supportFragmentManager, "timePicker")
+    private fun showTimePickerDialog(tag: String) {
+        var timePicker = TimePickerFragment()
+
+        TimePickerFragment().show(activity!!.supportFragmentManager, tag)
     }
 
     class TimePickerFragment() : DialogFragment(), TimePickerDialog.OnTimeSetListener {
@@ -247,10 +275,19 @@ class AddEventFragment : Fragment() {
         @SuppressLint("SetTextI18n")
         override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
             // Do something with the time chosen by the user
-            var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)
-            text?.setText("${hourOfDay}:${minute}")
-            localDate.add(3,hourOfDay)
-            localDate.add(4,minute)
+            if (this.tag == "startTime"){
+                var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)
+                text?.setText("${hourOfDay}:${minute}")
+                StartDateEvent.add(3,hourOfDay)
+                StartDateEvent.add(4,minute)
+            }else{
+                var text = this.activity?.findViewById<EditText>(R.id.inputEndTimeEvent)
+                text?.setText("${hourOfDay}:${minute}")
+                EndDateEvent.add(3,hourOfDay)
+                EndDateEvent.add(4,minute)
+            }
+
+
 
         }
     }

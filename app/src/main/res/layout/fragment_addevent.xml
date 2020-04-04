@@ -12,6 +12,21 @@
             android:layout_height="match_parent"
             android:background="@color/backgroundTheme">
 
+        <TextView
+                android:id="@+id/titleEventLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonAddPictureEvent"
+            app:layout_constraintEnd_toStartOf="@+id/inputTitleEvent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Názov"
+                android:textSize="20dp"
+
+                android:textColor="@color/GreenTheme"/>
+
         <EditText
                 android:id="@+id/inputTitleEvent"
                 android:layout_width="0dp"
@@ -27,7 +42,22 @@
                 android:textColorHint="@color/textColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonAddPictureEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleEventLabel" />
+
+        <TextView
+                android:id="@+id/titleDetailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputTitleEvent"
+                app:layout_constraintEnd_toStartOf="@+id/inputDetailsEvent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Informácie o udalosti"
+                android:textSize="20dp"
+
+                android:textColor="@color/GreenTheme"/>
 
         <EditText
                 android:id="@+id/inputDetailsEvent"
@@ -44,12 +74,27 @@
                 android:textColorHint="@color/textColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputTitleEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleDetailLabel"
+                />
+        <TextView
+                android:id="@+id/titleStartDateLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputDetailsEvent"
+                app:layout_constraintEnd_toStartOf="@+id/inputStartDateEvent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Začiatok udalosti"
+                android:textSize="20dp"
+
+                android:textColor="@color/GreenTheme"/>
 
         <EditText
                 android:id="@+id/inputStartDateEvent"
                 android:layout_width="0dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
@@ -63,7 +108,59 @@
                 android:textColorHint="@color/textColor"
                 app:layout_constraintEnd_toStartOf="@+id/inputStartTimeEvent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputDetailsEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleStartDateLabel" />
+
+        <EditText
+                android:id="@+id/inputEndDateEvent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/GreenTheme"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/Date"
+                android:inputType="date"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/textColor"
+                app:layout_constraintEnd_toStartOf="@+id/inputEndTimeEvent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleEndDateLabel" />
+        <TextView
+                android:id="@+id/titleLocationLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Koniec udalosti"
+                android:textColor="@color/GreenTheme"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/inputLocation"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/inputEndDateEvent" />
+
+        <TextView
+                android:id="@+id/titleEndDateLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Koniec udalosti"
+                android:textColor="@color/GreenTheme"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/inputLocation"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/inputStartDateEvent" />
+
+
+
+
 
         <EditText
                 android:id="@+id/inputLocation"
@@ -83,7 +180,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mapEvent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputStartTimeEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleLocationLabel" />
 
         <com.esri.arcgisruntime.mapping.view.MapView
                 android:id="@+id/mapEvent"
@@ -102,6 +199,7 @@
                 android:id="@+id/buttonAddEvent"
                 android:layout_width="137dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/custom_button"
@@ -116,7 +214,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="4dp"
                 android:clickable="true"
                 android:ems="10"
@@ -129,7 +227,27 @@
                 android:inputType="time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/inputStartDateEvent"
-                app:layout_constraintTop_toBottomOf="@+id/inputDetailsEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleStartDateLabel" />
+
+        <EditText
+                android:id="@+id/inputEndTimeEvent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/GreenTheme"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/Time"
+
+                android:inputType="time"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/textColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/inputEndDateEvent"
+                app:layout_constraintTop_toBottomOf="@+id/titleEndDateLabel" />
 
         <ImageView
                 android:id="@+id/imageViewPhotoEvent"
@@ -137,9 +255,10 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="@dimen/text_margin"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/inputTitleEvent"
+                app:layout_constraintBottom_toTopOf="@+id/titleEventLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

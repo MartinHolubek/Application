@@ -37,7 +37,7 @@ class DateFormat {
                 7 -> dayOfWeek = "Sobota"
                 1 -> dayOfWeek = "Nedeľa"
             }
-            return "${dayOfWeek}, ${month} ${day}. ${year}}"
+            return "$dayOfWeek, $month $day. $year"
         }
     }
 }

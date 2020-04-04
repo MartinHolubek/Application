@@ -11,7 +11,7 @@ class Event(){
     var organizer :String?=null
     var organizerID :String?=null
     var startDate :Timestamp?=null
-    var endDate :Date?=null
+    var endDate :Timestamp?=null
     var coordinates : GeoPoint?=null
     var placeName: String?=null
     var picture : String?=null

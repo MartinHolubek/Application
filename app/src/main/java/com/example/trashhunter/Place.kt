@@ -18,6 +18,7 @@ class Place(){
     var countOfRating:Int?=null
     var cleared:Boolean?=null
     var clearedBy:String?= null
+    var clearedByID:String?= null
     constructor(pointID:String, userName:String, date:Date, placeName:String, clearText:String,
                 photoBefore:String,photoAfter:String, coords:GeoPoint) : this() {
         this.pointID=pointID

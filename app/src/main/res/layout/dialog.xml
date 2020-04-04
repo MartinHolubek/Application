@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical">
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:text="užívateľ:"
+            android:textSize="18dp" />
+
+    <TextView
+            android:id="@+id/dialog_user"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:textSize="18dp" />
+
+</LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Názov miesta:"
+                android:textSize="18dp" />
+
+        <TextView
+                android:id="@+id/dialog_location"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
+                android:textSize="18dp" />
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dátum označenia:"
+                android:textSize="18dp" />
+
+        <TextView
+                android:id="@+id/dialog_date"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
+                android:textSize="18dp" />
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="123dp"
+                android:layout_height="wrap_content"
+                android:text="Popis:"
+                android:textSize="18dp" />
+
+        <TextView
+                android:id="@+id/dialog_details"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
+                android:textSize="18dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:text="Hodnotenie:"
+            android:textSize="18dp" />
+    <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <RatingBar
+                    android:id="@+id/dialog_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:textAlignment="viewEnd"
+                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/dialog_rating_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        <Button
+                android:id="@+id/dialog_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zavrieť"/>
+
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

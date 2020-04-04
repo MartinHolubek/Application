@@ -73,6 +73,7 @@ class MyEventsFragment : Fragment() {
             eventView.textViewEventStartDate.text = Date(currentEvent.startDate!!.seconds).toString()
             eventView.textViewEventTitle.text = currentEvent.title.toString()
             eventView.textViewEventLocation.text = currentEvent.placeName
+            eventView.buttonAddEventInterest.visibility = View.GONE
             val image = eventView.findViewById<ImageView>(R.id.imageTicketEvent)
 
 

@@ -203,7 +203,10 @@ class FirebaseRepository{
             .document(userID)
             .collection("places")
             .document(placeID).update(
-                "photoAfter",path,"cleared", true,"clearedBy", user!!.uid
+                "photoAfter",path,
+                "cleared", true,
+                "clearedBy", user!!.displayName,
+                "clearedByID",user!!.uid
             )
     }
 

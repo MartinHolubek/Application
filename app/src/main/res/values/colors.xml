@@ -8,4 +8,6 @@
     <color name="BackgroundTheme">#22222222</color>
     <color name="backgroundTheme">#222222</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="text_background">#9CF8A1</color>
+    <color name="hint_text">#8F92A0</color>
 </resources>
