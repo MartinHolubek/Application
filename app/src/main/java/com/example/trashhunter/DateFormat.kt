@@ -39,5 +39,15 @@ class DateFormat {
             }
             return "$dayOfWeek, $month $day. $year"
         }
+        @JvmStatic
+        fun getDateTimeFormat(date: Date): String{
+            val calendar = Calendar.getInstance()
+            calendar.setTime(date)
+            var hours = calendar.get(Calendar.HOUR_OF_DAY)
+            var minutes = calendar.get(Calendar.MINUTE)
+
+            return getDateFormat(date) + " " +  ",$hours : $minutes"
+        }
+
     }
 }

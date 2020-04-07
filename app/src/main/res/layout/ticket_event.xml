@@ -3,7 +3,8 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10pt"
-        android:background="@color/backgroundTheme">
+        android:background="@drawable/custom_text_view"
+        android:backgroundTint="@color/backgroundTheme">
 
     <ImageView
             android:id="@+id/imageTicketEvent"
@@ -13,22 +14,38 @@
             android:scaleType="centerCrop"
             android:textAlignment="center"
             android:textSize="24sp" />
-
-    <TextView
-            android:id="@+id/textViewEventStartDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/textColor"
-            android:textSize="18dp"/>
-
     <TextView
             android:id="@+id/textViewEventTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/textColor"
+            android:textSize="18dp"
+            android:layout_gravity="center"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Začiatok udalosti:"
+            android:textColor="@color/GreenTheme"
             android:textSize="18dp"/>
+    <TextView
+            android:id="@+id/textViewEventStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="16sp"
+            android:textColor="@color/textColor"
+            android:textSize="18dp"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Miesto konania:"
+            android:textColor="@color/GreenTheme"
+            android:textSize="18dp"/>
+
     <TextView
             android:id="@+id/textViewEventLocation"
             android:layout_width="match_parent"

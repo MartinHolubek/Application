@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.trashhunter.DateFormat
 import com.example.trashhunter.Event
 
 import com.example.trashhunter.R
@@ -76,7 +77,7 @@ class attendEventsFragment : Fragment() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var eventView=layoutInflater.inflate(R.layout.ticket_event,null)
             var currentEvent=listEventAdapter[position]
-            eventView.textViewEventStartDate.text = Date(currentEvent.startDate!!.seconds).toString()
+            eventView.textViewEventStartDate.text = DateFormat.getDateTimeFormat(currentEvent.startDate!!)
             eventView.textViewEventLocation.text = currentEvent.title.toString()
 
             eventView.setOnClickListener(View.OnClickListener {

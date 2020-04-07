@@ -10,7 +10,7 @@ class Event(){
     var title :String?=null
     var organizer :String?=null
     var organizerID :String?=null
-    var startDate :Timestamp?=null
+    var startDate :Date?=null
     var endDate :Timestamp?=null
     var coordinates : GeoPoint?=null
     var placeName: String?=null

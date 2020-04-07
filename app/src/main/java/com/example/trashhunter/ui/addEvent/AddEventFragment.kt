@@ -67,6 +67,8 @@ class AddEventFragment : Fragment() {
         val RESULT_CODE_PHOTO = 13
         lateinit var StartDateEvent : ArrayList<Int>
         lateinit var EndDateEvent : ArrayList<Int>
+        var startDateCal =  Calendar.getInstance()
+
     }
     //objekt na zistenie adresy
     private lateinit var mLocatorTask : LocatorTask
@@ -147,9 +149,10 @@ class AddEventFragment : Fragment() {
         var event = Event()
         event.title = view.findViewById<EditText>(R.id.inputTitleEvent).text.toString()
         event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).text.toString()
-        var startTimestamp = GregorianCalendar(StartDateEvent[0],StartDateEvent[1],StartDateEvent[2],StartDateEvent[3],StartDateEvent[4]).time
+        //var startTimestamp = GregorianCalendar(StartDateEvent[0],StartDateEvent[1],StartDateEvent[2],StartDateEvent[3],StartDateEvent[4]).time
+        var startTimestamp = startDateCal.time
         var endTimestamp = GregorianCalendar(EndDateEvent[0],EndDateEvent[1],EndDateEvent[2],EndDateEvent[3],EndDateEvent[4]).time
-        event.startDate = Timestamp(startTimestamp)
+        event.startDate = startTimestamp
         event.endDate = Timestamp(endTimestamp)
         event.coordinates = point
         event.picture = imageUri.toString()
@@ -241,6 +244,7 @@ class AddEventFragment : Fragment() {
                 var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
                 text?.setText("${month+1} ${day}, ${year}")
                 StartDateEvent.add(0,year)
+                startDateCal.set(year,month,day)
                 StartDateEvent.add(1,month)
                 StartDateEvent.add(2,day)
             }else{
@@ -280,6 +284,8 @@ class AddEventFragment : Fragment() {
                 text?.setText("${hourOfDay}:${minute}")
                 StartDateEvent.add(3,hourOfDay)
                 StartDateEvent.add(4,minute)
+                startDateCal.set(Calendar.HOUR_OF_DAY,hourOfDay)
+                startDateCal.set(Calendar.MINUTE,minute)
             }else{
                 var text = this.activity?.findViewById<EditText>(R.id.inputEndTimeEvent)
                 text?.setText("${hourOfDay}:${minute}")

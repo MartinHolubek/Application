@@ -28,10 +28,12 @@ import com.esri.arcgisruntime.mapping.Basemap
 import com.esri.arcgisruntime.mapping.view.*
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.example.trashhunter.Comment
+import com.example.trashhunter.DateFormat
 import com.example.trashhunter.Event
 import com.example.trashhunter.R
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.firebase.FirebaseStorage
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -112,12 +114,21 @@ class EventFragment : Fragment() {
         updateMap()
         var title = root?.findViewById<TextView>(R.id.eventTitle)
         var date = root?.findViewById<TextView>(R.id.eventDate)
+        var endDate = root?.findViewById<TextView>(R.id.eventEndDate)
+        var endDateLabel = root?.findViewById<TextView>(R.id.eventEndDateLabel)
         var details = root?.findViewById<TextView>(R.id.eventDetails)
         var location = root?.findViewById<TextView>(R.id.eventLocation)
         var coordination = root?.findViewById<TextView>(R.id.eventCoordination)
 
+
         title?.text = event.title
-        date?.text = event.startDate.toString() + " - " + event.endDate.toString()
+        date?.text = DateFormat.getDateTimeFormat(event.startDate!!)
+        if (event.endDate != null){
+            endDate?.text = DateFormat.getDateTimeFormat(Date(event.endDate?.seconds!!))
+        }else{
+            endDate?.visibility = View.GONE
+            endDateLabel?.visibility = View.GONE
+        }
         details?.text = event.details
         location?.text = event.placeName.toString()
         coordination?.text = "${event.coordinates!!.latitude.toString()}, ${event.coordinates!!.longitude.toString()}"
@@ -194,21 +205,15 @@ class EventFragment : Fragment() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             var view = layoutInflater.inflate(R.layout.ticket_comment,null)
             var currentComment = models[position]
-            var text: TextView
-            var textUserName: TextView
-            var date: TextView
-            var ratingBar: RatingBar
-
-            text = view.findViewById<TextView>(R.id.commentText)
-            textUserName =  view.findViewById<TextView>(R.id.commentUsername)
-            ratingBar = view.findViewById<RatingBar>(R.id.commentRating)
-            date = view.findViewById<TextView>(R.id.commentDate)
+            var text= view.findViewById<TextView>(R.id.commentText)
+            var textUserName=  view.findViewById<TextView>(R.id.commentUsername)
+            var date = view.findViewById<TextView>(R.id.commentDate)
+            var ratingBar= view.findViewById<RatingBar>(R.id.commentRating)
 
             text.setText(currentComment.comment)
             textUserName.setText(currentComment.userName)
             ratingBar.rating = currentComment.rating!!
-            var df = android.text.format.DateFormat.getDateFormat(view.context)
-            date.text = df.format(currentComment.date)
+            date.text = DateFormat.getDateFormat(Date(currentComment.date?.time!!))
 
             container.addView(view,0)
             return view
