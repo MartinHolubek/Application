@@ -41,6 +41,7 @@
         <activity android:name="com.example.trashhunter.StartActivity"/>
         <activity android:name="com.example.trashhunter.FindLocationActivity" />
         <activity android:name="com.example.trashhunter.CreateUserActivity" />
+        <activity android:name="com.example.trashhunter.FullScreenImageActivity"/>
         <activity android:name="com.example.trashhunter.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

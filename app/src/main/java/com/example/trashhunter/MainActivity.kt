@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,9 +22,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.firebase.FirebaseStorage
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -70,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_map, R.id.nav_addevent,
+                R.id.nav_posts, R.id.nav_map, R.id.nav_addevent,
                 R.id.nav_events, R.id.nav_friends, R.id.nav_addfriend
             ), drawerLayout
         )
@@ -113,6 +110,9 @@ class MainActivity : AppCompatActivity() {
                 mFirebaseAuth?.signOut()
                 val startIntent = Intent(this, LoginActivity::class.java)
                 startActivity(startIntent)
+            }
+            R.id.action_user_settings -> {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.userFragment)
             }
             else -> onSupportNavigateUp()
         }

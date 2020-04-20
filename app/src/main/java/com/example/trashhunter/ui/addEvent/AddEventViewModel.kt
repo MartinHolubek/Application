@@ -1,5 +1,6 @@
 package com.example.trashhunter.ui.addEvent
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,8 +9,11 @@ import androidx.lifecycle.ViewModel
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.Basemap
 import com.example.trashhunter.Event
+import com.example.trashhunter.Picture
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.firebase.FirebaseStorage
+import com.squareup.picasso.Picasso
+import java.io.ByteArrayOutputStream
 
 class AddEventViewModel : ViewModel() {
 
@@ -29,11 +33,10 @@ class AddEventViewModel : ViewModel() {
     }
     val map: LiveData<ArcGISMap> = _map
 
-    fun saveEventToFirebase(event : Event){
-        var uri = Uri.parse(event.picture)
-        firebaseStorage.saveImageEvent(uri).addOnFailureListener {
-            // Handle unsuccessful uploads
+    fun saveEventToFirebase(event : Event, data:ByteArray){
 
+        firebaseStorage.saveImageEvent(data).addOnFailureListener {
+            // Handle unsuccessful uploads
 
         }.addOnSuccessListener {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
@@ -43,5 +46,6 @@ class AddEventViewModel : ViewModel() {
                 Log.e(TAG, "Chyba pri ukladaní priatela")
             }
         }
+
     }
 }

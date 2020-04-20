@@ -18,6 +18,16 @@ class FirebaseRepository{
         return documentReference
     }
 
+    fun getJoinedUsers(organizerID: String, eventID: String): CollectionReference{
+        var collectionReference = firestoreDB.collection("users")
+            .document(organizerID)
+            .collection("events")
+            .document(eventID)
+            .collection("participant")
+
+        return collectionReference
+    }
+
     //ulozit miesto do firebase
     fun savePlaceItem(place: Place): Task<Void>{
         var documentReference = firestoreDB.collection("users")
@@ -46,6 +56,12 @@ class FirebaseRepository{
 
     fun deletePlaceItem(place: Place): Task<Void>{
         var documentReference = firestoreDB.collection("users/${user!!.uid}/places").document(place.pointID.toString())
+
+        return documentReference.delete()
+    }
+
+    fun deleteEventItem(event: Event): Task<Void>{
+        var documentReference = firestoreDB.collection("users/${user!!.uid}/events").document(event.id.toString())
 
         return documentReference.delete()
     }
@@ -93,12 +109,8 @@ class FirebaseRepository{
                 for (doc in querySnapshot) {
                     val friend = doc.toObject(Friend::class.java)
                     friends.add(friend.uid!!)
-
                 }
             }
-
-        /*var collectionReference = firestoreDB.collection("users")
-            .whereEqualTo("displayName", name.toString())*/
 
         var collectionReference = firestoreDB.collection("users")
             .orderBy("displayName").startAt(name).endAt(name+"\uf8ff")
@@ -108,7 +120,6 @@ class FirebaseRepository{
     }
 
     fun saveEventItem(event: Event): Task<Void> {
-        event.organizerID = user!!.uid
         val documentReference = firestoreDB.collection("users")
             .document(user!!.uid)
             .collection("events")
@@ -246,7 +257,7 @@ class FirebaseRepository{
     }
 
     fun getPlaces(listUsers:List<String>): Query {
-        return firestoreDB.collectionGroup("places").whereIn("creatorID",listUsers)
+        return firestoreDB.collectionGroup("places").whereIn("creatorID",listUsers).orderBy("date")
     }
 
     fun saveAttendEvent(event: Event): Task<Void> {
@@ -258,6 +269,29 @@ class FirebaseRepository{
             "event" to firestoreDB.collection("users").document(event.organizerID.toString())
                 .collection("events")
                 .document(event.id.toString())))
+
+    }
+
+    fun saveJoinedUser(event: Event): Task<Void>{
+        var documentReference = firestoreDB.collection("users")
+            .document(event.organizerID.toString())
+            .collection("events")
+            .document(event.id.toString())
+            .collection("participant")
+            .document(user!!.uid)
+        return documentReference.set(hashMapOf(
+            "user" to firestoreDB.collection("users").document(user!!.uid)
+        ))
+    }
+
+    fun deleteJoinedUser(event: Event): Task<Void>{
+        var documentReference = firestoreDB.collection("users")
+            .document(event.organizerID.toString())
+            .collection("events")
+            .document(event.id.toString())
+            .collection("participant")
+            .document(user!!.uid)
+        return documentReference.delete()
     }
 
     fun getEvents(savedFriendList: MutableList<String>): Query {
@@ -270,15 +304,15 @@ class FirebaseRepository{
         return documentReference.delete()
     }
 
-    fun saveAccountInfo(name: String?, image: String):Task<Void> {
+    fun saveAccountInfo(uid:String,name: String?, image: String):Task<Void> {
         val account = hashMapOf(
             "displayName" to name,
-            "uid" to user!!.uid,
+            "uid" to uid,
             "image" to image
         )
 
         return firestoreDB.collection("users")
-            .document(user!!.uid)
+            .document(uid)
             .set(account)
     }
 

@@ -19,6 +19,7 @@ import com.example.trashhunter.Place
 
 import com.example.trashhunter.R
 import com.example.trashhunter.firebase.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.ticket.view.textViewDescription
 import kotlinx.android.synthetic.main.ticket.view.textViewRating
 import kotlinx.android.synthetic.main.ticket.view.valueDate
@@ -81,7 +82,7 @@ class MyPlacesFragment : Fragment() {
          * Vytvorí
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var placeView=layoutInflater.inflate(R.layout.ticket_my_place,null)
+            var placeView=layoutInflater.inflate(R.layout.ticket,null)
             var currentPlace=listPlaceAdapter[position]
             placeView.valueUser.text=currentPlace.userName
             //placeView.valueFoto.setImageURI()
@@ -91,10 +92,12 @@ class MyPlacesFragment : Fragment() {
 
             val imageBeforeView = placeView.findViewById<ImageView>(R.id.imageTicketBefore)
             var ratingValue:Float
-            val ratingbar =placeView.findViewById<RatingBar>(R.id.rating_bar)
+            val ratingBar =placeView.findViewById<RatingBar>(R.id.rating_bar)
 
-
-            ratingbar.rating = 2F
+            if (currentPlace.rating != 0F){
+                ratingBar.rating = currentPlace.rating!!.div(currentPlace.countOfRating!!)
+                placeView.textViewRating.text = currentPlace.countOfRating.toString() + " Hodnotení"
+            }
             placeView.textViewRating.text = currentPlace.countOfRating.toString() + " Hodnotení"
 
             placeView.setOnClickListener(View.OnClickListener {
@@ -110,20 +113,9 @@ class MyPlacesFragment : Fragment() {
             var photoBeforeRef = com.google.firebase.storage.FirebaseStorage.getInstance()
                 .reference
                 .child(currentPlace.photoBefore.toString())
-
-
-            val ONE_MEGABYTE: Long = 1024 * 1024
-
-            photoBeforeRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-                // Konvertujeme byteArray na bitmap
-                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                //imageBeforeView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageBeforeView.width,imageBeforeView.height,false))
-                imageBeforeView.setImageBitmap(bmp)
-            }.addOnFailureListener {
-                    // Handle any errors
-                }
-
-            imageBeforeView.setImageBitmap(viewModel.getImagePlace(currentPlace.photoBefore.toString()).value)
+            photoBeforeRef.downloadUrl.addOnSuccessListener {
+                Picasso.get().load(it).into(imageBeforeView)
+            }
 
             return placeView
         }

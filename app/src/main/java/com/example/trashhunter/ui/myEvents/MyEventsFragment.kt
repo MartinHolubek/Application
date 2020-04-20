@@ -18,8 +18,8 @@ import com.example.trashhunter.Event
 
 import com.example.trashhunter.R
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.ticket_event.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MyEventsFragment : Fragment() {
@@ -53,11 +53,11 @@ class MyEventsFragment : Fragment() {
     }
 
     fun updateList(view: View){
-        var myFriendsAdapter= friendsAdapter(view.context,listEvents)
+        var myFriendsAdapter= eventsAdapter(view.context,listEvents)
         listViewEvents.adapter=myFriendsAdapter
     }
 
-    inner class friendsAdapter: BaseAdapter {
+    inner class eventsAdapter: BaseAdapter {
         var listEventAdapter : ArrayList<Event>
         var context: Context?=null
         constructor(context: Context, listEventAdapter: ArrayList<Event>):super(){
@@ -74,10 +74,15 @@ class MyEventsFragment : Fragment() {
             eventView.textViewEventStartDate.text = DateFormat.getDateTimeFormat(currentEvent.startDate!!)
             eventView.textViewEventTitle.text = currentEvent.title.toString()
             eventView.textViewEventLocation.text = currentEvent.placeName
+            eventView.textViewEventOrganizer.text = currentEvent.organizer.toString()
             eventView.buttonAddEventInterest.visibility = View.GONE
+            eventView.buttonDeleteEventInterest.visibility = View.GONE
             val image = eventView.findViewById<ImageView>(R.id.imageTicketEvent)
 
-
+            eventView.button_delete_event.visibility = View.VISIBLE
+            eventView.button_delete_event.setOnClickListener {
+                viewModel.deleteEvent(listEventAdapter[position])
+            }
             eventView.setOnClickListener(View.OnClickListener {
                 val bundle = Bundle()
                 bundle.putString("EVENT_ID",currentEvent.id)
@@ -89,17 +94,8 @@ class MyEventsFragment : Fragment() {
                 .reference
                 .child(currentEvent.picture.toString())
 
-            /*photoRef.downloadUrl.addOnSuccessListener {
-                image.setImageURI(it)
-            }*/
-
-            val ONE_MEGABYTE: Long = 1024 * 1024
-            photoRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-                // Konvertujeme byteArray na bitmap
-                var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
-                image.setImageBitmap(bmp)
-            }.addOnFailureListener {
-                // Handle any errors
+            photoRef.downloadUrl.addOnSuccessListener {
+                Picasso.get().load(it).into(image)
             }
 
             return eventView

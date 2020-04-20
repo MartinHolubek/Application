@@ -17,8 +17,24 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Dialog" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="colorAccent">@color/GreenTheme</item>
+        <item name="colorPrimary">@color/GreenTheme</item>
+        <item name="colorPrimaryDark">@color/GreenTheme</item>
+        <item name="android:colorForeground">@color/GreenTheme</item>
+        <item name="colorBackgroundFloating">@color/GreenTheme</item>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/GreenTheme</item>
+        <item name="colorControlActivated">@color/GreenTheme</item>
+    </style>
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:textColorSecondary">@color/backgroundTheme</item>
+        <item name="colorControlNormal">@color/backgroundTheme</item>
+        <item name="android:homeAsUpIndicator">@color/backgroundTheme</item>
+    </style>
 
 
 </resources>

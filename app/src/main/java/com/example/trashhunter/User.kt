@@ -8,5 +8,6 @@ class User {
     constructor(name:String, uid:String, image:String) {
         this.displayName = name
         this.uid = uid
+        this.image = image
     }
 }

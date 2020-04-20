@@ -8,7 +8,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,11 +19,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.view.Graphic
@@ -34,8 +36,9 @@ import com.example.trashhunter.Event
 import com.example.trashhunter.FindLocationActivity
 import com.example.trashhunter.Map
 import com.example.trashhunter.R
-import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,6 +53,7 @@ class AddEventFragment : Fragment() {
     val SELECT_IMAGE = 1001
     private var imageUri: Uri? = null
 
+    private var locationName: String? = null
     private lateinit var startDate: EditText
     private lateinit var startTime: EditText
     private lateinit var endDate: EditText
@@ -68,6 +72,7 @@ class AddEventFragment : Fragment() {
         lateinit var StartDateEvent : ArrayList<Int>
         lateinit var EndDateEvent : ArrayList<Int>
         var startDateCal =  Calendar.getInstance()
+        var endDateCal =  Calendar.getInstance()
 
     }
     //objekt na zistenie adresy
@@ -87,7 +92,7 @@ class AddEventFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_addevent, container, false)
 
 
-        mapView = root.findViewById(R.id.mapEvent)
+        mapView = root.findViewById(R.id.addEventMapView)
         mapView.locationDisplay.autoPanMode = LocationDisplay.AutoPanMode.RECENTER
         addEventViewModel.map.observe(this, Observer {
             mapView!!.map = it
@@ -136,7 +141,8 @@ class AddEventFragment : Fragment() {
             showTimePickerDialog("endTime")
         })
 
-        Map.setMove(root,mapView)
+        var scrollView = root.findViewById<NestedScrollView>(R.id.addEventScrollView)
+        Map.setMove(root,mapView,scrollView)
 
         return root
     }
@@ -144,30 +150,58 @@ class AddEventFragment : Fragment() {
     /**
      * Metoda. ktora uloží udalosť do databazy firebase
      */
+    private fun showToast(text:String){
+        Toast.makeText(view?.context,text,Toast.LENGTH_SHORT).show()
+    }
 
     private fun addEvent(view:View):Boolean {
         var event = Event()
-        event.title = view.findViewById<EditText>(R.id.inputTitleEvent).text.toString()
-        event.details = view.findViewById<EditText>(R.id.inputDetailsEvent).text.toString()
-        //var startTimestamp = GregorianCalendar(StartDateEvent[0],StartDateEvent[1],StartDateEvent[2],StartDateEvent[3],StartDateEvent[4]).time
-        var startTimestamp = startDateCal.time
-        var endTimestamp = GregorianCalendar(EndDateEvent[0],EndDateEvent[1],EndDateEvent[2],EndDateEvent[3],EndDateEvent[4]).time
-        event.startDate = startTimestamp
-        event.endDate = Timestamp(endTimestamp)
+        val title = view.findViewById<EditText>(R.id.inputTitleEvent).text.toString()
+        val details = view.findViewById<EditText>(R.id.inputDetailsEvent).text.toString()
+        val startDate = view.findViewById<EditText>(R.id.inputStartDateEvent)
+        val startTime = view.findViewById<EditText>(R.id.inputStartTimeEvent)
+        val endDate = view.findViewById<EditText>(R.id.inputEndDateEvent)
+        val endTime = view.findViewById<EditText>(R.id.inputEndTimeEvent)
+        if(title==""){
+            showToast("Vložte názov udalosti")
+        }else{
+            event.title = title
+        }
+        if (details==""){
+            showToast("Vložte informácie o udalosti")
+        }else{
+            event.details = details
+        }
+        if (startDate.text.toString()=="" && startTime.text.toString()==""){
+            showToast("Vložte dátum a čas začiatku udalosti")
+        }else{
+            val startTimestamp = startDateCal.time
+            event.startDate = startTimestamp
+        }
+        if (endDate.text.toString()=="" && endTime.text.toString()==""){
+            showToast("Vložte dátum a čas konca udalosti")
+        }else{
+            val startTimestamp = startDateCal.time
+            event.startDate = startTimestamp
+        }
+        val endTimestamp = endDateCal.time
+        event.endDate = endTimestamp
+
         event.coordinates = point
         event.picture = imageUri.toString()
-        var addressInfo = mLocatorTask.reverseGeocodeAsync(Point(point.longitude,point.latitude))
-        addressInfo.addDoneListener(Runnable {
-            kotlin.run {
-                if (addressInfo.get().size> 0) {
-                    var address =
-                        addressInfo.get().get(0).attributes.getValue("Address").toString() + "," +
-                                addressInfo.get().get(0).attributes.getValue("City")
-                    event.placeName = address
-                    addEventViewModel.saveEventToFirebase(event)
-                }
-            }
-        })
+        event.organizer = FirebaseAuth.getInstance().currentUser?.displayName
+        event.organizerID = FirebaseAuth.getInstance().currentUser?.uid
+        var uri = Uri.parse(event.picture)
+
+        var bitmap = (imageViewPhotoEvent.drawable as BitmapDrawable).bitmap
+        
+        val baos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 30, baos)
+        val data = baos.toByteArray()
+        event.placeName = locationName
+        addEventViewModel.saveEventToFirebase(event, data)
+
+
         return true
     }
 
@@ -178,6 +212,7 @@ class AddEventFragment : Fragment() {
         if (requestCode==REQUEST_CODE_LOCATION && resultCode == RESULT_CODE_LOCATION){
             var address = data?.getStringExtra(EXTRA_KEY)
             textLocation.setText(address)
+            locationName = address
 
             if(!address.equals("")){
                 val geocodeFuture = mLocatorTask.geocodeAsync(address)
@@ -226,7 +261,6 @@ class AddEventFragment : Fragment() {
 
     class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
-
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             // Use the current date as the default date in the picker
             val c = Calendar.getInstance()
@@ -235,26 +269,23 @@ class AddEventFragment : Fragment() {
             val day = c.get(Calendar.DAY_OF_MONTH)
 
             // Create a new instance of DatePickerDialog and return it
-            return DatePickerDialog(this.context!!, this, year, month, day)
+            return DatePickerDialog(this.context!!,R.style.Dialog, this, year, month, day)
         }
 
+        /***
+         *
+         */
         override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
             // Do something with the date chosen by the user
             if (this.tag == "startDate"){
                 var text = this.activity?.findViewById<EditText>(R.id.inputStartDateEvent)
-                text?.setText("${month+1} ${day}, ${year}")
-                StartDateEvent.add(0,year)
                 startDateCal.set(year,month,day)
-                StartDateEvent.add(1,month)
-                StartDateEvent.add(2,day)
+                text?.setText(com.example.trashhunter.DateFormat.getDateFormat(startDateCal))
             }else{
                 var text = this.activity?.findViewById<EditText>(R.id.inputEndDateEvent)
-                text?.setText("${month+1} ${day}, ${year}")
-                EndDateEvent.add(0,year)
-                EndDateEvent.add(1,month)
-                EndDateEvent.add(2,day)
+                endDateCal.set(year,month,day)
+                text?.setText(com.example.trashhunter.DateFormat.getDateFormat(endDateCal))
             }
-
         }
     }
 
@@ -272,7 +303,7 @@ class AddEventFragment : Fragment() {
             val minute = c.get(Calendar.MINUTE)
 
             // Create a new instance of TimePickerDialog and return it
-            return TimePickerDialog(activity, this, hour, minute,
+            return TimePickerDialog(activity,R.style.Dialog, this, hour, minute,
                 DateFormat.is24HourFormat(activity))
         }
 
@@ -281,20 +312,23 @@ class AddEventFragment : Fragment() {
             // Do something with the time chosen by the user
             if (this.tag == "startTime"){
                 var text = this.activity?.findViewById<EditText>(R.id.inputStartTimeEvent)
-                text?.setText("${hourOfDay}:${minute}")
-                StartDateEvent.add(3,hourOfDay)
-                StartDateEvent.add(4,minute)
+                if (minute < 10){
+                    text?.setText("${hourOfDay}:0${minute}")
+                }else{
+                    text?.setText("${hourOfDay}:${minute}")
+                }
                 startDateCal.set(Calendar.HOUR_OF_DAY,hourOfDay)
                 startDateCal.set(Calendar.MINUTE,minute)
             }else{
                 var text = this.activity?.findViewById<EditText>(R.id.inputEndTimeEvent)
-                text?.setText("${hourOfDay}:${minute}")
-                EndDateEvent.add(3,hourOfDay)
-                EndDateEvent.add(4,minute)
+                if (minute < 10){
+                    text?.setText("${hourOfDay}:0${minute}")
+                }else{
+                    text?.setText("${hourOfDay}:${minute}")
+                }
+                endDateCal.set(Calendar.HOUR_OF_DAY,hourOfDay)
+                endDateCal.set(Calendar.MINUTE,minute)
             }
-
-
-
         }
     }
 

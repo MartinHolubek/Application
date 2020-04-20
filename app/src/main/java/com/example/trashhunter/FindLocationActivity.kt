@@ -1,20 +1,24 @@
 package com.example.trashhunter
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-
 import android.view.Menu
-
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.esri.arcgisruntime.geometry.Geometry
 import com.esri.arcgisruntime.loadable.LoadStatus
+import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.esri.arcgisruntime.tasks.geocode.SuggestParameters
 import com.example.trashhunter.ui.addEvent.AddEventFragment
 import kotlinx.android.synthetic.main.activity_find_location.*
+
 
 class FindLocationActivity : AppCompatActivity() {
 
@@ -44,6 +48,8 @@ class FindLocationActivity : AppCompatActivity() {
 
                         //Obmedzte vyhľadávanie na tento rozsah máp a nie viac ako 10 návrhov
                         var suggestParams = SuggestParameters()
+                        suggestParams.countryCode = "SVK"
+
                         //suggestParams.searchArea = currentExtent
                         suggestParams.maxResults = 10
 

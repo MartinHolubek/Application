@@ -1,0 +1,213 @@
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@color/backgroundTheme"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.trashhunter.ui.UserFragment"
+        android:orientation="vertical"
+        android:background="@color/backgroundTheme">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+                android:id="@+id/userPictureLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Profilová fotka"
+                android:layout_weight="1"
+                android:textColor="@color/GreenTheme"/>
+        <Button
+                android:id="@+id/userButtonImage"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/GreenTheme"
+                android:background="@color/fui_transparent"
+                android:text="Upraviť" />
+    </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/userImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_gravity="center_horizontal"/>
+    <TextView
+            android:id="@+id/userNameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:textSize="20dp"
+            android:text="Meno uživateľa:"
+
+            android:textColor="@color/GreenTheme"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+        <EditText
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_weight="1"/>
+
+        <Button
+                android:id="@+id/userButtonName"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/GreenTheme"
+                android:background="@color/fui_transparent"
+                android:text="Upraviť" />
+        <Button
+                android:id="@+id/userButtonNameSave"
+                android:layout_width="200dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/GreenTheme"
+                android:background="@color/fui_transparent"
+                android:text="Uložiť" />
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/userEmailLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:text="Email uživateľa:"
+            android:textColor="@color/GreenTheme"
+
+            android:textSize="20dp" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+        <EditText
+                android:id="@+id/userEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/textColor" />
+
+        <Button
+                android:id="@+id/userButtonEmail"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/fui_transparent"
+                android:textColor="@color/GreenTheme"
+                android:text="Upraviť" />
+        <Button
+                android:id="@+id/userButtonEmailSave"
+                android:visibility="gone"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/fui_transparent"
+                android:textColor="@color/GreenTheme"
+                android:text="Uložiť" />
+    </LinearLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:text="Zmeniť heslo:"
+            android:textColor="@color/GreenTheme"
+
+            android:textSize="20dp" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_margin"
+                android:layout_weight="1"
+                android:text="Vložte staré heslo:"
+                android:textColor="@color/GreenTheme" />
+
+        <EditText
+                android:id="@+id/userOldPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="@color/textColor" />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/text_margin"
+                android:text="Vložte nové heslo:"
+                android:textColor="@color/GreenTheme" />
+        <EditText
+                android:id="@+id/userNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="@color/textColor" />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="right">
+        <Button
+                android:id="@+id/userButtonPasswordSave"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/text_margin"
+                android:background="@color/fui_transparent"
+                android:textColor="@color/GreenTheme"
+                android:text="Uložiť" />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="right">
+        <Button
+                android:id="@+id/userButtonDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/text_margin"
+                android:background="@color/fui_transparent"
+                android:textColor="@color/GreenTheme"
+                android:text="Zrušiť účet" />
+    </LinearLayout>
+
+</LinearLayout>
+</ScrollView>

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.Friend
 import com.example.trashhunter.firebase.FirebaseStorage
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -64,9 +65,11 @@ class AddFriendViewModel : ViewModel() {
             var savedFriendList : MutableList<Friend> = mutableListOf()
 
             for (doc in value!!) {
-                var friend = doc.toObject(Friend::class.java)
-                friend.uid = doc.id
-                savedFriendList.add(friend)
+                if (FirebaseAuth.getInstance().currentUser!!.uid != doc["uid"]){
+                    var friend = doc.toObject(Friend::class.java)
+                    friend.uid = doc.id
+                    savedFriendList.add(friend)
+                }
             }
             potentionalFriends.value = savedFriendList
         })

@@ -14,10 +14,11 @@
 
         <EditText
                 android:id="@+id/text_send"
-                android:layout_width="139dp"
-                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/GreenTheme"
                 android:textAlignment="center"
@@ -27,10 +28,11 @@
 
         <Button
                 android:id="@+id/buttonSearchFriend"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="52dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/GreenTheme"
@@ -42,6 +44,7 @@
             android:id="@+id/lvPotentionalFriends"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:dividerHeight="10dp"/>
 
 </LinearLayout>

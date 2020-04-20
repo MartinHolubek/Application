@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -18,8 +17,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.text.BoringLayout
-import android.text.Html
 import android.text.SpannableStringBuilder
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -42,10 +39,10 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.esri.arcgisruntime.symbology.TextSymbol
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
 import com.example.trashhunter.DateFormat
+import com.example.trashhunter.Map
 import com.example.trashhunter.Place
 import com.example.trashhunter.R
 import com.google.firebase.firestore.GeoPoint
-import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -139,7 +136,8 @@ class MapFragment : Fragment() {
                 }
             }
         })
-
+        val scrollView = root.findViewById<NestedScrollView>(R.id.mapScrollView)
+        Map.setMove(root,mapView,scrollView)
         setOnTouchListener(root)
 
         val buttonClean : Button = root.findViewById(R.id.button_clean)
@@ -245,22 +243,6 @@ class MapFragment : Fragment() {
 
     private fun setOnTouchListener(root:View) {
         mapView.onTouchListener = object:DefaultMapViewOnTouchListener(root.context, mapView) {
-
-            override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-
-                val scrollView = root.findViewById<NestedScrollView>(R.id.scroll_map)
-
-                when(event?.action){
-                    MotionEvent.ACTION_DOWN ->{
-                        scrollView.requestDisallowInterceptTouchEvent(true)
-                    }
-                    MotionEvent.ACTION_UP ->{
-                        scrollView.requestDisallowInterceptTouchEvent(true)
-                    }
-                }
-                super.onTouch(view, event)
-                return true
-            }
 
             override fun onSingleTapConfirmed(e:MotionEvent):Boolean {
                 val screenPoint : android.graphics.Point = android.graphics.Point(e.x.toInt(),e.y.toInt())

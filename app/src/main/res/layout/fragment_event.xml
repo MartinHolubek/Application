@@ -4,6 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+android:id="@+id/eventScrollView"
 app:layout_behavior="@string/appbar_scrolling_view_behavior"
 android:background="@color/backgroundTheme"
 tools:context="com.example.trashhunter.ui.event.EventFragment">
@@ -26,6 +27,24 @@ tools:context="com.example.trashhunter.ui.event.EventFragment">
 
         <TextView
                 android:id="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/textColor"
+                android:textSize="24dp"
+                android:gravity="center"/>
+        <TextView
+                android:id="@+id/eventOrganizerLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textSize="20dp"
+                android:text="Organizátor:"
+                android:textColor="@color/GreenTheme"/>
+        <TextView
+                android:id="@+id/eventOrganizer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
@@ -80,6 +99,15 @@ tools:context="com.example.trashhunter.ui.event.EventFragment">
                 android:layout_margin="@dimen/text_margin"
                 android:textColor="@color/textColor"/>
     </LinearLayout>
+    <Button
+            android:id="@+id/buttonParticiants"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/participants"
+            android:layout_margin="16dp"
+            android:textColor="@color/backgroundTheme"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/GreenTheme"/>
 
 
     <androidx.cardview.widget.CardView
@@ -91,31 +119,34 @@ tools:context="com.example.trashhunter.ui.event.EventFragment">
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/GreenTheme">
+
+            <TextView
+                    android:id="@+id/eventLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/eventMap"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/backgroundTheme"/>
+
+            <TextView
+                    android:id="@+id/eventCoordination"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/eventLocation"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/backgroundTheme"/>
 
             <com.esri.arcgisruntime.mapping.view.MapView
                     android:id="@+id/eventMap"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     app:layout_constraintHorizontal_bias="0.6" />
-
-            <TextView
-                    android:id="@+id/eventLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/eventMap"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp" />
-
-            <TextView
-                    android:id="@+id/eventCoordination"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/eventLocation"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
@@ -142,18 +173,23 @@ tools:context="com.example.trashhunter.ui.event.EventFragment">
         <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/eventRatingBar"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:clickable="false"
                 android:focusable="false"
                 android:numStars="5"
+                android:progressTint="@color/GreenTheme"
                 android:stepSize="0.5" />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+        </View>
 
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonEventRate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/GreenTheme"
                 android:text="Pridať komentár" />

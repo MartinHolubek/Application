@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.io.ByteArrayOutputStream
 
@@ -83,24 +84,10 @@ class CreateUserActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        object : Thread(){
-            override fun run() {
-                if (resultCode== Activity.RESULT_OK){
-                    if(requestCode== SELECT_IMAGE){
-                        imageUri = data?.data
-                        if (imageUri != null){
-                            create_user_image.post(object : Thread() {
-                                override fun run() {
-                                    super.run()
-                                    create_user_image.setImageURI(null)
-                                    create_user_image.setImageURI(imageUri)
-                                }
-                            })
-                        }
-                    }
-                }
-            }
-        }.start()
+        var uri = data?.data
+        if (uri != null){
+            Picasso.get().load(uri).into(create_user_image)
+        }
     }
     /**
      *
@@ -131,12 +118,9 @@ class CreateUserActivity : AppCompatActivity() {
                             this, "Authentication success.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        var imageByteArray = saveInfoAccount()
 
+                        var imageByteArray = saveInfoAccount(mFirebaseAuth?.currentUser?.uid!!)
 
-                        val startIntent = Intent(this, MainActivity::class.java)
-                        startIntent.putExtra("image",imageByteArray)
-                        startActivity(startIntent)
                     } else { // If sign in fails, display a message to the user.
                         Log.w(
                             FragmentActivity.ACCOUNT_SERVICE,
@@ -151,7 +135,7 @@ class CreateUserActivity : AppCompatActivity() {
                 })
     }
 
-    private fun saveInfoAccount(): ByteArray{
+    private fun saveInfoAccount(uid: String): ByteArray{
         var name = findViewById<TextView>(R.id.sign_up_name)
         var image = findViewById<ImageView>(R.id.create_user_image)
 
@@ -160,8 +144,12 @@ class CreateUserActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
         val data = baos.toByteArray()
         firebaseStorage?.saveImageUser(data)?.addOnSuccessListener {
-            firebaseRepository?.saveAccountInfo(name.text.toString(), it.metadata?.path.toString())?.addOnFailureListener {
+            firebaseRepository?.saveAccountInfo(uid,name.text.toString(), it.metadata?.path.toString())?.addOnFailureListener {
                 Log.e(TAG, "Chyba pri ukladaní udajov noveho uživateľa")
+            }?.addOnSuccessListener {
+                val startIntent = Intent(this, MainActivity::class.java)
+                startIntent.putExtra("image",data)
+                startActivity(startIntent)
             }
         }
 

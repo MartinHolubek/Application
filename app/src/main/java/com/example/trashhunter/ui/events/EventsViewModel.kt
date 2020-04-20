@@ -27,27 +27,6 @@ class EventsViewModel : ViewModel() {
      * Metóda, ktorá naplní z databázi pole miest
      * @return vráti pole s miestami
      */
-    fun getSavedEvents() : LiveData<List<Event>> {
-        firebaseRepository.getAllEventItems().addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
-            if (e != null){
-                Log.w(TAG,"LISTEN FAILED", e)
-                savedEvents.value = null
-                return@EventListener
-            }
-
-            var savedEventsList : MutableList<Event> = mutableListOf()
-            for (doc in value!!){
-                var eventItem = doc.toObject(Event::class.java)
-                eventItem.id = doc.id
-
-                savedEventsList.add(eventItem)
-            }
-
-            savedEvents.value = savedEventsList
-        })
-        return savedEvents
-    }
-
     fun getSavedEvents2(): LiveData<List<Event>>{
         firebaseRepository.getFriendItems().addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
             if (e != null) {
@@ -62,24 +41,25 @@ class EventsViewModel : ViewModel() {
                 var friend = doc.toObject(Friend::class.java)
                 savedFriendList.add(friend.uid.toString())
             }
+
             if (savedFriendList.isEmpty()){
                 savedEvents.value = listOf<Event>()
             }else{
-                firebaseRepository.getEvents(savedFriendList).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
-                    if (e != null) {
-                        Log.w(TAG, "Chyba pri načitaní udalosti")
-                        savedFriends.value = null
+                    firebaseRepository.getEvents(savedFriendList).addSnapshotListener(EventListener<QuerySnapshot>{ value, e ->
+                        if (e != null) {
+                            Log.w(TAG, "Chyba pri načitaní udalosti")
+                            savedFriends.value = null
 
-                        return@EventListener
-                    }
-                    var savedEventsList : MutableList<Event> = mutableListOf()
-                    for (doc in value!!){
-                        var eventItem = doc.toObject(Event::class.java)
-                        savedEventsList.add(eventItem)
-                    }
+                            return@EventListener
+                        }
+                        var savedEventsList : MutableList<Event> = mutableListOf()
+                        for (doc in value!!){
+                            var eventItem = doc.toObject(Event::class.java)
+                            savedEventsList.add(eventItem)
+                        }
 
-                    savedEvents.value = savedEventsList
-                })
+                        savedEvents.value = savedEventsList
+                    })
             }
             savedFriends.value = savedFriendList
         })
@@ -87,6 +67,8 @@ class EventsViewModel : ViewModel() {
     }
 
     fun saveAttendEvent(event: Event) {
-        firebaseRepository.saveAttendEvent(event)
+        firebaseRepository.saveAttendEvent(event).addOnSuccessListener {
+            firebaseRepository.saveJoinedUser(event)
+        }
     }
 }

@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.trashhunter.Friend
 import com.example.trashhunter.R
 import com.example.trashhunter.firebase.FirebaseStorage
-import kotlinx.android.synthetic.main.ticket_friend.view.*
+import kotlinx.android.synthetic.main.ticket_user.view.*
 
 class AddFriendFragment : Fragment() {
 
@@ -71,7 +71,6 @@ class AddFriendFragment : Fragment() {
         listViewFriends.adapter=myfoodAdapter
     }
 
-
     /**
      *
      */
@@ -97,10 +96,10 @@ class AddFriendFragment : Fragment() {
          * Vytvorí
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var friendView=layoutInflater.inflate(R.layout.ticket_friend,null)
+
+            var friendView=layoutInflater.inflate(R.layout.ticket_user,null)
             var currentfriend=listFriendAdapter[position]
             friendView.textViewName.text = currentfriend.displayName.toString()
-
 
             firebaseStorage.getImageUser(currentfriend.image.toString()).addOnSuccessListener {
                 var bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
@@ -109,19 +108,19 @@ class AddFriendFragment : Fragment() {
 
             if (isFriend(listFriendAdapter[position])){
                 //buttonAddFriend.text = getText(R.string.RemoveFriend)
-                friendView.buttonAddFriend.text = "Odober"
+                friendView.buttonAddUser.text = "Odober"
             }else{
                 //buttonAddFriend.text = getText(R.string.AddFriend)
-                friendView.buttonAddFriend.text = "Pridaj"
+                friendView.buttonAddUser.text = "Pridaj"
             }
-            friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
+            friendView.buttonAddUser.setOnClickListener(View.OnClickListener {
 
                 if (!isFriend(listFriendAdapter[position])){
                     addFriendViewModel.saveFriendsToFirebase(listFriendAdapter[position])
-                    friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
+                    friendView.buttonAddUser.text = getText(R.string.RemoveFriend)
                 }else{
                     addFriendViewModel.deleteFriendItem(listFriendAdapter[position])
-                    friendView.buttonAddFriend.text = getText(R.string.AddFriend)
+                    friendView.buttonAddUser.text = getText(R.string.AddFriend)
                 }
 
             })

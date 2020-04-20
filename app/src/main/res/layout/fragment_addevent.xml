@@ -6,11 +6,11 @@
         android:layout_height="match_parent"
         android:backgroundTint="@color/backgroundTheme"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/scroll_map">
+        android:id="@+id/addEventScrollView"
+        android:background="@color/backgroundTheme">
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/backgroundTheme">
+            android:layout_height="match_parent">
 
         <TextView
                 android:id="@+id/titleEventLabel"
@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Koniec udalosti"
+                android:text="Miesto konania"
                 android:textColor="@color/GreenTheme"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -177,13 +177,13 @@
                 android:backgroundTint="@color/GreenTheme"
                 android:textColor="@color/textColor"
                 android:textColorHint="@color/textColor"
-                app:layout_constraintBottom_toTopOf="@+id/mapEvent"
+                app:layout_constraintBottom_toTopOf="@+id/addEventMapView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleLocationLabel" />
 
         <com.esri.arcgisruntime.mapping.view.MapView
-                android:id="@+id/mapEvent"
+                android:id="@+id/addEventMapView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="16dp"
@@ -191,6 +191,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputLocation"
+                app:layout_constraintBottom_toTopOf="@+id/buttonAddEvent"
                 android:background="@drawable/ic_menu_map">
 
         </com.esri.arcgisruntime.mapping.view.MapView>
@@ -207,7 +208,7 @@
                 android:text="@string/CreateEvent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mapEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/addEventMapView" />
 
         <EditText
                 android:id="@+id/inputStartTimeEvent"

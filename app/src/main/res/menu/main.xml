@@ -7,7 +7,7 @@
             android:title="@string/SingOut"
             app:showAsAction="never" />
     <item
-            android:id="@+id/action_events"
+            android:id="@+id/action_user_settings"
             android:orderInCategory="101"
             android:title="@string/Settings"
             app:showAsAction="never" />

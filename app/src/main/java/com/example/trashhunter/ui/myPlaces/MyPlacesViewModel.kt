@@ -39,10 +39,10 @@ class MyPlacesViewModel : ViewModel() {
     }
 
     fun deletePlace(place:Place){
-        firebaseStorage.deletePlaceImages(place.photoBefore!!).addOnFailureListener{
+        firebaseStorage.deleteImage(place.photoBefore!!).addOnFailureListener{
             Log.e(TAG,"Failed to delete image before")
         }
-        firebaseStorage.deletePlaceImages(place.photoAfter!!).addOnFailureListener {
+        firebaseStorage.deleteImage(place.photoAfter!!).addOnFailureListener {
             Log.e(TAG,"Failed to delete image after")
         }
         firebaseRepository.deletePlaceItem(place).addOnFailureListener{

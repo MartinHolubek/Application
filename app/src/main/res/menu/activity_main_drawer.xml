@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:showIn="navigation_view">
+        tools:showIn="navigation_view"
+        >
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_home"
-                android:icon="@drawable/ic_menu_home"
-                android:title="@string/menu_home" />
+                android:id="@+id/nav_posts"
+                android:icon="@drawable/ic_posts"
+                android:title="@string/menu_posts" />
         <item
                 android:id="@+id/nav_map"
                 android:icon="@drawable/ic_menu_map"
-                android:title="@string/menu_map" />
+                android:title="@string/menu_map"
+                />
         <item
                 android:id="@+id/nav_addevent"
                 android:icon="@drawable/ic_menu_addevent"
@@ -20,19 +22,14 @@
                 android:id="@+id/nav_events"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="@string/menu_events" />
+        <item
+                android:id="@+id/nav_friends"
+                android:icon="@drawable/ic_menu_friends"
+                android:title="@string/menu_friends" />
+        <item
+                android:id="@+id/nav_addfriend"
+                android:icon="@drawable/ic_menu_addfriend"
+                android:title="@string/menu_addfriend" />
     </group>
-
-    <item android:title="Priatelia">
-        <menu>
-            <item
-                    android:id="@+id/nav_friends"
-                    android:icon="@drawable/ic_menu_friends"
-                    android:title="@string/menu_friends" />
-            <item
-                    android:id="@+id/nav_addfriend"
-                    android:icon="@drawable/ic_menu_addfriend"
-                    android:title="@string/menu_addfriend" />
-        </menu>
-    </item>
 
 </menu>

@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/placeScrollView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="@color/backgroundTheme">
 
@@ -57,7 +58,7 @@
                     android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
                     android:text="Príspevok vytvoril:"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/GreenTheme"/>
             <TextView
                     android:id="@+id/placeUsername"
                     android:layout_width="match_parent"
@@ -74,7 +75,7 @@
                     android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
                     android:text="Miesto vyčistil:"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/GreenTheme"/>
             <TextView
                     android:id="@+id/clearUsername"
                     android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                     android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
                     android:text="Dátum zverejnenia:"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/GreenTheme"/>
             <TextView
                     android:id="@+id/placeDate"
                     android:layout_width="match_parent"
@@ -106,7 +107,7 @@
                     android:layout_marginRight="@dimen/text_margin"
                     android:textSize="20dp"
                     android:text="Informácie:"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/GreenTheme"/>
             <TextView
                     android:id="@+id/placeText"
                     android:layout_width="match_parent"
@@ -115,15 +116,25 @@
                     android:textSize="16dp"
                     android:textColor="@color/textColor"/>
 
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_margin"
+                    android:textSize="20dp"
+                    android:text="Hodnotenie:"
+                    android:textColor="@color/GreenTheme"/>
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <androidx.appcompat.widget.AppCompatRatingBar
                         android:id="@+id/ratingPlace"
-                        android:layout_width="240dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:layout_margin="16dp"
                         android:clickable="false"
                         android:focusable="false"
                         android:numStars="5"
@@ -188,12 +199,13 @@
                 android:layout_margin="@dimen/text_margin"
                 android:text="@string/RatePlace"
                 android:textSize="20dp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/GreenTheme"/>
         <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/eventTextRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/Comment"
+                android:textColorHint="@color/hint_text"
                 android:backgroundTint="@color/GreenTheme"
                 android:textColor="@color/textColor"/>
         <LinearLayout
@@ -225,7 +237,7 @@
                 android:text="@string/Comments"
                 android:textSize="20dp"
                 android:layout_margin="@dimen/text_margin"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/GreenTheme"/>
 
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerComments"

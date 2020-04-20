@@ -3,11 +3,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/mobile_navigation"
-        app:startDestination="@+id/nav_home">
+        app:startDestination="@+id/nav_posts">
 
     <fragment
-            android:id="@+id/nav_home"
-            android:name="com.example.trashhunter.ui.home.HomeFragment"
+            android:id="@+id/nav_posts"
+            android:name="com.example.trashhunter.ui.posts.PostsFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home" >
         <action
@@ -95,5 +95,23 @@
             android:id="@+id/eventFragment"
             android:name="com.example.trashhunter.ui.event.EventFragment"
             android:label="Udalosť"
-            tools:layout="@layout/fragment_event" />
+            tools:layout="@layout/fragment_event" >
+        <action
+                android:id="@+id/action_eventFragment_to_joinedUsersFragment"
+                app:destination="@id/joinedUsersFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/userFragment"
+            android:name="com.example.trashhunter.ui.UserFragment"
+            android:label="fragment_user"
+            tools:layout="@layout/fragment_user" >
+        <action
+                android:id="@+id/action_userFragment_self"
+                app:destination="@id/userFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/joinedUsersFragment"
+            android:name="com.example.trashhunter.ui.JoinedUsers.JoinedUsersFragment"
+            android:label="@string/participants"
+            tools:layout="@layout/joined_users_fragment" />
 </navigation>

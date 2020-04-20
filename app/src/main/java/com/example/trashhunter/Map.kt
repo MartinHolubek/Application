@@ -9,12 +9,10 @@ import com.esri.arcgisruntime.mapping.view.MapView
 class Map {
     companion object {
         @JvmStatic
-        fun setMove(root: View, mapView: MapView): Boolean {
+        fun setMove(root: View, mapView: MapView, scrollView: NestedScrollView): Boolean {
             mapView.onTouchListener = object: DefaultMapViewOnTouchListener(root.context, mapView) {
 
                 override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-
-                    val scrollView = root.findViewById<NestedScrollView>(R.id.scroll_map)
 
                     when (event?.action) {
                         MotionEvent.ACTION_DOWN -> {
@@ -24,7 +22,7 @@ class Map {
                             scrollView.requestDisallowInterceptTouchEvent(true)
                         }
                     }
-                    super.onTouch(view, event)
+                    //super.onTouch(view, event)
                     return true
                 }
             }

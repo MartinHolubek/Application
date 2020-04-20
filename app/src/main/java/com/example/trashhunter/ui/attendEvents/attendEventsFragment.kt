@@ -86,12 +86,12 @@ class attendEventsFragment : Fragment() {
                 bundle.putString("ORGANIZER_ID",currentEvent.organizerID)
                 findNavController().navigate(R.id.action_attendEventsFragment_to_eventFragment,bundle)
             })
-            eventView.buttonAddEventInterest.setBackgroundResource(R.drawable.ic_delete_black_24dp)
-            eventView.buttonAddEventInterest.setOnClickListener {
+            eventView.buttonDeleteEventInterest.visibility = View.VISIBLE
+            eventView.buttonAddEventInterest.visibility = View.GONE
+            eventView.buttonDeleteEventInterest.setOnClickListener {
                 viewModel.deleteEvent(listEventAdapter[position])
                 listEvents.remove(listEventAdapter[position])
                 updateList(view!!)
-
             }
 
             val image = eventView.findViewById<ImageView>(R.id.imageTicketEvent)

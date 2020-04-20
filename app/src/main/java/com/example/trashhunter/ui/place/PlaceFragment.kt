@@ -8,16 +8,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.transition.Visibility
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +26,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -43,17 +39,14 @@ import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.example.trashhunter.*
+import com.example.trashhunter.Map
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,8 +72,6 @@ class PlaceFragment : Fragment() {
     private lateinit var uriPictureAfter:Uri
     private var pictureFile:File?=null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -99,6 +90,8 @@ class PlaceFragment : Fragment() {
         viewPagerComments = root.findViewById(R.id.viewPagerComments)
         mapView = root.findViewById<MapView>(R.id.placeMap)
         mapView!!.map = ArcGISMap(Basemap.Type.STREETS_VECTOR, 49.201476197, 18.870735168, 11)
+        var scrollView = root.findViewById<NestedScrollView>(R.id.placeScrollView)
+        Map.setMove(root,mapView,scrollView)
 
         //Vyhladanie miesta podla ID
         placeViewModel.getPlace(placeID.toString()).observe(this, Observer { it ->
@@ -324,11 +317,6 @@ class PlaceFragment : Fragment() {
                 // Konvertujeme byteArray na bitmap
                 var bmp = BitmapFactory.decodeByteArray(it, 0, it.size)
                 pictures.add(Picture(bmp,"Fotka po"))
-
-                /*var adapterPictures = AdapterPictures(pictures,view.context)
-
-                viewPager.adapter = adapterPictures
-                viewPager.setPadding(130,0,130,0)*/
                 updatePictures()
             }.addOnFailureListener {
                 // Handle any errors
@@ -342,8 +330,6 @@ class PlaceFragment : Fragment() {
 
         viewPager.adapter = adapterPictures
         viewPager.setPadding(130,0,130,0)
-
-
     }
 
     inner class AdapterPictures : PagerAdapter{
@@ -384,6 +370,17 @@ class PlaceFragment : Fragment() {
             imageView = view.findViewById(R.id.imageTicketPlace)
             title = view.findViewById<TextView>(R.id.pictureTitle)
             imageView.setImageBitmap(currentPicture.image)
+            imageView.setOnClickListener {
+                var intent = Intent(view.context,FullScreenImageActivity::class.java)
+
+                var bitmap = currentPicture.image
+                val bytes = ByteArrayOutputStream()
+                bitmap!!.compress(Bitmap.CompressFormat.JPEG, 50, bytes)
+                val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+
+                intent.setData(Uri.parse(path.toString()))
+                startActivity(intent)
+            }
             title.setText(currentPicture.title)
 
             container.addView(view,0)

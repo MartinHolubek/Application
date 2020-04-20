@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashhunter.Friend
 import com.example.trashhunter.R
 import com.example.trashhunter.firebase.FirebaseStorage
-import kotlinx.android.synthetic.main.ticket_friend.view.*
+import kotlinx.android.synthetic.main.ticket_user.view.*
 
 class FriendsFragment : Fragment() {
 
@@ -64,7 +63,7 @@ class FriendsFragment : Fragment() {
          * Vytvorí
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var friendView=layoutInflater.inflate(R.layout.ticket_friend,null)
+            var friendView=layoutInflater.inflate(R.layout.ticket_user,null)
             var currentfriend=listFriendAdapter[position]
             friendView.textViewName.text = currentfriend.displayName.toString()
 
@@ -72,8 +71,8 @@ class FriendsFragment : Fragment() {
                 var bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
                 friendView.imageTicket.setImageBitmap(bitMap)
             }
-            friendView.buttonAddFriend.text = getText(R.string.RemoveFriend)
-            friendView.buttonAddFriend.setOnClickListener(View.OnClickListener {
+            friendView.buttonAddUser.text = getText(R.string.RemoveFriend)
+            friendView.buttonAddUser.setOnClickListener(View.OnClickListener {
                 //shareViewModel.saveFriendsToFirebase(listFriendAdapter[position])
                 friendsViewModel.deleteFriendItem(listFriendAdapter[position])
 

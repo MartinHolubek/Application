@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10pt"
         android:orientation="vertical"
-        android:background="@color/backgroundTheme">
+        android:background="@drawable/custom_text_view">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -20,7 +20,8 @@
                 android:scaleType="centerCrop"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:layout_margin="10dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -36,7 +37,8 @@
                 android:text="@string/Description"
                 android:textAlignment="center"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/textColor"
+                android:layout_margin="@dimen/text_margin"/>
 
     </LinearLayout>
 
@@ -44,21 +46,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
         <TextView
                 android:id="@+id/textViewDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="@string/date_ticket"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/GreenTheme"
+                android:textSize="16sp"/>
 
         <TextView
                 android:id="@+id/valueDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/textColor"/>
     </LinearLayout>
 
@@ -66,20 +74,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
         <TextView
                 android:id="@+id/textViewAddress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:text="@string/Address"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/GreenTheme"
+                android:textSize="16dp"/>
 
         <TextView
                 android:id="@+id/valuePlaceName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:textColor="@color/textColor"/>
     </LinearLayout>
@@ -87,28 +101,36 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
         <TextView
                 android:id="@+id/textViewUser"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:text="@string/user_name"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/GreenTheme"
+                android:textSize="16dp"/>
 
         <TextView
                 android:id="@+id/valueUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/textColor"/>
 
     </LinearLayout>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
         <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/rating_bar"
@@ -130,5 +152,13 @@
                 android:textColor="@color/textColor"/>
 
     </LinearLayout>
+    <Button
+            android:id="@+id/button_delete_place"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/delete_place"
+            android:background="@color/GreenTheme"
+            />
 
 </LinearLayout>

@@ -7,12 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trashhunter.Event
 import com.example.trashhunter.firebase.FirebaseRepository
+import com.example.trashhunter.firebase.FirebaseStorage
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
 
 class MyEventsViewModel : ViewModel() {
     val firebaseRepository =
         FirebaseRepository()
+    val firebaseStorage = FirebaseStorage()
 
     var savedEvents : MutableLiveData<List<Event>> = MutableLiveData()
 
@@ -43,4 +45,15 @@ class MyEventsViewModel : ViewModel() {
         })
         return savedEvents
     }
+
+    fun deleteEvent(event: Event){
+        firebaseStorage.deleteImage(event.picture!!).addOnFailureListener{
+            Log.e("DELIMAGE","Failed to delete event image")
+        }
+        firebaseRepository.deleteEventItem(event).addOnFailureListener{
+            Log.e("DELIMAGE","Failed to delete event image")
+        }
+
+    }
+
 }

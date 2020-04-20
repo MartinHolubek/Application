@@ -14,11 +14,10 @@
         <Button
                 android:id="@+id/button_to_attend_events"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:text="@string/button_to_attend_events"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_margin="10dp"
                 android:backgroundTint="@color/GreenTheme"
                 android:background="@drawable/custom_button"
                 android:layout_weight="1"/>
@@ -30,8 +29,7 @@
                 android:text="@string/button_to_my_event"
                 android:backgroundTint="@color/GreenTheme"
                 android:background="@drawable/custom_button"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_margin="10dp"
                 android:layout_weight="1"/>
     </LinearLayout>
 
@@ -41,8 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/backgroundTheme"
-            android:dividerHeight="10dp"
-            />
+            android:dividerHeight="10dp" />
 
 
 </LinearLayout>

@@ -7,7 +7,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             cardCornerRadius="20dp"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/backgroundTheme">
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -19,7 +20,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="16dp"
                     android:hint="@string/user_name"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textColor="@color/GreenTheme"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -29,7 +31,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="16dp"
                     android:hint="@string/Comment"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textColor="@color/GreenTheme"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -39,15 +42,18 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="16dp"
                     android:hint="@string/Date"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textColor="@color/GreenTheme"/>
 
             <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/commentRating"
-                    android:layout_width="250dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/commentDate"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="3dp" />
+                    android:layout_marginTop="3dp"
+                    android:numStars="5"
+                    android:progressTint="@color/GreenTheme"/>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

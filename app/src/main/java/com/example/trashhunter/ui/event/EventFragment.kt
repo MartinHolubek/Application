@@ -9,15 +9,13 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.esri.arcgisruntime.concurrent.ListenableFuture
@@ -25,11 +23,13 @@ import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReference
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.Basemap
+import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.*
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.example.trashhunter.Comment
 import com.example.trashhunter.DateFormat
 import com.example.trashhunter.Event
+import com.example.trashhunter.Map
 import com.example.trashhunter.R
 import com.example.trashhunter.firebase.FirebaseRepository
 import com.example.trashhunter.firebase.FirebaseStorage
@@ -76,11 +76,15 @@ class EventFragment : Fragment() {
             ViewModelProviders.of(this).get(EventViewModel::class.java)
         // Inflate the layout for this fragment
         var root = inflater.inflate(R.layout.fragment_event, container, false)
+        var buttonParticipants = root.findViewById<Button>(R.id.buttonParticiants)
+        var scrollView = root.findViewById<NestedScrollView>(R.id.eventScrollView)
+        var buttonRateEvent = root.findViewById<AppCompatButton>(R.id.buttonEventRate)
+
         viewPagerComments = root.findViewById(R.id.viewPagerComments)
         mapView = root.findViewById<MapView>(R.id.eventMap)
         mapView!!.map = ArcGISMap(Basemap.Type.STREETS_VECTOR, 49.201476197, 18.870735168, 11)
 
-        setOnTouchListener(root)
+        Map.setMove(root, mapView,scrollView)
         eventViewModel.getPlace(eventID!!, organizerID!!).observe(this, Observer { it ->
             event = it
             updateEvent(root)
@@ -91,7 +95,7 @@ class EventFragment : Fragment() {
             updateComments(root)
         })
 
-        var buttonRateEvent = root.findViewById<AppCompatButton>(R.id.buttonEventRate)
+
         buttonRateEvent.setOnClickListener(View.OnClickListener {
 
             var ratingbarPlace = root.findViewById<RatingBar>(R.id.eventRatingBar)
@@ -101,6 +105,14 @@ class EventFragment : Fragment() {
                 event.countOfRating!!, event.rating!!,ratingbarPlace.rating,comment.text.toString())
         })
 
+
+        buttonParticipants.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("EVENT_ID",eventID)
+            bundle.putString("ORGANIZER_ID",organizerID)
+            findNavController().navigate(R.id.action_eventFragment_to_joinedUsersFragment, bundle)
+
+        }
 
         return root
     }
@@ -119,12 +131,14 @@ class EventFragment : Fragment() {
         var details = root?.findViewById<TextView>(R.id.eventDetails)
         var location = root?.findViewById<TextView>(R.id.eventLocation)
         var coordination = root?.findViewById<TextView>(R.id.eventCoordination)
+        var organizer = root?.findViewById<TextView>(R.id.eventOrganizer)
 
 
         title?.text = event.title
+        organizer?.text = event.organizer
         date?.text = DateFormat.getDateTimeFormat(event.startDate!!)
         if (event.endDate != null){
-            endDate?.text = DateFormat.getDateTimeFormat(Date(event.endDate?.seconds!!))
+            endDate?.text = DateFormat.getDateTimeFormat(event.endDate!!)
         }else{
             endDate?.visibility = View.GONE
             endDateLabel?.visibility = View.GONE
@@ -151,6 +165,7 @@ class EventFragment : Fragment() {
 
         myGraphicsOverlay.graphics.add(myGraphic)
         mapView.graphicsOverlays.add(myGraphicsOverlay)
+        mapView.map.initialViewpoint = Viewpoint(pt, 40.0)
     }
 
     companion object {
@@ -224,27 +239,5 @@ class EventFragment : Fragment() {
 
         }
 
-    }
-
-    private fun setOnTouchListener(root:View) {
-        mapView.onTouchListener = object: DefaultMapViewOnTouchListener(root.context, mapView) {
-
-            override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-
-                var sv = root.findViewById<NestedScrollView>(R.id.scroll_map)
-                var action = event?.action
-
-                when(action){
-                    MotionEvent.ACTION_DOWN ->{
-                        sv.requestDisallowInterceptTouchEvent(true)
-                    }
-                    MotionEvent.ACTION_UP ->{
-                        sv.requestDisallowInterceptTouchEvent(true)
-                    }
-                }
-                super.onTouch(view, event)
-                return true
-            }
-        }
     }
 }

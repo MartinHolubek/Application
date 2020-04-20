@@ -1,9 +1,7 @@
 package com.example.trashhunter.firebase
 
-import android.net.Uri
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -24,12 +22,12 @@ class FirebaseStorage() {
      *
      * @return cesta k obrázku v uložisku
      */
-    fun saveImageEvent(uri: Uri): UploadTask{
+    fun saveImageEvent(ba: ByteArray): UploadTask{
         var timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val reference = mFirebaseStorage.getReference("Pictures_events/" + mFirebaseAuth.currentUser!!.uid)
         var pictureRef = reference.child("picture_$timeStamp")
 
-        var uploadTask = pictureRef.putFile(uri)
+        var uploadTask = pictureRef.putBytes(ba)
 
 
         return uploadTask
@@ -54,7 +52,7 @@ class FirebaseStorage() {
         return photoBeforeRef.getBytes(ONE_MEGABYTE)
     }
 
-    fun deletePlaceImages(path: String):Task<Void>{
+    fun deleteImage(path: String):Task<Void>{
         val reference = mFirebaseStorage.getReference(path)
 
         var task = reference.delete()

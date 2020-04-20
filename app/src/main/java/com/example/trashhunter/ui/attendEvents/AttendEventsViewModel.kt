@@ -21,7 +21,7 @@ class AttendEventsViewModel : ViewModel() {
 
     fun deleteEvent(event:Event){
         firebaseRepository.deleteAttendEvent(event).addOnSuccessListener {
-            
+            firebaseRepository.deleteJoinedUser(event)
         }
     }
 
