@@ -9,10 +9,15 @@
 <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.trashhunter.ui.UserFragment"
+        tools:context="com.android.trashhunter.ui.UserFragment"
         android:orientation="vertical"
         android:background="@color/backgroundTheme">
-
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custom_text_view"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,12 +29,14 @@
                 android:textSize="20dp"
                 android:text="Profilová fotka"
                 android:layout_weight="1"
+                android:layout_margin="@dimen/text_margin"
                 android:textColor="@color/GreenTheme"/>
         <Button
                 android:id="@+id/userButtonImage"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_margin="@dimen/text_margin"
                 android:textColor="@color/GreenTheme"
                 android:background="@color/fui_transparent"
                 android:text="Upraviť" />
@@ -41,6 +48,14 @@
             android:layout_height="120dp"
             android:layout_margin="@dimen/text_margin"
             android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custom_text_view"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
     <TextView
             android:id="@+id/userNameLabel"
             android:layout_width="match_parent"
@@ -62,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/textColor"
                 android:ems="10"
+                android:layout_marginStart="@dimen/text_margin"
                 android:inputType="textPersonName"
                 android:layout_weight="1"/>
 
@@ -70,6 +86,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="@dimen/text_margin"
                 android:textColor="@color/GreenTheme"
                 android:background="@color/fui_transparent"
                 android:text="Upraviť" />
@@ -84,7 +101,14 @@
                 android:text="Uložiť" />
 
     </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custom_text_view"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
     <TextView
             android:id="@+id/userEmailLabel"
             android:layout_width="match_parent"
@@ -108,6 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:layout_marginStart="@dimen/text_margin"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/textColor" />
 
@@ -116,6 +141,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="@dimen/text_margin"
                 android:background="@color/fui_transparent"
                 android:textColor="@color/GreenTheme"
                 android:text="Upraviť" />
@@ -129,6 +155,14 @@
                 android:textColor="@color/GreenTheme"
                 android:text="Uložiť" />
     </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custom_text_view"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -162,6 +196,8 @@
                 android:inputType="textPassword"
                 android:textColor="@color/textColor" />
     </LinearLayout>
+
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -195,17 +231,19 @@
                 android:textColor="@color/GreenTheme"
                 android:text="Uložiť" />
     </LinearLayout>
+    </LinearLayout>
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:gravity="right">
         <Button
                 android:id="@+id/userButtonDelete"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/text_margin"
-                android:background="@color/fui_transparent"
-                android:textColor="@color/GreenTheme"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/GreenTheme"
+                android:textColor="@color/backgroundTheme"
                 android:text="Zrušiť účet" />
     </LinearLayout>
 

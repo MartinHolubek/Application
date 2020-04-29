@@ -1,47 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".FindLocationActivity"
-        android:background="@color/backgroundTheme">
+        android:background="@color/backgroundTheme"
+        android:orientation="vertical">
 
-    <Button
-            android:id="@+id/buttonBackEvent"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/custom_button"
-            android:backgroundTint="@color/GreenTheme"/>
+            android:layout_margin="10dp">
 
-    <AutoCompleteTextView
-            android:id="@+id/inputEventLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:ems="10"
-            android:hint="@string/InputLocationEvent"
-            android:inputType="textPersonName"
-            android:completionThreshold="1"
-            android:dropDownAnchor="@id/text_view_address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/buttonBackEvent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:backgroundTint="@color/GreenTheme"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/textColor"/>
+        <Button
+                android:id="@+id/buttonBackEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/GreenTheme"
+                android:text="@string/Back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+        <AutoCompleteTextView
+                android:id="@+id/inputEventLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/GreenTheme"
+                android:completionThreshold="1"
+                android:dropDownAnchor="@id/text_view_address"
+                android:ems="10"
+                android:hint="@string/InputLocationEvent"
+                android:inputType="textPersonName"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/textColor" />
+    </LinearLayout>
+
+    <ListView
             android:id="@+id/text_view_address"
-            android:layout_width="390dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputEventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:layout_marginTop="13dp"
             android:textColor="@color/textColor"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

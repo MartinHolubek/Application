@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:925627893528:android:1bac88eef160cbe221006d",
         "android_client_info": {
-          "package_name": "com.example.application"
+          "package_name": "com.holubek.trashhunter"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "925627893528-5jbgrsftnep0dffdaa3eml8u2lridoj5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.application",
+            "package_name": "com.holubek.trashhunter",
             "certificate_hash": "e426bfc2c829e8374132525cf82d5a37f23e0d1d"
           }
         },

@@ -9,11 +9,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
-        applicationId "com.example.application"
+        applicationId "com.holubek.trashhunter"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.2"
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,8 +25,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
     }
 }
 
@@ -69,6 +70,7 @@ dependencies {
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     androidTestImplementation 'androidx.test:rules:1.3.0-alpha04'
+    implementation 'com.android.support:support-annotations:28.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 android:id="@+id/eventScrollView"
 app:layout_behavior="@string/appbar_scrolling_view_behavior"
 android:background="@color/backgroundTheme"
-tools:context="com.example.trashhunter.ui.event.EventFragment">
+tools:context="com.holubek.trashhunter.ui.event.EventFragment">
 
 <LinearLayout
         android:layout_width="match_parent"

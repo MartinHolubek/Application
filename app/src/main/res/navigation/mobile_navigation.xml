@@ -7,7 +7,7 @@
 
     <fragment
             android:id="@+id/nav_posts"
-            android:name="com.example.trashhunter.ui.posts.PostsFragment"
+            android:name="com.holubek.trashhunter.ui.posts.PostsFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home" >
         <action
@@ -21,19 +21,19 @@
 
     <fragment
             android:id="@+id/nav_map"
-            android:name="com.example.trashhunter.ui.map.MapFragment"
+            android:name="com.holubek.trashhunter.ui.map.MapFragment"
             android:label="@string/menu_map"
             tools:layout="@layout/fragment_map" />
 
     <fragment
             android:id="@+id/nav_addevent"
-            android:name="com.example.trashhunter.ui.addEvent.AddEventFragment"
+            android:name="com.holubek.trashhunter.ui.addEvent.AddEventFragment"
             android:label="@string/menu_addevent"
             tools:layout="@layout/fragment_addevent" />
 
     <fragment
             android:id="@+id/nav_events"
-            android:name="com.example.trashhunter.ui.events.EventsFragment"
+            android:name="com.holubek.trashhunter.ui.events.EventsFragment"
             android:label="@string/menu_events"
             tools:layout="@layout/fragment_events" >
         <action
@@ -49,21 +49,21 @@
 
     <fragment
             android:id="@+id/nav_friends"
-            android:name="com.example.trashhunter.ui.friends.FriendsFragment"
+            android:name="com.holubek.trashhunter.ui.friends.FriendsFragment"
             android:label="@string/menu_friends"
             tools:layout="@layout/fragment_friends" />
 
     <fragment
             android:id="@+id/nav_addfriend"
-            android:name="com.example.trashhunter.ui.addFriend.AddFriendFragment"
+            android:name="com.holubek.trashhunter.ui.addFriend.AddFriendFragment"
             android:label="@string/menu_addfriend" />
     <fragment
             android:id="@+id/nav_place"
-            android:name="com.example.trashhunter.ui.place.PlaceFragment"
+            android:name="com.holubek.trashhunter.ui.place.PlaceFragment"
             android:label="Príspevok" />
     <fragment
             android:id="@+id/myEventsFragment"
-            android:name="com.example.trashhunter.ui.myEvents.MyEventsFragment"
+            android:name="com.holubek.trashhunter.ui.myEvents.MyEventsFragment"
             android:label="Moje udalosti"
             tools:layout="@layout/my_events_fragment">
         <action
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
             android:id="@+id/myPlacesFragment"
-            android:name="com.example.trashhunter.ui.myPlaces.MyPlacesFragment"
+            android:name="com.holubek.trashhunter.ui.myPlaces.MyPlacesFragment"
             android:label="Moje príspevky"
             tools:layout="@layout/my_places_fragment">
         <action
@@ -84,7 +84,7 @@
     </fragment>
     <fragment
             android:id="@+id/attendEventsFragment"
-            android:name="com.example.trashhunter.ui.attendEvents.attendEventsFragment"
+            android:name="com.holubek.trashhunter.ui.attendEvents.attendEventsFragment"
             android:label="Udalosti na ktorých sa zúčastním"
             tools:layout="@layout/attend_events_fragment">
         <action
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
             android:id="@+id/eventFragment"
-            android:name="com.example.trashhunter.ui.event.EventFragment"
+            android:name="com.holubek.trashhunter.ui.event.EventFragment"
             android:label="Udalosť"
             tools:layout="@layout/fragment_event" >
         <action
@@ -102,7 +102,7 @@
     </fragment>
     <fragment
             android:id="@+id/userFragment"
-            android:name="com.example.trashhunter.ui.UserFragment"
+            android:name="com.holubek.trashhunter.ui.UserFragment"
             android:label="fragment_user"
             tools:layout="@layout/fragment_user" >
         <action
@@ -111,7 +111,7 @@
     </fragment>
     <fragment
             android:id="@+id/joinedUsersFragment"
-            android:name="com.example.trashhunter.ui.JoinedUsers.JoinedUsersFragment"
+            android:name="com.holubek.trashhunter.ui.JoinedUsers.JoinedUsersFragment"
             android:label="@string/participants"
             tools:layout="@layout/joined_users_fragment" />
 </navigation>

@@ -27,7 +27,7 @@
     <string name="button_clean">Uložiť</string>
     <string name="photo_before">Fotka pred</string>
     <string name="photo_after">Fotka po</string>
-    <string name="location_permission_denied">User denied permission for device location.</string>
+    <string name="location_permission_denied">Používateľ zamietol povolenie na vyhľadanie zariadenia.</string>
     <string name="undefined_location">Location is undefined</string>
     <string name="without_pictures">Kde su obrazky ?</string>
     <string name="appwidget_text">EXAMPLE</string>
@@ -175,4 +175,5 @@
     <string name="menu_posts">Príspevky</string>
     <string name="delete_event">Odstrániť udalosť</string>
     <string name="participants">Účastníci</string>
+    <string name="successfullySavedPlace">Príspevok bol uložený</string>
 </resources>

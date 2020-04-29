@@ -21,12 +21,7 @@
             android:fitsSystemWindows="true"
             android:background="@color/backgroundTheme"
             app:itemTextColor="@color/GreenTheme"
-
             app:itemIconTint="@color/GreenTheme"
-
-
-
-
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer" />
 
