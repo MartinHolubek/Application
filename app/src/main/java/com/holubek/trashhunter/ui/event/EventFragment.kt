@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -97,9 +98,12 @@ class EventFragment : Fragment() {
 
             var ratingbarPlace = root.findViewById<RatingBar>(R.id.eventRatingBar)
             var comment = root.findViewById<AppCompatEditText>(R.id.eventTextRating)
-
+            var commentText = ""
+            if (!comment.text.toString().equals(getString(R.string.Comment))){
+                commentText = comment.text.toString()
+            }
             eventViewModel.saveRating(event.id.toString(),event.organizerID.toString(),
-                event.countOfRating!!, event.rating!!,ratingbarPlace.rating,comment.text.toString())
+                event.countOfRating!!, event.rating!!,ratingbarPlace.rating,commentText)
         })
 
         buttonParticipants.setOnClickListener {
@@ -141,6 +145,14 @@ class EventFragment : Fragment() {
             endDate?.visibility = View.GONE
             endDateLabel?.visibility = View.GONE
         }
+
+        var ratingBar = root?.findViewById<AppCompatRatingBar>(R.id.ratingPlaceEvent)
+        var ratingCount = root?.findViewById<TextView>(R.id.countRatingTextEvent)
+        if (event.rating != 0F){
+            ratingBar?.rating = event.rating!!.div(event.countOfRating!!)
+            ratingCount?.text = event.countOfRating.toString() + " Hodnotení"
+        }
+
         details?.text = event.details
         location?.text = event.placeName.toString()
         coordination?.text = "${event.coordinates!!.latitude.toString()}, ${event.coordinates!!.longitude.toString()}"

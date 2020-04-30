@@ -116,9 +116,13 @@ class PlaceFragment : Fragment() {
 
             var ratingbarPlace = root.findViewById<RatingBar>(R.id.placeRatingBar)
             var comment = root.findViewById<AppCompatEditText>(R.id.eventTextRating)
+            var commentText = ""
+            if (!comment.text.toString().equals(getString(R.string.Comment))){
+                commentText = comment.text.toString()
+            }
 
             placeViewModel.saveRating(place.pointID.toString(),
-                place.countOfRating!!,place.rating!!,ratingbarPlace.rating,comment.text.toString())
+                place.countOfRating!!,place.rating!!,ratingbarPlace.rating,commentText)
         })
 
         var buttonTakePicture = root.findViewById<Button>(R.id.button_takeAftPicture)

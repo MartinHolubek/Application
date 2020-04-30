@@ -94,7 +94,7 @@ class MapViewModel : ViewModel() {
      * @param ba2 bajtove pole reprezentujúce fotku po vyčistením
      */
     @SuppressLint("SimpleDateFormat")
-    fun savePlace(place : Place, ba1: ByteArray?, ba2: ByteArray?) : String {
+    fun savePlace(place : Place, ba1: ByteArray?, ba2: ByteArray?) : Boolean {
         val storage = FirebaseStorage.getInstance()
         val db = FirebaseFirestore.getInstance()
         mFirebaseAuth = FirebaseAuth.getInstance()
@@ -128,7 +128,7 @@ class MapViewModel : ViewModel() {
                 }
             }
         }
-        return R.string.successfullySavedPlace.toString()
+        return true
     }
 }
 

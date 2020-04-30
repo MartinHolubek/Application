@@ -176,4 +176,5 @@
     <string name="delete_event">Odstrániť udalosť</string>
     <string name="participants">Účastníci</string>
     <string name="successfullySavedPlace">Príspevok bol uložený</string>
+    <string name="failedSavedPlace">Príspevok sa nepodarilo uložiť</string>
 </resources>

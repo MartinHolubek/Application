@@ -53,7 +53,11 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="3dp"
                     android:numStars="5"
-                    android:progressTint="@color/GreenTheme"/>
+                    android:isIndicator="true"
+                    android:stepSize="0.5"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:progressTint="@color/GreenTheme"
+                    />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

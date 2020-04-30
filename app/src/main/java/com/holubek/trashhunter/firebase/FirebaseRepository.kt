@@ -240,7 +240,7 @@ class FirebaseRepository{
             .document()
 
         var newCount = oldCount + 1
-        var actualRating = (oldRating + newRating)/2
+        var actualRating = oldRating + newRating
 
         return documentReference.also{
             var uid =user!!.uid
@@ -295,13 +295,13 @@ class FirebaseRepository{
      * @param eventID jedinečný identifikátor udalosti
      * @param userID jedinečný identifikátor užívateľa
      */
-    fun getEventComments(eventID:String, userID: String): CollectionReference{
+    fun getEventComments(eventID:String, userID: String): Query{
 
         var collectionReference = firestoreDB.collection("users")
             .document(userID)
             .collection("events")
             .document(eventID)
-            .collection("rating")
+            .collection("rating").orderBy("date",Query.Direction.DESCENDING)
 
         return collectionReference
     }

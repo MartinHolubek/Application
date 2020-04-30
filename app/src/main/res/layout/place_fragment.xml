@@ -128,7 +128,7 @@
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <androidx.appcompat.widget.AppCompatRatingBar
                         android:id="@+id/ratingPlace"
                         android:layout_width="wrap_content"
@@ -138,6 +138,8 @@
                         android:clickable="false"
                         android:focusable="false"
                         android:numStars="5"
+                        android:isIndicator="true"
+                        android:progressTint="@color/GreenTheme"
                         android:stepSize="0.5"
                         />
 
@@ -220,6 +222,7 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:numStars="5"
+                    android:progressTint="@color/GreenTheme"
                     android:stepSize="0.5"
                     />
             <androidx.appcompat.widget.AppCompatButton
@@ -240,12 +243,14 @@
 
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerComments"
+                android:background="@drawable/custom_text_view"
+                android:backgroundTint="@color/GreenTheme"
+                android:layout_margin="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
                 android:clipToPadding="false"
                 android:foregroundGravity="center"
-                android:overScrollMode="never"
-                android:background="@color/backgroundTheme"/>
+                android:overScrollMode="never"/>
     </LinearLayout>
 
 

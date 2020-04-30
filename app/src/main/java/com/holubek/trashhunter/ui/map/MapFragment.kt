@@ -103,6 +103,7 @@ class MapFragment : Fragment() {
             mapView.invalidate()
         })
 
+        // zobrazí príspevky priateľov na mape
         showPlaces()
 
         val scrollView = root.findViewById<NestedScrollView>(R.id.mapScrollView)
@@ -111,7 +112,10 @@ class MapFragment : Fragment() {
 
         val buttonClean : Button = root.findViewById(R.id.button_clean)
         buttonClean.setOnClickListener(View.OnClickListener {
-            savePlace(root)
+            if (checkFields()){
+                savePlace(root)
+            }
+
         })
 
         imageBeforePhoto = root.findViewById<ImageView>(R.id.imageView_before)
@@ -189,10 +193,32 @@ class MapFragment : Fragment() {
     }
 
     /**
+     * Metoda zobrazí hlášku na obrazovke
+     * @param text, ktorý sa zobrazí v hláške
+     */
+    private fun showToast(text:String){
+        Toast.makeText(view?.context,text,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun checkFields():Boolean{
+        if (uriPictureBefore == null){
+            showToast("Vložte fotku pred vyčistením")
+                return false
+        }
+        var placeInfo = view?.findViewById<EditText>(R.id.placeInfo)
+        if (placeInfo?.text?.toString().equals("")){
+            showToast("Vložte popis príspevku")
+            return false
+        }
+
+        return true
+    }
+    /**
      * Vytvorenie objektu miesta a uloženie do databázy
      * @param root objekt View, ktorý reprezentuje obrazovku na pridanie príspevku
      */
     private fun savePlace(root: View){
+
         mLocationDisplay = mapView.locationDisplay
         var placeInfo = view?.findViewById<EditText>(R.id.placeInfo)
 
@@ -226,14 +252,27 @@ class MapFragment : Fragment() {
                     val data = baos.toByteArray()
 
                     if (uriPictureAfter == null){
-                        Toast.makeText(root.context,mapViewModel.savePlace(placeToSave,data, null), Toast.LENGTH_LONG).show()
+                        var result = ""
+                        if (mapViewModel.savePlace(placeToSave,data, null)){
+                            result = getString(R.string.successfullySavedPlace)
+                        }else{
+                            result = getString(R.string.failedSavedPlace)
+                        }
+                        getString(R.string.successfullySavedPlace)
+                        Toast.makeText(root.context,result, Toast.LENGTH_LONG).show()
                     }else{
+
                         var bitmap2 = (imageView_after.drawable as BitmapDrawable).bitmap
                         val baos2 =ByteArrayOutputStream()
                         bitmap2.compress(Bitmap.CompressFormat.JPEG, 50, baos2)
                         val data2 = baos2.toByteArray()
-
-                        Toast.makeText(root.context,mapViewModel.savePlace(placeToSave,data, data2), Toast.LENGTH_LONG).show()
+                        var result = ""
+                        if (mapViewModel.savePlace(placeToSave,data, data2)){
+                            result = getString(R.string.successfullySavedPlace)
+                        }else{
+                            result = getString(R.string.failedSavedPlace)
+                        }
+                        Toast.makeText(root.context,result, Toast.LENGTH_LONG).show()
                     }
                 }
             }
