@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 mFirebaseAuth?.signOut()
                 val startIntent = Intent(this, LoginActivity::class.java)
                 startActivity(startIntent)
+                print("hello world")
             }
             R.id.action_user_settings -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.userFragment)
